@@ -12,8 +12,40 @@
 */
 
 Route::get('/', 'WelcomeController@index');
-Route::get('/hi', function(){
+
+Route::group(['prefix' => 'admin','namespace'=>'Admin'], function () {
+    Route::group(["as"=>"admin.welcome"],function() {
+        Route::get('', function(){
+            header("Location: /admin/dashboard" );
+            die();
+        });
+        Route::get('login', 'WelcomeController@login');
+        Route::get('logout', 'DashboardController@logout');
+        Route::post('loginPost', 'WelcomeController@loginPost');
+    });
+
+    Route::get('system/menu', array(
+        'as'=>"admin.system.menu",
+        "uses"=>'SystemMenuController@index',
+    ));
+
+    Route::get('system/menu/edit/{id}', array(
+        'as'=>"admin.system.menu",
+        "uses"=>'SystemMenuController@edit',
+    ));
+
+    Route::get('system/configuration', array(
+        'as'=>"admin.system.configuration",
+        "uses"=>'SystemMenuController@index',
+    ));
+
+
+
+    Route::get('dashboard', array(
+        'as'=>"admin.dashboard",
+        "uses"=>'DashboardController@index',
+    ));
     
-    return view('greeting', ['name' => 'James']);
-    
+
 });
+
