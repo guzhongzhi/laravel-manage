@@ -1,0 +1,46 @@
+input.span11, textarea.span11, .uneditable-input.span11 {
+	width:auto
+}
+
+.admin-login  .form-horizontal .controls {
+    text-align:left
+}
+
+.admin-login  .form-horizontal .controls input {
+    width:90%;
+}
+.global-message .alert {
+    margin-bottom:1px;
+    text-align:left;
+}
+
+.admin-login  #forgot-password-text {
+    text-align:right;
+    padding-right:10px;
+}
+
+.modal-large {
+    width:1000px;
+    margin-left:0px;
+}
+
+.search-form  .control-group {
+    float:left;
+    margin-left:10px;
+}
+
+.control-group-bottons {
+    padding-top:24px;
+}
+
+.table-action a {
+    margin-right:10px;
+    font-size:16px;
+}
+.table-action {
+    width:100px;
+}
+
+.search-form .select2-container-multi {
+    min-width: 100px;
+}
