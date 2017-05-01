@@ -1,5 +1,34 @@
 <!--sidebar-menu-->
-<div id="sidebar">
+<style>
+
+#sidebar > ul li ul li a{ color:#939da8}
+#sidebar > ul li ul li a:hover, #sidebar > ul li ul li.active a {
+	color: #fff;
+	background-color: none;
+}
+
+.left-menu ul,
+.left-menu li {
+    padding:0px;
+    margin:0px;
+    list-style:none;
+    
+}
+.left-menu li.left-menu-submenu  {
+    padding-left:30px ;
+}
+.left-menu li.active a,
+.left-menu li a:hover{
+    background:none;
+}
+.left-menu li.active {
+    
+    background:#28b779
+    
+}
+
+</style>
+<div id="sidebar" class="left-menu">
   <ul>
     @foreach($GlobalLeftMenuItems as $menuItem)
     <li class="
@@ -23,7 +52,7 @@
     @if($menuItem->hasChild()) 
     <ul>
         @foreach($menuItem->getChilds() as $childMenu)
-        <li class="
+        <li class=" left-menu-submenu 
         @if($childMenu->url == $currentUrl  )
         active
         @endif

@@ -11,7 +11,40 @@
     min-height:100%;
     background:#FFF;
 }
+.clearboth {
+    
+    clear:both;
+    
+}
 
+
+
+.pagination-container {
+    
+}
+.pagination {
+    margin:0px;
+}
+.pagination  li.active{
+    background:#e1e1e1;
+    font-weight:bold;
+}
+.pagination  li a{
+    font-size:14px;
+    padding:6px 8px;
+    
+}
+
+.pagination  li{
+    list-style:none;
+    float:left;
+    margin-left: 10px;
+    border:solid 1px #999;
+    
+}
+.pagination  li:first-child{
+    margin-left:0px;
+}
 </style>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />

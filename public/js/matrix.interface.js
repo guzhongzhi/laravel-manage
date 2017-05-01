@@ -38,7 +38,7 @@ $(document).ready(function(){
 	$(".peity_bar_neutral span").peity("bar", {
 		colour: "#757575"
 	});
-	
+	return false;
 	// === jQeury Gritter, a growl-like notifications === //
 	$.gritter.add({
 		title:	'Important Unread messages',

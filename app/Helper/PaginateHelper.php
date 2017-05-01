@@ -7,6 +7,17 @@ class PaginateHelper {
     protected $paginate = null;
     protected $filter = null;
     
+    public static function initSearchFieldData($searchData,$searchForm) {
+        foreach($searchData as $key=>$value) {
+            if($key == "_order") {
+                $searchForm[$key] = $value;
+                continue;
+            }
+            $searchForm[$key]["value"] = $value;
+        }
+        return $searchForm;
+    }
+    
     public function __construct($modeName) {
         $this->modeName = $modeName;
     }
@@ -44,8 +55,163 @@ class PaginateHelper {
         /**
          * @var \Illuminate\Database\Eloquent\Collection $rows
          */
-        return $this->paginate = $queryBuilder->paginate(15);
-        
+        $this->paginate = $queryBuilder->paginate(2);
+        //print_r(get_class_methods($this->paginate));die();
+        return $this->paginate;
     }
     
+    
+    
+    public function getItemsNumber() {
+        return $this->paginate->total;
+    }
+    
+    public function getCurrentPage() {
+        return $this->paginate->currentPage();
+    }
+    
+    var $currentDisplayNumber = -1;
+    function initPageNumberDisplay() {
+        $this->currentDisplayNumber = -1;
+    }
+    
+    public function hasNextPageToDisplay() {
+        $this->currentDisplayNumber += 1;
+        $statNumber = $this->getPageStartNumber() + $this->currentDisplayNumber;
+        $endNumber = $this->getPageEndNumber();
+        if( $statNumber <=  $endNumber) {
+            return true;
+            
+        }
+        return false;
+    }
+    
+    public function getCurrentDisplayPageNumber() {
+        return $this->getPageStartNumber() + $this->currentDisplayNumber;
+    }
+    
+    public function getPageStartNumber() {
+        return $this->getRangePageNumber(-5);
+    }
+    
+    public function getTotalPage() {
+        return $this->paginate->lastPage();
+    }
+    
+    protected function getRangePageNumber($steep = 5) {
+        $lastPage = $this->paginate->lastPage();
+        $n = $this->paginate->currentPage();
+        $n = $n + $steep;
+        if($n <= 0) {
+            $n = 1;
+        }
+        if($n > $lastPage) {
+            $n = $lastPage;
+        }
+        return $n;
+    }
+    
+    public function getPageEndNumber() {
+        return $this->getRangePageNumber(5);
+    }
+    
+    public function getFirstPageNumger() {
+        return 1;
+    }
+    
+    public function getPrevPageNumber() {
+        return $this->getRangePageNumber(-1);
+    }
+    
+    public function getNextPageNumber() {
+        return $this->getRangePageNumber(1);
+    }
+    
+    public function getLastPageNumber() {
+        return $lastPage = $this->paginate->lastPage();
+    }
+    
+    public function getSortByUrlByNumberAndFieldName($fieldName,$page = 1) {
+        $filter = $this->filter;
+        if(!isset($filter["_order"])) {
+            $filter["_order"] = array(
+                "field_name"=>$fieldName,
+                "value"=>"ASC"
+            );
+        } else {
+            $oldSortOrderField = $filter["_order"];
+            $orderDirection = "asc";
+            if($fieldName == $oldSortOrderField["field_name"]) {
+                if(strtolower(trim($oldSortOrderField["value"])) == "asc") {
+                    $orderDirection = "desc";
+                } else {
+                    $orderDirection = "asc";
+                }
+            }
+            $filter["_order"] = array(
+                "field_name"=>$fieldName,
+                "value"=>$orderDirection,
+            );
+        }
+        
+        $pageUrl = "?page=".$page;
+        foreach($filter as $name=>$field) {
+            if($name == "_order") {
+                $pageUrl .= "&filter[".$name."][field_name]=".$field["field_name"]."&filter[".$name."][value]=".$field['value'];
+                continue;
+            }
+            if(!isset($field["value"])) {
+                continue;
+            }
+            if(is_array($field["value"])) {
+                if(empty($field["value"])) {
+                    continue;
+                }
+                foreach($field["value"] as $value) {
+                    $pageUrl .= "&filter[".$name."][]=".urlencode($value);
+                }
+            }else if($field["value"] != "") {
+                $pageUrl .= "&filter[".$name."]=".urlencode($field["value"]);
+            }
+        }
+        
+        return $pageUrl;
+    }
+    
+    public function getOrderedFieldClass($fieldName) {
+        $filter = $this->filter;
+        if(isset($filter["_order"])) {
+            if($filter["_order"]["field_name"] == $fieldName) {
+                return "filter-ordered-active-".$filter["_order"]["value"];
+            }
+        }
+        return "filter-ordered";
+    }
+    
+    public function getPageUrlByNumber($page) {
+        $filter = $this->filter;
+        $pageUrl = "?page=".$page;
+        foreach($filter as $name=>$field) {
+            if($name == "_order") {
+                $pageUrl .= "&filter[".$name."][field_name]=".$field["field_name"]."&filter[".$name."][value]=".$field['value'];
+                continue;
+            }
+            
+            if(!isset($field["value"])) {
+                continue;
+            }
+            if(is_array($field["value"])) {
+                if(empty($field["value"])) {
+                    continue;
+                }
+                foreach($field["value"] as $value) {
+                    $pageUrl .= "&filter[".$name."][]=".urlencode($value);
+                }
+            }else if($field["value"] != "") {
+                $pageUrl .= "&filter[".$name."]=".urlencode($field["value"]);
+            }
+        }
+        
+        return $pageUrl;
+    }
 }

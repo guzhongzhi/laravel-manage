@@ -1,7 +1,17 @@
-
+<style>
+.search-form select{
+    
+    display:none;
+    
+}
+</style>
 <form class="search-form" id="search-form">
     
         @foreach($filter as $fieldName=>$field)
+            @if($fieldName == "_order")
+                ffff;
+                @break;
+            @endif
         <div class="control-group">
         <label class="control-label">{{$field["label"]}}</label>
         <div class="controls">

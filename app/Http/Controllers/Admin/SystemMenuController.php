@@ -43,9 +43,7 @@ class SystemMenuController extends AdminBaseController {
 
         );
         $searchData = $request->get("filter", array());
-        foreach($searchData as $key=>$value) {
-            $searchForm[$key]["value"] = $value;
-        }
+        $searchFormValue = PaginateHelper::initSearchFieldData($searchData,$searchForm);
         //print_r($searchForm);
         /**
          * @var \Illuminate\Database\Eloquent\Builder $queryBuilder
@@ -53,9 +51,9 @@ class SystemMenuController extends AdminBaseController {
 
 
         $paginateHelper = new PaginateHelper(Menu::class);
-        $paginate = $paginateHelper->getPaginate($searchForm);
+        $paginate = $paginateHelper->getPaginate($searchFormValue);
 
-		return view('admin.system.menu', array("filter"=>$searchForm, "paginate"=>$paginate));
+		return view('admin.system.menu', array("filter"=>$searchForm,"paginateHelper"=>$paginateHelper, "paginate"=>$paginate));
 	}
 
     public function logout() {

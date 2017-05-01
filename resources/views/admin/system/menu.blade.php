@@ -20,9 +20,9 @@
             <table class="table table-bordered table-striped with-check">
               <thead>
                 <tr>
-                  <th><i class="icon-resize-vertical"></i></th>
+                  <th class="{{$paginateHelper->getOrderedFieldClass('id')}}"><a href="{{$paginateHelper->getSortByUrlByNumberAndFieldName('id')}}">ID</a></th>
                   <th>ParentId</th>
-                  <th>Name</th>
+                  <th class="{{$paginateHelper->getOrderedFieldClass('name')}}"><a href="{{$paginateHelper->getSortByUrlByNumberAndFieldName('name')}}">Name</a></th>
                   <th>Url</th>
                   <th>Order</th>
                   <th>Menu</th>
@@ -51,21 +51,22 @@
               
             </table>
             
-            <div>
-            
-              <ul class="pagination pagination-sm">
-                <li><a href="#" aria-label="Previous"><span aria-hidden="true">«</span></a></li>
-                <li><a href="#">1</a></li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">4</a></li>
-                <li><a href="#">5</a></li>
-                <li><a href="#" aria-label="Next"><span aria-hidden="true">»</span></a></li>
-              </ul>
-    
-    
-            {{$paginate}}
-            </div>
           </div>
         </div>
+            
+            <div class="clearboth pagination-container">
+            
+              <ul class="pagination pagination-sm">
+                <li><a href="{{$paginateHelper->getPageUrlByNumber($paginateHelper->getPrevPageNumber())}}" aria-label="Previous"><span aria-hidden="true">&lt;&lt;</span></a></li>
+                    @while($paginateHelper->hasNextPageToDisplay() )
+                        <li class="
+                    @if($paginateHelper->getCurrentDisplayPageNumber() == $paginateHelper->getCurrentPage())
+                        active
+                    @endif
+                    "><a href="{{$paginateHelper->getPageUrlByNumber($paginateHelper->getCurrentDisplayPageNumber())}}">{{$paginateHelper->getCurrentDisplayPageNumber()}}</a></li>
+                    @endwhile
+                <li><a href="{{$paginateHelper->getPageUrlByNumber($paginateHelper->getNextPageNumber())}}" aria-label="Next"><span aria-hidden="true">&gt;&gt;</span></a></li>
+                <li><a href="#" aria-label="Next">TotalPage: {{$paginateHelper->getTotalPage()}}</a></li>
+              </ul>
+            </div>
 @endsection
