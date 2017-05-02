@@ -8,17 +8,15 @@
 <form class="search-form" id="search-form">
     
         @foreach($filter as $fieldName=>$field)
-            @if($fieldName == "_order")
-                ffff;
-                @break;
-            @endif
-        <div class="control-group">
-        <label class="control-label">{{$field["label"]}}</label>
-        <div class="controls">
         
         @if($field["input_type"]=="hidden")
             <input type="hidden" id="search-form-{{$fieldName}}" value="{{isset($field["value"]) ? $field["value"] :""}}" name="filter[{{$fieldName}}]"  class="span11">
+            @continue
         @endif
+        
+        <div class="control-group">
+        <label class="control-label">{{$field["label"]}}</label>
+        <div class="controls">
         
         @if($field["input_type"]=="text")
             <input type="text" id="search-form-{{$fieldName}}" value="{{isset($field["value"]) ? $field["value"] :""}}" name="filter[{{$fieldName}}]"  class="span11">

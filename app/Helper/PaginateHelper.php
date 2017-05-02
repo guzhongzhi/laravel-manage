@@ -11,6 +11,8 @@ class PaginateHelper {
         foreach($searchData as $key=>$value) {
             if($key == "_order") {
                 $searchForm[$key] = $value;
+                $searchForm[$key]["label"]="";
+                $searchForm[$key]["input_type"]="hidden";
                 continue;
             }
             $searchForm[$key]["value"] = $value;
@@ -27,7 +29,7 @@ class PaginateHelper {
         $modelName = $this->modeName;
         $queryBuilder = $modelName::query();
         foreach($filter as $fieldName=>$field) {
-            if(!isset($field["type"]) || !isset($field["value"]) || $fieldName == "_order") {
+            if(!isset($field["type"]) || !isset($field["value"]) || $fieldName == "_order" || $field["value"] === "") {
                 continue;
             }
             if(isset($field["field_name"])) {
@@ -55,7 +57,7 @@ class PaginateHelper {
         /**
          * @var \Illuminate\Database\Eloquent\Collection $rows
          */
-        $this->paginate = $queryBuilder->paginate(2);
+        $this->paginate = $queryBuilder->paginate(20);
         //print_r(get_class_methods($this->paginate));die();
         return $this->paginate;
     }

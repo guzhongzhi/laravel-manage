@@ -35,7 +35,7 @@ class Menu extends Migration {
 	{
 		Schema::table('menu', function(Blueprint $table)
 		{
-			//$table->drop();
+			$table->drop();
 		});
 	}
 

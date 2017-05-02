@@ -30,6 +30,13 @@ class SystemMenuController extends AdminBaseController {
                 "type"=>"like",
                 "label"=>"Url",
             ),
+            "parent_id"=>array(
+                "field_name"=>"parent_id",
+                "input_type"=>"text",
+                "type"=>"=",
+                "value"=>"",
+                "label"=>"Parent ID",
+            ),
             "show_in_menu"=>array(
                 "field_name"=>"show_in_menu",
                 "input_type"=>"mutiselect",
@@ -44,7 +51,6 @@ class SystemMenuController extends AdminBaseController {
         );
         $searchData = $request->get("filter", array());
         $searchFormValue = PaginateHelper::initSearchFieldData($searchData,$searchForm);
-        //print_r($searchForm);
         /**
          * @var \Illuminate\Database\Eloquent\Builder $queryBuilder
          */
@@ -53,7 +59,7 @@ class SystemMenuController extends AdminBaseController {
         $paginateHelper = new PaginateHelper(Menu::class);
         $paginate = $paginateHelper->getPaginate($searchFormValue);
 
-		return view('admin.system.menu', array("filter"=>$searchForm,"paginateHelper"=>$paginateHelper, "paginate"=>$paginate));
+		return view('admin.system.menu', array("filter"=>$searchFormValue,"paginateHelper"=>$paginateHelper, "paginate"=>$paginate));
 	}
 
     public function logout() {

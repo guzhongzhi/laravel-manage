@@ -24,7 +24,7 @@
                   <th>ParentId</th>
                   <th class="{{$paginateHelper->getOrderedFieldClass('name')}}"><a href="{{$paginateHelper->getSortByUrlByNumberAndFieldName('name')}}">Name</a></th>
                   <th>Url</th>
-                  <th>Order</th>
+                  <th class="{{$paginateHelper->getOrderedFieldClass('sort_order')}}"><a href="{{$paginateHelper->getSortByUrlByNumberAndFieldName('sort_order')}}">Order</a></th>
                   <th>Menu</th>
                   <th>icon</th>
                   <th>Action</th>
@@ -67,6 +67,7 @@
                     @endwhile
                 <li><a href="{{$paginateHelper->getPageUrlByNumber($paginateHelper->getNextPageNumber())}}" aria-label="Next"><span aria-hidden="true">&gt;&gt;</span></a></li>
                 <li><a href="#" aria-label="Next">TotalPage: {{$paginateHelper->getTotalPage()}}</a></li>
+                
               </ul>
             </div>
 @endsection

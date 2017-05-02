@@ -12,6 +12,12 @@ class MenuRole extends Migration {
 	 */
 	public function up()
 	{
+        Schema::create('role', function(Blueprint $table)
+		{
+			$table->increments("id");
+            $table->string("name");
+            $table->timestamps();            
+		});
 		Schema::create('menu_role', function(Blueprint $table)
 		{
 			$table->increments("id");
@@ -27,9 +33,13 @@ class MenuRole extends Migration {
 	 */
 	public function down()
 	{
-		Schema::table('menu', function(Blueprint $table)
+		Schema::table('role', function(Blueprint $table)
 		{
-			//
+			$table->drop();
+		});
+        Schema::table('menu_role', function(Blueprint $table)
+		{
+			$table->drop();
 		});
 	}
 

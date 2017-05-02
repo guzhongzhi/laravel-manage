@@ -210,13 +210,13 @@ class ComposerStaticInit8198c2c4a2b2ba2dc6046b01d39a72b8
     );
 
     public static $classMap = array (
-        'CreateMenusTable' => __DIR__ . '/../..' . '/database/migrations/2017_04_22_065230_create_menus_table.php',
         'DatabaseSeeder' => __DIR__ . '/../..' . '/database/seeds/DatabaseSeeder.php',
         'File_Iterator' => __DIR__ . '/..' . '/phpunit/php-file-iterator/File/Iterator.php',
         'File_Iterator_Facade' => __DIR__ . '/..' . '/phpunit/php-file-iterator/File/Iterator/Facade.php',
         'File_Iterator_Factory' => __DIR__ . '/..' . '/phpunit/php-file-iterator/File/Iterator/Factory.php',
         'IlluminateQueueClosure' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Queue/IlluminateQueueClosure.php',
         'Menu' => __DIR__ . '/../..' . '/database/migrations/2017_04_22_063309_menu.php',
+        'MenuAndRoleTableSeeder' => __DIR__ . '/../..' . '/database/seeds/MenuAndRoleTableSeeder.php',
         'MenuRole' => __DIR__ . '/../..' . '/database/migrations/2017_04_22_064219_menu_role.php',
         'PHPUnit_Exception' => __DIR__ . '/..' . '/phpunit/phpunit/src/Exception.php',
         'PHPUnit_Extensions_GroupTestSuite' => __DIR__ . '/..' . '/phpunit/phpunit/src/Extensions/GroupTestSuite.php',
@@ -629,6 +629,7 @@ class ComposerStaticInit8198c2c4a2b2ba2dc6046b01d39a72b8
         'SessionHandlerInterface' => __DIR__ . '/..' . '/symfony/http-foundation/Symfony/Component/HttpFoundation/Resources/stubs/SessionHandlerInterface.php',
         'TestCase' => __DIR__ . '/../..' . '/tests/TestCase.php',
         'Text_Template' => __DIR__ . '/..' . '/phpunit/php-text-template/Text/Template.php',
+        'UserTableSeeder' => __DIR__ . '/../..' . '/database/seeds/UserTableSeeder.php',
         'Users' => __DIR__ . '/../..' . '/database/migrations/2017_04_22_063418_users.php',
     );
 
