@@ -2,9 +2,21 @@
 <style>
 
 #sidebar > ul li ul li a{ color:#939da8}
-#sidebar > ul li ul li a:hover, #sidebar > ul li ul li.active a {
+#sidebar > ul li ul li:hover, 
+#sidebar > ul li ul li a:hover, 
+#sidebar > ul li ul li.active a {
+	background: none;
+}
+
+#sidebar > ul li ul li a:hover {
 	color: #fff;
-	background-color: none;
+	background: none !important;
+}
+
+#sidebar > ul li ul li:hover {
+    
+    background:red;
+    
 }
 
 .left-menu ul,
