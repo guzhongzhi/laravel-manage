@@ -26,7 +26,7 @@ class MenuAndRoleTableSeeder extends Seeder {
                 "show_in_menu"=>1,
                 "childs"=>array(
                     array(
-                        "name"=>"Settings",
+                        "name"=>"Configuration",
                         "url"=>"/admin/system/configuration",
                         "icon"=>"",
                         "show_in_menu"=>1
@@ -42,6 +42,26 @@ class MenuAndRoleTableSeeder extends Seeder {
                         "url"=>"/admin/system/menu/edit/{id}",
                         "icon"=>"",
                         "show_in_menu"=>0
+                    ),
+                    
+                    array(
+                        "name"=>"Role",
+                        "url"=>"/admin/system/role",
+                        "icon"=>"",
+                        "show_in_menu"=>1
+                    ),
+                    
+                    array(
+                        "name"=>"User",
+                        "url"=>"/admin/system/user",
+                        "icon"=>"",
+                        "show_in_menu"=>1
+                    ),
+                    array(
+                        "name"=>"Cache",
+                        "url"=>"/admin/system/cache",
+                        "icon"=>"",
+                        "show_in_menu"=>1
                     ),
                 ),
             ),
