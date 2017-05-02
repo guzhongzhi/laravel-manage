@@ -20,6 +20,7 @@ class Menu extends Migration {
             $table->string("url");
             $table->string("icon");
             $table->string("show_in_menu");
+            $table->integer("sort_order");
             $table->timestamps();
 			//
 		});
