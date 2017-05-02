@@ -85,6 +85,7 @@ class AdminBaseController extends Controller {
             $childMenuItems = $this->filterChildMenuItems($rootMenuItem->id,$rows, $showAll);
             $rootMenuItem->setChilds($childMenuItems);
         }
+        
         return $rootMenuItems;
     }
 
