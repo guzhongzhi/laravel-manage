@@ -1,0 +1,30 @@
+<config>
+
+    <sections>
+        
+        <weixin>
+            <label></label>
+            <order></order>
+            <comments></comments>
+            <fieldset>
+                <label></label>
+                <order></order>
+                <comments></comments>
+                <fields>
+                    <field>
+                        <label></label>
+                        <order></order>
+                        <comments></comments>
+                        <type></type>
+                        <source></source>
+                    </field>
+                </fields>
+            </fieldset>
+        </weixin>
+        
+    </sections>
+    
+    <global>
+        
+    </global>
+</config>

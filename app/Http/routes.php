@@ -36,7 +36,7 @@ Route::group(['prefix' => 'admin','namespace'=>'Admin'], function () {
 
     Route::get('system/configuration', array(
         'as'=>"admin.system.configuration",
-        "uses"=>'SystemMenuController@index',
+        "uses"=>'SystemMenuController@configuration',
     ));
 
 

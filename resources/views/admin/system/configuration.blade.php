@@ -1,0 +1,1 @@
+@extends("admin.column-2-left")

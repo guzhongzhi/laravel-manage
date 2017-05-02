@@ -61,6 +61,10 @@ class SystemMenuController extends AdminBaseController {
 
 		return view('admin.system.menu', array("filter"=>$searchFormValue,"paginateHelper"=>$paginateHelper, "paginate"=>$paginate));
 	}
+    
+    public function configuration() {
+        return view('admin.system.configuration');
+    }
 
     public function logout() {
         Auth::logout();
