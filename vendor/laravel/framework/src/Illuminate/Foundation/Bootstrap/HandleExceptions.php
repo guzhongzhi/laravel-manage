@@ -70,6 +70,10 @@ class HandleExceptions {
 	 */
 	public function handleException($e)
 	{
+        echo get_class($e);
+        print_r(get_class_methods($e));
+        echo $e->__toString();
+        die();
 		$this->getExceptionHandler()->report($e);
 
 		if ($this->app->runningInConsole())
