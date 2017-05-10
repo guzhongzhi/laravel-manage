@@ -19,4 +19,17 @@ class News extends Model {
         'created_at',
         'updated_at',
     ];
+    
+    public function getSightUrl() {
+        return "/sight/s-" . $this->id.".html";
+    }
+    
+    public function getShortDesc() {
+        if($this->short_description) {
+            return $this->short_description;
+        }
+        $content = $this->content;
+        $content = preg_replace('/<\/?.*?>/is','',$content);
+        return mb_substr($content,0,200);
+    }
 }

@@ -13,6 +13,8 @@
 
 Route::get('/', 'WelcomeController@index');
 Route::get('/sight', 'SightController@index');
+Route::get('/sight/p{id}.html', 'SightController@provinceList');
+Route::get('/sight/s-{id}.html', 'SightController@sightDetail');
 
 Route::group(['prefix' => 'admin','namespace'=>'Admin'], function () {
     Route::group(["as"=>"admin.welcome"],function() {
