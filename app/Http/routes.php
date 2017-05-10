@@ -12,6 +12,7 @@
 */
 
 Route::get('/', 'WelcomeController@index');
+Route::get('/sight', 'SightController@index');
 
 Route::group(['prefix' => 'admin','namespace'=>'Admin'], function () {
     Route::group(["as"=>"admin.welcome"],function() {

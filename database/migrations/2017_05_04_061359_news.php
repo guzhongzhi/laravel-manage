@@ -18,12 +18,16 @@ class News extends Migration {
 			$table->integer('category_id');
 			$table->integer('province_id');
 			$table->integer('country_id');
-			$table->double('rate');
+			$table->integer('city_id')->nullable()->default(0);
+			$table->double('rate')->nullable()->default(0);
 			$table->string('title');
-			$table->string('short_description');
-			$table->string('editor');
-			$table->string('source_url');
-            $table->string('content');
+			$table->string('pic');
+			$table->string('meta_keywords')->nullable();
+			$table->string('meta_description')->nullable();
+			$table->string('short_description')->nullable();
+			$table->string('editor')->nullable();
+			$table->string('source_url')->nullable();
+            $table->longText('content');
 			$table->timestamps();
 		});
 	}

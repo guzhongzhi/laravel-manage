@@ -49,7 +49,12 @@ class SightSeek extends Command {
                 break;
             }
             case "ctrip": {
-                $this->seekCtrip();
+                try {
+                    $this->seekCtrip();
+                }catch(\Exception $ex){
+                    echo $ex->__toString(),PHP_EOL;
+                }
+                
                 break;
             }
             default: {
@@ -96,6 +101,7 @@ class SightSeek extends Command {
     
     protected function getProvinceByName($name) {
         $sql = "SELECT * FROM region WHERE name like '%".$name."%' AND parent_id = 1";
+        echo $sql,PHP_EOL;
         $rows = DB::select($sql);
         return $rows[0];
     }
@@ -122,7 +128,7 @@ class SightSeek extends Command {
                 $maxPage = $matches[1][0];
                 
                 $this->seekCtripSight($content,$sightName);
-                
+                $maxPage = 2;
                 for($p = 2;$p<=$maxPage;$p++) {
                     
                     echo PHP_EOL;
@@ -131,7 +137,12 @@ class SightSeek extends Command {
                     echo $url,PHP_EOL;
                     
                     $content = $this->getFileContent($url);
-                    $this->seekCtripSight($content,$sightName);
+                    try {
+                        $this->seekCtripSight($content,$sightName);
+                    }catch(\Exception $ex) {
+                        
+                    }
+                    
                     sleep(1);
                 }
             }
@@ -144,6 +155,9 @@ class SightSeek extends Command {
         $sightUrls = $matches[0];
         $sightUrls = array_unique($sightUrls);
         foreach($sightUrls as $sightUrl) {
+            try {
+                
+            
             $sightUrl = "http://you.ctrip.com".$sightUrl;
             echo $sightUrl,PHP_EOL;
             
@@ -151,7 +165,7 @@ class SightSeek extends Command {
             $sql = "SELECT * FROM news WHERE source_url = ?";
             $row = DB::select($sql,[$sightUrl]);
             if(!empty($row)) {
-                //continue;
+                continue;
             }
             
             $content = $this->getFileContent($sightUrl);
@@ -163,11 +177,18 @@ class SightSeek extends Command {
             
             preg_match_all('/<a.*?>(.*?)<\/a>/is',$bread,$matches);
             
-            
+            print_r($matches);
             $provinceName = $matches[1][1];
-            $provinceName = trim($provinceName,"景点");
+            $provinceName = trim($provinceName);
+            
+            if(!isset($matches[1][2])) {
+                $provinceName = str_replace("景点","",$provinceName);
+                $provinceName = trim($provinceName);
+            }
+            echo $provinceName,PHP_EOL;
             $cityName = isset($matches[1][2]) ? $matches[1][2]: "";
             
+            print_r($provinceName);
             $province = $this->getProvinceByName($provinceName);
             
             preg_match('/<title>(.*?)<\/title>/is',$content,$matches);
@@ -207,6 +228,9 @@ class SightSeek extends Command {
                 "title"=>$title,
                 "source_url"=>$sightUrl,
             ));
+            }catch(\Exception $ex) {
+                echo $ex->__toString(),PHP_EOL;
+            }
         }
         
     }
@@ -261,6 +285,8 @@ class SightSeek extends Command {
                     }
                     $this->processListContent($content, $province, $country,$urlRegex);
                     $page++;
+                    
+                    $totalPage = 10;
                 }while($page <= $totalPage);
                 
             }

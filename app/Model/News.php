@@ -3,6 +3,8 @@
 use Illuminate\Database\Eloquent\Model;
 
 class News extends Model {
+    const CATEGORY_ID_SIGHT = 1;
+    
 	protected $table = "news";
     protected $fillable = [
         'category_id', 
