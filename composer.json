@@ -17,6 +17,7 @@
 		"classmap": [
 			"database"
 		],
+        "files": ["app/Common/SimpleHtmlDom.php"],
 		"psr-4": {
 			"App\\": "app/"
 		}
