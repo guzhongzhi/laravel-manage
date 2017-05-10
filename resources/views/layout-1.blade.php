@@ -64,7 +64,7 @@
     <div class="container nav">
         
         <ul class="nav">
-            <li>首页</li>
+            <li><a href="/">首页</a></li>
             <li><a href="{{url('sight/')}}">景点</a></li>
             <li>游记</li>
             <li>国内游</li>
