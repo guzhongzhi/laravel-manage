@@ -9,18 +9,34 @@
         padding:0;
         margin:0;
     }
+    .sight-home-province li.active {
+        background:#e1e1e1;
+    }
+    .sight-home-province  ul{
+        margin:10px;
+    }
+    .sight-home-province  {
+        border:solid 1px #e1e1e1;
+    }
     .sight-home-province li {
         float:left;
         width:18%;
         padding:10px 0px;
         text-align:left;
+        margin-right:10px;
     }
     
+    .sight-home-news li div.pic img{
+        width:150px;
+        max-height:130px;
+    }
     .sight-home-news li div.pic {
         float:left;
         width:150px;
-        border:solid 1px red;
-        height: 150px;
+        border:solid 1px #e1e1e1;
+        display:table-sell;
+        vertical-align:middle;
+        height: 130px;
     }
     .sight-home-news li div.desc {
         float:left;
@@ -49,7 +65,7 @@
         
             <li class="
             @if($provinceId == $province->id)
-                live
+                active
             @endif
             "><a href="{{url('sight/'.$province->getSightUrlKey())}}">{{$province->name}}</a></li>
         @endforeach
@@ -70,7 +86,7 @@
         <ul>
         @foreach($news as $new)
             <li>
-                <div class="pic"><img src="{{$new->pic}}"/></div>
+                <div class="pic"><a href="{{$new->getSightUrl()}}"><img src="{{$new->pic}}"/></a></div>
                 <div class="desc">
                     <p class="title"><a href="{{$new->getSightUrl()}}">{{$new->title}}</a></p>
                     <p class="short_desc">{{$new->getShortDesc()}}</p>

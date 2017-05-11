@@ -6,6 +6,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use DB;
 include "Pinyin.php";
 use App\Model\News;
+use App\Model\NewsImage;
 
 class SightSeek extends Command {
 
@@ -99,6 +100,13 @@ class SightSeek extends Command {
         return $curl_result;
     }
     
+    protected function getProvinceNameById($id) {
+        $sql = "SELECT * FROM region WHERE  id= " . ($id * 1);
+        $rows = DB::select($sql);
+        $row = $rows[0];
+        return $row->name;
+    }
+    
     protected function getProvinceByName($name) {
         $sql = "SELECT * FROM region WHERE name like '%".$name."%' AND parent_id = 1";
         echo $sql,PHP_EOL;
@@ -148,6 +156,18 @@ class SightSeek extends Command {
             }
         }
     }
+        
+        
+    function searchImages($sigthName) {
+        $content = file_get_contents("http://image.chinaso.com/getpic?rn=72&st=216&q=".urlencode($sigthName)."&t=" . time());
+        $c = json_decode($content ,true);
+        $results = $c["arrResults"];
+        $urls = array();
+        foreach($results as $result) {
+            $urls[] = $result["url"]."";
+        }
+        return $urls;
+    }
     
     protected function seekCtripSight($content,$sightName) {
 
@@ -165,7 +185,37 @@ class SightSeek extends Command {
             $sql = "SELECT * FROM news WHERE source_url = ?";
             $row = DB::select($sql,[$sightUrl]);
             if(!empty($row)) {
-                continue;
+                $row = $row[0];
+                
+                $provinceName = $this->getProvinceNameById($row->province_id);
+                $title = "";
+                if($row->pic == "" ) {
+                    $title = $provinceName . " ". $row->title;
+                }
+                echo $title,PHP_EOL;
+                if($title) {
+                    try {
+                        $images = $this->searchImages($title);
+                        
+                            
+                        $doc = News::find($row->id);
+                        $doc->pic = $images[0];
+                        $doc->save();
+                        
+                        foreach($images as $index=>$pic) {
+                            NewsImage::create(array(
+                                "news_id"=>$doc->id,
+                                "url"=>$pic,
+                            ));
+                            if($index > 30) {
+                                break;
+                            }
+                        }
+                        
+                    } catch (\Exception $ex) {
+                        echo $ex->__toString(),PHP_EOL;
+                    }
+                }
             }
             
             $content = $this->getFileContent($sightUrl);

@@ -10,7 +10,7 @@
             </div>
             <div class="sp"></div>
             <div style="border:solid 1px #e2e2e2">
-                <img style="height:400px"/>
+                <img style="height:400px" src="{{$sight->pic}}"/>
             </div>
             <div class="sp"></div>
             <div class="short-desc-view-on-detail">
@@ -61,14 +61,14 @@
                 <div class="sight-relation-right">
                 
                 <ul class="sight-relation">
-                <li>周边景点</li>
-                <li>注意事项</li>
-                <li>旅游佳季</li>
-                <li>特色美食</li>
-                <li>酒店住宿</li>
-                <li>交通工具</li>
-                <li>风景图处</li>
-                <li>旅游攻略</li>
+                <li><span class="glyphicon glyphicon-question-sign"></span> 周边景点</li>
+                <li><span class="glyphicon glyphicon-warning-sign"></span> 注意事项</li>
+                <li><span class="glyphicon glyphicon-flash"></span> 旅游佳季</li>
+                <li><span class="glyphicon glyphicon-thumbs-up"></span> 特色美食</li>
+                <li><span class="glyphicon glyphicon-screenshot"></span> 酒店住宿</li>
+                <li><span class="glyphicon glyphicon-plane"></span> 交通工具</li>
+                <li><span class="glyphicon glyphicon-tree-deciduous"></span> 风景图片</li>
+                <li><span class="glyphicon glyphicon-fire"></span> 旅游攻略</li>
                 </ul>
                 <div class="sp"></div>
                 </div>

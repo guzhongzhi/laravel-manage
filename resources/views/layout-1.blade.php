@@ -2,7 +2,9 @@
 	<head>
     @section("head")
 		<title>Laravel</title>
-        <script language="javascript" src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+        	<link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">  
+	<script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <style>
         .tab-section-content {
             min-height:150px;
@@ -118,7 +120,15 @@
                 font-size:14px;
                 line-height:26px;
             }
+            .nav li{
+                padding: 0 10px;
+            }
+            .nav li a {
+                padding:0px 15px;
+                margin-right:15px;
+            }
             .container {
+                padding:0px;
                 width:80%;
                 max-width:1240px;
                 margin:0px auto;
@@ -177,9 +187,9 @@
         <ul class="nav">
             <li><a href="/">首页</a></li>
             <li><a href="{{url('sight/')}}">景点</a></li>
-            <li>游记</li>
-            <li>国内游</li>
-            <li>出境游</li>
+            <li><a href="/">游记</a></li>
+            <li><a href="/">国内游</a></li>
+            <li><a href="/">出境游</a></li>
         </ul>
         <div class="clear"></div>
     </div>
