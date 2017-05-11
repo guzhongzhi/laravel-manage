@@ -3,18 +3,21 @@ namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
 use DB;
+use Illuminate\Pagination\AbstractPaginator;
 
 class Region extends Model {
 	protected $table = "region";
     
     public static function getProvinces() {
-        $queryBuilder = Region::select();
+        
+        $region = new Region();
+        $queryBuilder = $region->newQuery();
         $queryBuilder->where("parent_id",1);
-        $rows = $queryBuilder->paginate(1000);
+        $rows = $queryBuilder->get(array("*"));
         return $rows;
     }
     
-    public function getUrlKey() {
+    public function getSightUrlKey() {
         return "p".strtolower($this->id).".html";
     }
 }

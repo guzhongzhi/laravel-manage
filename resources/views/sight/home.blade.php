@@ -18,13 +18,13 @@
     
     .sight-home-news li div.pic {
         float:left;
-        width:200px;
+        width:150px;
         border:solid 1px red;
-        height: 200px;
+        height: 150px;
     }
     .sight-home-news li div.desc {
         float:left;
-        width:calc(100% - 220px);
+        width:calc(100% - 170px);
         margin-left:10px;
     }
     .sight-home-news li .desc .title{
@@ -47,12 +47,25 @@
         <ul>
         @foreach($provinces as $province)
         
-            <li><a href="{{url('sight/'.$province->getUrlKey())}}">{{$province->name}}</a></li>
+            <li class="
+            @if($provinceId == $province->id)
+                live
+            @endif
+            "><a href="{{url('sight/'.$province->getSightUrlKey())}}">{{$province->name}}</a></li>
         @endforeach
         </ul>
         <div class="sp"></div>
         
     </div>
+    
+
+    <div class="sp"></div>
+    <div class="container clearboth pagination-container">
+        @include("tools.paginate")
+    </div>
+    
+        
+    <div class="sp"></div>
     <div class="container sight-home sight-home-news">
         <ul>
         @foreach($news as $new)
@@ -70,4 +83,10 @@
         <div class="sp"></div>
         
     </div>
+    
+    <div class="sp"></div>
+    <div class="container clearboth pagination-container">
+        @include("tools.paginate")
+    </div>
+    
 @endsection

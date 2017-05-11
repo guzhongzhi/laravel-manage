@@ -39,15 +39,13 @@ class SightController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function index()
+	public function index(Request $request)
 	{
-        $queryBuilder = News::select();
-        $news = $queryBuilder ->paginate(30);
-        
-		return view('sight.home', array("provinces"=>Region::getProvinces(),"news"=>$news));
+		return $this->provinceList($request, $provinceId=0);
 	}
 
     public function provinceList(Request $request, $provinceId) {
+        $provinces = Region::getProvinces();
         $searchForm = array(
             "category_id"=>array(
                 "field_name"=>"category_id",
@@ -61,7 +59,7 @@ class SightController extends Controller {
                 "input_type"=>"text",
                 "type"=>"=",
                 "label"=>"Province Id",
-                "value"=>$provinceId,
+                "value"=>($provinceId>0) ? $provinceId : null,
             ),
         );
         $searchData = $request->get("filter", array());
@@ -71,7 +69,14 @@ class SightController extends Controller {
         $paginateHelper = new PaginateHelper(News::class);
         $paginate = $paginateHelper->getPaginate($searchFormValue);
         
-        return view('sight.home', array("provinces"=>Region::getProvinces(),"news"=>$paginate));
+        return view('sight.home', array(
+                "provinces"=>$provinces,
+                "paginateHelper"=>$paginateHelper,
+                "paginate"=>$paginate,
+                "news"=>$paginate,
+                "provinceId"=>$provinceId,
+            )
+        );
         
 		//return view('admin.system.menu', array("filter"=>$searchFormValue,"paginateHelper"=>$paginateHelper, "paginate"=>$paginate));
         
@@ -79,7 +84,12 @@ class SightController extends Controller {
     
     
     public function sightDetail($newId) {
-        echo $newId;
-        echo __METHOD__;die();
+        $sight = News::find($newId);
+        
+        return view('sight.detail', array(
+                "sight"=>$sight,
+            )
+        );
+        
     }
 }
