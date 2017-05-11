@@ -1,6 +1,7 @@
 <?php
 namespace App\Helper;
 use Illuminate\Support\Facades\DB;
+use App\Helper\ImageSeekkHelper;
 class SeekerHelper {
     
    public static function curlInitData($url, $retry=5){
@@ -121,7 +122,8 @@ class SeekerHelper {
     
     public static function insertCNCNContent($data){
         $url = $data->url;
-        //echo $url;
+        //$url = "http://beijing.cncn.com/article/148144/";
+        //echo $url;die();
         $content = self::curlInitData($url);
         if($content){  
             $content = mb_convert_encoding($content, 'utf8', 'gbk');
@@ -129,7 +131,7 @@ class SeekerHelper {
             $newsKeywords = '';
             $newsDescription = isset($matchMeta[1]) ? $matchMeta[1] : "";
             $newsDescription = str_replace('欣欣旅游网游记攻略：', '', $newsDescription);
-            echo $newsDescription ."<br />";
+            //echo $newsDescription ."<br />";
             
             $html = str_get_html($content);//获得解析的文档
             $itemAttr = "id=content";
@@ -138,11 +140,17 @@ class SeekerHelper {
                 preg_match('%<title>(.*?)</title>%si', $content, $matchTitle);
                 $newsTitle = isset($matchTitle[1]) ? $matchTitle[1] : "";
                 $newsContent = $ret->innertext;
-                $sql = "INSERT INTO news(`id`, `category_id`, `city_id`, `province_id`, `country_id`, `rate`, `title`, `meta_keywords`, `meta_description`, `short_description`, `editor`, `source_url`, `content`, `created_at`, `updated_at`) VALUE (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW()); ";
-                $newsShortDescription = '';
-                $p = array('2', $data->city_id, $data->province_id, $data->country_id, 0, $newsTitle, $newsKeywords, $newsDescription, $newsShortDescription, '', $url, $newsContent);
-                DB::insert($sql, $p);
+                preg_match('/<div id="showinfo">.*?([0-9]{4}-[0-9]{2}-[0-9]{2})/si', $newsContent, $matchTime);
+                $createdAt = $updatedAt = trim(isset($matchTime[1]) ? $matchTime[1] : date("Y-m-d H:i:s"));
                 
+                $newsContent = ImageSeekHelper::seekPicAndSave($newsContent, 'secret');           
+                $pic = $newsContent['pic'];
+                $newsContent = $newsContent['content'];
+                
+                $sql = "INSERT INTO news(`id`, `category_id`, `city_id`, `province_id`, `country_id`, `rate`, `title`, `meta_keywords`, `meta_description`, `short_description`, `editor`, `source_url`, `pic`, `content`, `created_at`, `updated_at`) VALUE (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?); ";
+                $newsShortDescription = '';
+                $p = array('2', $data->city_id, $data->province_id, $data->country_id, 0, $newsTitle, $newsKeywords, $newsDescription, $newsShortDescription, '', $url, $pic, $newsContent, $createdAt, $updatedAt);
+                DB::insert($sql, $p);       
             }
             
         }
@@ -239,10 +247,18 @@ class SeekerHelper {
             preg_match('%(<div class="ctd_content">.*)<div class="ctd_theend">%si', $content, $matchContent);
             $newsContent = isset($matchContent[1]) ? $matchContent[1] : "";
             //$newsContent = strip_tags($newsContent, '<p><br><div><img><dd><h3><h2><h1><ul><li><span>');
+            
+            preg_match('%<h3>.*?发表于(.*?)</h3>%si', $newsContent, $matchTime);
+            $createdAt = $updatedAt = trim(isset($matchTime[1]) ? $matchTime[1] : date("Y-m-d H:i:s"));
+            
+            $newsContent = ImageSeekHelper::seekPicAndSave($newsContent, 'secret');           
+            $pic = $newsContent['pic'];
+            $newsContent = $newsContent['content'];  
+            
             //insert into news
-            $sql = "INSERT INTO news(`id`, `category_id`, `city_id`, `province_id`, `country_id`, `rate`, `title`, `meta_keywords`, `meta_description`, `short_description`, `editor`, `source_url`, `content`, `created_at`, `updated_at`) VALUE (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW()); ";
+            $sql = "INSERT INTO news(`id`, `category_id`, `city_id`, `province_id`, `country_id`, `rate`, `title`, `meta_keywords`, `meta_description`, `short_description`, `editor`, `source_url`, `pic`, `content`, `created_at`, `updated_at`) VALUE (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?); ";
             $newsShortDescription = '';
-            $p = array('2', $data->city_id, $data->province_id, $data->country_id, 0, $newsTitle, $newsKeywords, $newsDescription, $newsShortDescription, '', $url, $newsContent);
+            $p = array('2', $data->city_id, $data->province_id, $data->country_id, 0, $newsTitle, $newsKeywords, $newsDescription, $newsShortDescription, '', $url, $pic, $newsContent, $createdAt, $updatedAt);
             DB::insert($sql, $p);
         }
         
@@ -252,5 +268,8 @@ class SeekerHelper {
         $cityUrlKey = isset($maps[$cityKey]) ? $maps[$cityKey] : "";
         return $cityUrlKey;
     }
+   
+   
+   
    
 }

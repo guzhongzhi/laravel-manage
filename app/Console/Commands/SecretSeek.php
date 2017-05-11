@@ -184,6 +184,7 @@ class SecretSeek extends Command {
         $rows = DB::select($sql);
         foreach($rows as $row){
             $type = $row->type;
+          
             if($type == 'ctrip'){
                 $content = SeekerHelper::insertCtripContent($row);
             }else{
@@ -193,10 +194,13 @@ class SecretSeek extends Command {
             $sql = "UPDATE search_url SET is_searched = 1 WHERE id = ?";
             DB::update($sql, array($row->id));
         }
-        $start = $start + 50;
-        $cmd = "nohup php artisan secret:seek 1 " .$start ."  1>> process.out 2>> process.err < /dev/null &";    //  
-        echo $cmd,"\n";
-        system($cmd);
+        
+        if(count($rows) > 0){
+            $start = $start + 50;
+            $cmd = "nohup php artisan secret:seek 1 " .$start ."  1>> process.out 2>> process.err < /dev/null &";    //  
+            echo $cmd,"\n";
+            system($cmd);
+        }
     }
      
   
