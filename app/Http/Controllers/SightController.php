@@ -65,12 +65,14 @@ class SightController extends Controller {
         $searchData = $request->get("filter", array());
         $searchFormValue = PaginateHelper::initSearchFieldData($searchData,$searchForm);
 
+        $cities = Region::getRetionsByParentId($provinceId);
 
         $paginateHelper = new PaginateHelper(News::class);
         $paginate = $paginateHelper->getPaginate($searchFormValue);
         
         return view('sight.home', array(
                 "provinces"=>$provinces,
+                "cities"=>$cities,
                 "paginateHelper"=>$paginateHelper,
                 "paginate"=>$paginate,
                 "news"=>$paginate,
@@ -85,6 +87,8 @@ class SightController extends Controller {
     
     public function sightDetail($newId) {
         $sight = News::find($newId);
+        
+        
         
         return view('sight.detail', array(
                 "sight"=>$sight,

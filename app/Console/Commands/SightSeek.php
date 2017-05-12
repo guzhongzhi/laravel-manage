@@ -5,6 +5,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use DB;
 include "Pinyin.php";
+use App\Model\Region;
 use App\Model\News;
 use App\Model\NewsImage;
 
@@ -65,7 +66,7 @@ class SightSeek extends Command {
         }
 	}
     
-    public function getFileContent($url){
+    public function getFileContent($url, $referer="http://www.baidu.com"){
         $binfo = array(
             'Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; .NET CLR 2.0.50727; InfoPath.2; AskTbPTV/5.17.0.25589; Alexa Toolbar)',
             'Mozilla/5.0 (Windows NT 5.1; rv:22.0) Gecko/20100101 Firefox/22.0',
@@ -92,7 +93,7 @@ class SightSeek extends Command {
         curl_setopt($ch, CURLOPT_TIMEOUT,10);
         curl_setopt($ch, CURLOPT_POST, 0);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_REFERER, "http://www.baidu.com");
+        curl_setopt($ch, CURLOPT_REFERER, $referer);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
         curl_setopt($ch, CURLOPT_MAXREDIRS, 3);
         $curl_result = curl_exec($ch);
@@ -111,7 +112,14 @@ class SightSeek extends Command {
         $sql = "SELECT * FROM region WHERE name like '%".$name."%' AND parent_id = 1";
         echo $sql,PHP_EOL;
         $rows = DB::select($sql);
-        return $rows[0];
+        return isset($rows[0]) ? $rows[0] : new Region();
+    }
+    
+    protected function getCityByName($name,$provinceId) {
+        $sql = "SELECT * FROM region WHERE name like '%".$name."%' AND parent_id = " . ($provinceId * 1);
+        echo $sql,PHP_EOL;
+        $rows = DB::select($sql);
+        return isset($rows[0]) ? $rows[0] : new Region();
     }
     
     protected function seekCtrip() {
@@ -158,14 +166,40 @@ class SightSeek extends Command {
     }
         
         
-    function searchImages($sigthName) {
-        $content = file_get_contents("http://image.chinaso.com/getpic?rn=72&st=216&q=".urlencode($sigthName)."&t=" . time());
+    function searchImages($sigthName,$level = 0) {
+        $url = "http://image.chinaso.com/getpic?rn=50&st=0&q=".urlencode($sigthName)."&t=" . time();
+        echo $url,PHP_EOL;
+        $content = $this->getFileContent($url,"http://image.chinaso.com/so?q=" . urlencode($sigthName));
         $c = json_decode($content ,true);
+        
         $results = $c["arrResults"];
+        if(empty($results) && $level == 0) {
+            if(isset($c["relateSearch"][0])) {
+                return $this->searchImages($c["relateSearch"][0], $level++);
+            }
+        }
+        
         $urls = array();
         foreach($results as $result) {
-            $urls[] = $result["url"]."";
+            if($result["ImageWidth"] <700 || $result["ImageHeight"] <600) {
+                continue;
+            }
+            $url = $result["url"]."";
+            if(preg_match('/(landtu.com|sinaimg.cn|16fan.com|nipic.com|qq.com|sina.com.cn)/is',$url)) {
+                continue;
+            }
+            $urls[] = $url;
         }
+        if(empty($urls)) {
+            foreach($results as $result) {
+                $url = $result["url"]."";
+                if(preg_match('/(landtu.com|sinaimg.cn|16fan.com|nipic.com|qq.com|sina.com.cn)/is',$url)) {
+                    continue;
+                }
+                $urls[] = $url;
+            }
+        }
+        $urls = array_unique($urls);
         return $urls;
     }
     
@@ -186,36 +220,8 @@ class SightSeek extends Command {
             $row = DB::select($sql,[$sightUrl]);
             if(!empty($row)) {
                 $row = $row[0];
-                
-                $provinceName = $this->getProvinceNameById($row->province_id);
-                $title = "";
-                if($row->pic == "" ) {
-                    $title = $provinceName . " ". $row->title;
-                }
-                echo $title,PHP_EOL;
-                if($title) {
-                    try {
-                        $images = $this->searchImages($title);
-                        
-                            
-                        $doc = News::find($row->id);
-                        $doc->pic = $images[0];
-                        $doc->save();
-                        
-                        foreach($images as $index=>$pic) {
-                            NewsImage::create(array(
-                                "news_id"=>$doc->id,
-                                "url"=>$pic,
-                            ));
-                            if($index > 30) {
-                                break;
-                            }
-                        }
-                        
-                    } catch (\Exception $ex) {
-                        echo $ex->__toString(),PHP_EOL;
-                    }
-                }
+                $this->seekSightImage($row->id);
+                continue;
             }
             
             $content = $this->getFileContent($sightUrl);
@@ -235,11 +241,18 @@ class SightSeek extends Command {
                 $provinceName = str_replace("景点","",$provinceName);
                 $provinceName = trim($provinceName);
             }
-            echo $provinceName,PHP_EOL;
-            $cityName = isset($matches[1][2]) ? $matches[1][2]: "";
             
-            print_r($provinceName);
+            $cityName = isset($matches[1][2]) ? $matches[1][2]: "";
+            $cityName = str_replace("景点","",$cityName);
+            
+            echo $provinceName , " > " , $cityName ,PHP_EOL;
+            
+            
             $province = $this->getProvinceByName($provinceName);
+            $city = $this->getCityByName($cityName,$province->id);
+            if(!$city->id) {
+                $city = $province;
+            }
             
             preg_match('/<title>(.*?)<\/title>/is',$content,$matches);
             preg_match('/<h1>(.*?)<\/h1>/is',$content,$matches);
@@ -270,19 +283,57 @@ class SightSeek extends Command {
             $sightContent = implode(PHP_EOL, $lines);
             file_put_contents("1.log",$sightContent);
             
-            News::create(array(
+            $sight = News::create(array(
                 "category_id"=>1,
                 "province_id"=>$province->id,
                 "country_id"=>1,
+                "city_id"=>$city->id,
                 "content"=> $sightContent,
                 "title"=>$title,
                 "source_url"=>$sightUrl,
             ));
+            $this->seekSightImage($sight->id);
+            
+            sleep(5);
             }catch(\Exception $ex) {
                 echo $ex->__toString(),PHP_EOL;
             }
         }
         
+    }
+    
+    protected function seekSightImage($id) {
+        $sight = News::find($id);
+        $provinceName = $this->getProvinceNameById($sight->province_id);
+        $title = "";
+        if($sight->pic == "") {
+            $title = $provinceName . " ". $sight->title;
+        }
+        echo $title,PHP_EOL;
+        if($title) {
+            try {
+                $images = $this->searchImages($title);
+                if(empty($images)) {
+                    die();
+                }
+                print_r($images);
+                $sight->pic = isset($images[3]) ? $images[3] : (isset($images[0]) ? $images[0] : "");
+                $sight->save();
+                
+                foreach($images as $index=>$pic) {
+                    NewsImage::create(array(
+                        "news_id"=>$sight->id,
+                        "url"=>$pic,
+                    ));
+                    if($index > 30) {
+                        break;
+                    }
+                }
+                
+            } catch (\Exception $ex) {
+                echo $ex->__toString(),PHP_EOL;
+            }
+        }
     }
     
     protected function seekCnCn() {
@@ -450,7 +501,7 @@ class SightSeek extends Command {
         
         preg_match_all('/<div[^>]*?class="type"[^>]*?>(.*?)<\/div>/is',$content,$matches);
         $content = $matches[1][0];
-        News::create(array(
+        $sight = News::create(array(
             "category_id"=>1,
             "province_id"=>$province->id,
             "country_id"=>$country->id,
@@ -458,6 +509,7 @@ class SightSeek extends Command {
             "title"=>$title,
             "source_url"=>$url,
         ));
+        
     }
 
 	/**

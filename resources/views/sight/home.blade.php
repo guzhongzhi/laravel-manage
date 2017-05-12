@@ -1,4 +1,9 @@
 @extends("layout-1")
+
+@section("breadcrumb")
+        fff
+@endsection
+
 @section("content")
     @parent
     <div class="sp"></div>
@@ -59,20 +64,42 @@
         
     }
     </style>
+    
+    
+    
+    
+    
+    
     <div class="container sight-home sight-home-province">
         <ul>
-        @foreach($provinces as $province)
+        @if($provinceId)
+            
+            @foreach($cities as $province)
+                <li class="
+                @if($provinceId == $province->id)
+                    active
+                @endif
+                "><a href="{{url('sight/'.$province->getSightUrlKey())}}">{{$province->name}}</a></li>
+            @endforeach
+            
+        @else
+            @foreach($provinces as $province)
+            
+                <li class="
+                @if($provinceId == $province->id)
+                    active
+                @endif
+                "><a href="{{url('sight/'.$province->getSightUrlKey())}}">{{$province->name}}</a></li>
+            @endforeach
         
-            <li class="
-            @if($provinceId == $province->id)
-                active
-            @endif
-            "><a href="{{url('sight/'.$province->getSightUrlKey())}}">{{$province->name}}</a></li>
-        @endforeach
+        @endif
         </ul>
         <div class="sp"></div>
         
     </div>
+    
+    
+    
     
 
     <div class="sp"></div>

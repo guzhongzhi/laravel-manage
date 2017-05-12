@@ -9,10 +9,13 @@ class Region extends Model {
 	protected $table = "region";
     
     public static function getProvinces() {
-        
+        return self::getRetionsByParentId(1);
+    }
+    
+    public static function getRetionsByParentId($id) {
         $region = new Region();
         $queryBuilder = $region->newQuery();
-        $queryBuilder->where("parent_id",1);
+        $queryBuilder->where("parent_id",$id);
         $rows = $queryBuilder->get(array("*"));
         return $rows;
     }

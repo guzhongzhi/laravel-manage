@@ -6,12 +6,95 @@
     <div class="container">
         <div class="fleft two-left-big">
             <div class="sight-detail-title">
-            <h1>{{$sight->title}}</h1>
+            <h1>{{$sight->getProvince()->name}} {{$sight->title}}</h1>
             </div>
             <div class="sp"></div>
+            
+            <style>
+            
+            .sp-thumbnail-image-container  {
+                width:170px;
+            }
+            .sp-thumbnail-image-container img {
+                width:150px;
+            }
+            </style>
+            
             <div style="border:solid 1px #e2e2e2">
-                <img style="height:400px" src="{{$sight->pic}}"/>
+            
+    <script language="javascript" src="/js/jquery.sliderPro.min.js"></script>
+    
+    
+    
+    
+    
+<link rel="stylesheet" type="text/css" href="/css/slider/slider-pro.min.css" media="screen"/>
+<script type="text/javascript">
+	$( document ).ready(function( $ ) {
+		$( '#example5' ).sliderPro({
+			width: 740,
+			height: 500,
+			orientation: 'vertical',
+			loop: false,
+			arrows: true,
+			buttons: false,
+			thumbnailsPosition: 'right',
+			thumbnailPointer: true,
+			thumbnailWidth: 170,
+			breakpoints: {
+				800: {
+					thumbnailsPosition: 'bottom',
+					thumbnailWidth: 170,
+					thumbnailHeight: 100
+				},
+				500: {
+					thumbnailsPosition: 'bottom',
+					thumbnailWidth: 120,
+					thumbnailHeight: 50
+				}
+			}
+		});
+        $(".slider-pro").css("max-width","100%");
+	});
+</script>
+    
+<div id="example5" class="slider-pro">
+  <div class="sp-slides">
+  
+    @foreach($sight->getImages() as $image)
+    <div class="sp-slide">
+        <img class="sp-image" src="css/images/blank.gif" data-src="{{$image->url}}" data-retina="{{$image->url}}"/>
+        <div class="sp-caption"></div>
+    </div>
+    @endforeach
+  </div>
+  
+        <div class="sp-thumbnails">
+
+        @foreach($sight->getImages() as $image)
+    
+            <div class="sp-thumbnail">
+              <div class="sp-thumbnail-image-container"> <img class="sp-thumbnail-image" src="{{$image->url}}"/> </div>
+              <div class="sp-thumbnail-text">
+                <div class="sp-thumbnail-title"> {{$sight->title}}</div>
+                <div class="sp-thumbnail-description"></div>
+              </div>
             </div>
+            
+            
+            @endforeach
+            
+          </div>
+        </div> 
+         </div>
+            
+            
+            
+            
+            
+            
+            
+            
             <div class="sp"></div>
             <div class="short-desc-view-on-detail">
             {{$sight->getShortDesc()}}
@@ -33,22 +116,22 @@
                 </div>
                 
                 <div class="tab-2 tab-section-content hidden">
-                fdsa
+                 e
                 </div>
                 
                 <div class="tab-3 tab-section-content hidden">
-                cccc
+                 f
                 </div>
                 
                 <div class="tab-4 tab-section-content hidden">
-                eeee
+                 d
                 </div>
             </div>
         </div>
         <script language="javascript">
         $(".tab-section li").click(function(){
-            $(".tab-section-content").hide();
-            $(($(this).attr("rel"))).show();
+            $(".tab-section-content").addClass("hidden");
+            $(($(this).attr("rel"))).removeClass("hidden");
             
             $("li",this.parentNode).removeClass("active");
             $(this).addClass("active");
