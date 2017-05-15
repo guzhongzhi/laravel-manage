@@ -20,7 +20,11 @@ class Region extends Model {
         return $rows;
     }
     
-    public function getSightUrlKey() {
-        return "p".strtolower($this->id).".html";
+    public function getChilds() {
+        return self::getRetionsByParentId($this->id * 1);
+    }
+    
+    public function getSightUrlKey($city = null) {
+        return ($city ? "c" : "p").strtolower($this->id).".html";
     }
 }

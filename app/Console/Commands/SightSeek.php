@@ -112,14 +112,22 @@ class SightSeek extends Command {
         $sql = "SELECT * FROM region WHERE name like '%".$name."%' AND parent_id = 1";
         echo $sql,PHP_EOL;
         $rows = DB::select($sql);
-        return isset($rows[0]) ? $rows[0] : new Region();
+        $data = isset($rows[0]) ? $rows[0] : new Region();
+        if($data->id) {
+            return Region::find($data->id);
+        }
+        return $data;
     }
     
     protected function getCityByName($name,$provinceId) {
         $sql = "SELECT * FROM region WHERE name like '%".$name."%' AND parent_id = " . ($provinceId * 1);
         echo $sql,PHP_EOL;
         $rows = DB::select($sql);
-        return isset($rows[0]) ? $rows[0] : new Region();
+        $data = isset($rows[0]) ? $rows[0] : new Region();
+        if($data->id) {
+            return Region::find($data->id);
+        }
+        return $data;
     }
     
     protected function seekCtrip() {
@@ -251,7 +259,8 @@ class SightSeek extends Command {
             $province = $this->getProvinceByName($provinceName);
             $city = $this->getCityByName($cityName,$province->id);
             if(!$city->id) {
-                $city = $province;
+                $cities = $province->getChilds();
+                $city = array_pop($city);
             }
             
             preg_match('/<title>(.*?)<\/title>/is',$content,$matches);

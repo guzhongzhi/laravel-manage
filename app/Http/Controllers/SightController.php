@@ -44,6 +44,52 @@ class SightController extends Controller {
 		return $this->provinceList($request, $provinceId=0);
 	}
 
+    public function cityList(Request $request, $cityId) {
+        $provinces = Region::getProvinces();
+        $searchForm = array(
+            "category_id"=>array(
+                "field_name"=>"category_id",
+                "input_type"=>"text",
+                "type"=>"=",
+                "label"=>"Category",
+                "value"=>News::CATEGORY_ID_SIGHT,
+            ),
+            "city_id"=>array(
+                "field_name"=>"city_id",
+                "input_type"=>"text",
+                "type"=>"=",
+                "label"=>"City Id",
+                "value"=>($cityId>0) ? $cityId : null,
+            ),
+        );
+        $searchData = $request->get("filter", array());
+        $searchFormValue = PaginateHelper::initSearchFieldData($searchData,$searchForm);
+        $city = $province = null;
+        $city = Region::find($cityId);
+        
+        
+        $province = Region::find($city->parent_id);
+        $provinceId = $province->id;
+        
+        $cities = Region::getRetionsByParentId($province->id);
+
+        $paginateHelper = new PaginateHelper(News::class);
+        $paginate = $paginateHelper->getPaginate($searchFormValue);
+        
+        return view('sight.home', array(
+                "provinces"=>$provinces,
+                "cities"=>$cities,
+                "paginateHelper"=>$paginateHelper,
+                "paginate"=>$paginate,
+                "news"=>$paginate,
+                "provinceId"=>$provinceId,
+                "province"=>$province,
+                "city"=>$city,
+                "cityId"=>$cityId,
+            )
+        );
+    }
+    
     public function provinceList(Request $request, $provinceId) {
         $provinces = Region::getProvinces();
         $searchForm = array(
@@ -64,10 +110,11 @@ class SightController extends Controller {
         );
         $searchData = $request->get("filter", array());
         $searchFormValue = PaginateHelper::initSearchFieldData($searchData,$searchForm);
-        $city = $province = null;
+        $cityId  = $city = $province = null;
         $province = Region::find($provinceId);
         if($province && $province->parent_id != 1) {
             $city = $province;
+            $cityId = $city->id;
             $province = Region::find($city->parent_id);
         }
         
@@ -85,6 +132,7 @@ class SightController extends Controller {
                 "provinceId"=>$provinceId,
                 "province"=>$province,
                 "city"=>$city,
+                "cityId"=>$cityId,
             )
         );
         
@@ -96,10 +144,16 @@ class SightController extends Controller {
     public function sightDetail($newId) {
         $sight = News::find($newId);
         
+        $queryBuilder = $sight->newQuery();
+        $queryBuilder->where("city_id",$sight->city_id);
+        $queryBuilder->WhereNotIn("id",array($sight->id));
+        $queryBuilder->getQuery()->limit(5);
         
+        $relatedSight = $queryBuilder->get(array("*"));
         
         return view('sight.detail', array(
                 "sight"=>$sight,
+                "recItems"=>$relatedSight,
             )
         );
         

@@ -10,6 +10,13 @@
             </div>
             <div class="sp"></div>
             
+            
+            <div class="short-desc-view-on-detail">
+            {{$sight->getShortDesc()}}
+            </div>
+            
+            
+            <div class="sp"></div>
             <style>
             
             .sp-thumbnail-image-container  {
@@ -57,17 +64,17 @@
         $(".slider-pro").css("max-width","100%");
 	});
 </script>
-    
-<div id="example5" class="slider-pro">
-  <div class="sp-slides">
-  
-    @foreach($sight->getImages() as $image)
-    <div class="sp-slide">
-        <img class="sp-image" src="css/images/blank.gif" data-src="{{$image->url}}" data-retina="{{$image->url}}"/>
-        <div class="sp-caption"></div>
-    </div>
-    @endforeach
-  </div>
+            
+        <div id="example5" class="slider-pro">
+          <div class="sp-slides">
+          
+            @foreach($sight->getImages() as $image)
+            <div class="sp-slide">
+                <img class="sp-image" src="css/images/blank.gif" data-src="{{$image->url}}" data-retina="{{$image->url}}"/>
+                <div class="sp-caption"></div>
+            </div>
+            @endforeach
+          </div>
   
         <div class="sp-thumbnails">
 
@@ -94,11 +101,6 @@
             
             
             
-            
-            <div class="sp"></div>
-            <div class="short-desc-view-on-detail">
-            {{$sight->getShortDesc()}}
-            </div>
             <div class="sp"></div>
             <div class="sp"></div>
             <div class="sp"></div>
@@ -144,7 +146,7 @@
                 <div class="sight-relation-right">
                 
                 <ul class="sight-relation">
-                <li><span class="glyphicon glyphicon-question-sign"></span> 周边景点</li>
+                <li><span class="glyphicon glyphicon-question-sign"></span> <a href="/sight/c{{$sight->city_id}}.html">周边景点</a></li>
                 <li><span class="glyphicon glyphicon-warning-sign"></span> 注意事项</li>
                 <li><span class="glyphicon glyphicon-flash"></span> 旅游佳季</li>
                 <li><span class="glyphicon glyphicon-thumbs-up"></span> 特色美食</li>
@@ -163,15 +165,21 @@
                 <div style="padding:10px;background:#f33b7a;color:#FFF;font-weight:bold;">热门目的地</div>
                 <div class="sight-relation-right">
                 
-                <ul class="sight-relation">
-                <li>周边景点</li>
-                <li>注意事项</li>
-                <li>旅游佳季</li>
-                <li>特色美食</li>
-                <li>酒店住宿</li>
-                <li>交通工具</li>
-                <li>风景图处</li>
-                <li>旅游攻略</li>
+                <ul class="sight-relation-sights" style="padding:0px;">
+                @foreach($recItems as $item) 
+                    <li>
+                    <div style="float:left;width:150px;overflow:hidden;height:100px;">
+                        <a href="{{$item->getSightUrl()}}"><img src="{{$item->pic}}" width="150"/></a>
+                    </div>
+                    <div style="float:right;width:calc(100% - 160px)">
+                        <a href="{{$item->getSightUrl()}}">{{$item->title}}</a>
+                        <div style="height:65px;font-size:12px;overflow:hidden;color:#999">
+                        {{$item->getShortDesc()}}
+                        </div>
+                    </div>
+                    </li>
+                @endforeach
+                
                 </ul>
                 <div class="sp"></div>
                 </div>

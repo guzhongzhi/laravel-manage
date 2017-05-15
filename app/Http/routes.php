@@ -14,6 +14,7 @@
 Route::get('/', 'WelcomeController@index');
 Route::get('/sight', 'SightController@index');
 Route::get('/sight/p{id}.html', 'SightController@provinceList');
+Route::get('/sight/c{id}.html', 'SightController@cityList');
 Route::get('/sight/s-{id}.html', 'SightController@sightDetail');
 
 Route::get('/travel', 'TravelController@index');

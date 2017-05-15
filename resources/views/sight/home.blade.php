@@ -26,8 +26,9 @@
         padding:0;
         margin:0;
     }
-    .sight-home-province li.active {
-        background:#e1e1e1;
+    .sight-home-province li.active a {
+        color: #a70303 !important;
+        font-weight: bold;
     }
     .sight-home-province  ul{
         margin:10px;
@@ -81,12 +82,12 @@
         <ul>
         @if($provinceId)
             
-            @foreach($cities as $province)
+            @foreach($cities as $city)
                 <li class="
-                @if($provinceId == $province->id)
+                @if($cityId == $city->id)
                     active
                 @endif
-                "><a href="{{url('sight/'.$province->getSightUrlKey())}}">{{$province->name}}</a></li>
+                "><a href="{{url('sight/'.$city->getSightUrlKey($city))}}">{{$city->name}}</a></li>
             @endforeach
             
         @else
@@ -96,7 +97,7 @@
                 @if($provinceId == $province->id)
                     active
                 @endif
-                "><a href="{{url('sight/'.$province->getSightUrlKey())}}">{{$province->name}}</a></li>
+                "><a href="{{url('sight/'.$province->getSightUrlKey($city))}}">{{$province->name}}</a></li>
             @endforeach
         
         @endif

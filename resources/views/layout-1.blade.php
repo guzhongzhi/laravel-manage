@@ -178,6 +178,22 @@
                 border-radius: 4px;
                 border: solid 1px #e5004f;
             }
+            .nav>li>a:focus, .nav>li>a:hover {
+                text-decoration: none;
+                background-color: #ca0046;
+            }
+            .sight-relation-sights,
+            .sight-relation-sights li {
+                padding:0px;
+                margin:0px;
+                list-style:none;
+            }
+            
+            .sight-relation-sights li {
+                margin-bottom:10px;
+                clear:both;
+                height:100px;
+            }
 		</style>
 	@show
 		
@@ -213,7 +229,7 @@
     @show
 	<div class="sp"></div>
     @section("bottom")
-        <div style="border-top:solid 2px #f55b90;background:#e1e1e1;padding:10px 10%;">
+        <div style="border-top:solid 2px #f55b90;background:#f5f5f5;padding:10px 10%;">
             <div class="row">
               <div class="col-md-3">去旅行</div>
               <div class="col-md-3">最热门</div>
