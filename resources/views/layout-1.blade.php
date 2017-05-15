@@ -166,6 +166,10 @@
             .pagination li:first-child{
                 padding-left:0px;
             }
+            
+            .fr {
+                float:right!important
+            }
 		</style>
 	@show
 		
@@ -184,7 +188,7 @@
         <ul class="nav">
             <li><a href="/">首页</a></li>
             <li><a href="{{url('sight/')}}">景点</a></li>
-            <li><a href="/">游记</a></li>
+            <li><a href="{{url('travel/')}}">游记</a></li>
             <li><a href="/">国内游</a></li>
             <li><a href="/">出境游</a></li>
         </ul>

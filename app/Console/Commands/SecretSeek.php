@@ -195,6 +195,7 @@ class SecretSeek extends Command {
             DB::update($sql, array($row->id));
         }
         
+        die("Done");
         if(count($rows) > 0){
             $start = $start + 50;
             $cmd = "nohup php artisan secret:seek 1 " .$start ."  1>> process.out 2>> process.err < /dev/null &";    //  

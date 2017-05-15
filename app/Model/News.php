@@ -5,7 +5,8 @@ use DB;
 
 class News extends Model {
     const CATEGORY_ID_SIGHT = 1;
-    const CATEGORY_ID_STRATEGY = 2;
+    const CATEGORY_ID_STRATEGY = 3;
+    const CATEGORY_ID_TRAVEL = 2;
     const CATEGORY_ID_FOOD = 5;
     const CATEGORY_ID_HOTEL = 6;
     
@@ -51,12 +52,17 @@ class News extends Model {
         return "/sight/s-" . $this->id.".html";
     }
     
+    public function getTravelUrl() {
+        return "/travel/s-" . $this->id.".html";
+    }
+    
     public function getShortDesc() {
         if($this->short_description) {
             return $this->short_description;
         }
         $content = $this->content;
         $content = preg_replace('/<\/?.*?>/is','',$content);
+        $content = str_replace(array("\r\n", "\r", "\n", " "), "", $content);
         return mb_substr($content,0,200);
     }
     

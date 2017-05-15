@@ -16,6 +16,12 @@ Route::get('/sight', 'SightController@index');
 Route::get('/sight/p{id}.html', 'SightController@provinceList');
 Route::get('/sight/s-{id}.html', 'SightController@sightDetail');
 
+Route::get('/travel', 'TravelController@index');
+Route::get('/travel/p{id}.html', 'TravelController@provinceList');
+Route::get('/travel/c{id}.html', 'TravelController@cityList');
+Route::get('/travel/s-{id}.html', 'TravelController@travelDetail');
+Route::get('/travel/like', 'TravelController@travelEnjoy');
+
 Route::group(['prefix' => 'admin','namespace'=>'Admin'], function () {
     Route::group(["as"=>"admin.welcome"],function() {
         Route::get('', function(){

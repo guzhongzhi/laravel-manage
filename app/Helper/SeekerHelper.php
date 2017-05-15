@@ -227,6 +227,7 @@ class SeekerHelper {
     public static function insertCtripContent($data){
         $url = $data->url;
         $content = self::curlInitData($url);
+        echo "Search $url \n";
         if($content){            
             preg_match('/<meta name="keywords" content="(.*?)".*<meta name="description" content="(.*?)"/si', $content, $matchMeta);
             $newsKeywords    = isset($matchMeta[1]) ? $matchMeta[1] : "";
@@ -244,8 +245,10 @@ class SeekerHelper {
             $newsTitle = isset($matchTitle[1]) ? $matchTitle[1] : "";
             $newsTitle = str_replace('【携程攻略】', '', $newsTitle);
         
-            preg_match('%(<div class="ctd_content">.*)<div class="ctd_theend">%si', $content, $matchContent);
+            preg_match('%(<div class="ctd_content.*)<div class="ctd_theend">%si', $content, $matchContent);
             $newsContent = isset($matchContent[1]) ? $matchContent[1] : "";
+            $newsContent = preg_replace('%<div class="ctd_content_controls.*?</h3>%si', '', $newsContent);
+            $newsContent = preg_replace('%<a target="_blank" class="gs_a_poi.*?href=".*?>(.*?)</a>%si', '$1', $newsContent);
             //$newsContent = strip_tags($newsContent, '<p><br><div><img><dd><h3><h2><h1><ul><li><span>');
             
             preg_match('%<h3>.*?发表于(.*?)</h3>%si', $newsContent, $matchTime);
@@ -261,7 +264,6 @@ class SeekerHelper {
             $p = array('2', $data->city_id, $data->province_id, $data->country_id, 0, $newsTitle, $newsKeywords, $newsDescription, $newsShortDescription, '', $url, $pic, $newsContent, $createdAt, $updatedAt);
             DB::insert($sql, $p);
         }
-        
     }
     public static function ctripMapsCity($cityKey){
         $maps = array('beijing'=>'beijing1', 'tianjin'=>'tianjin154', 'jiazhuang'=>'shijiazhuang199', 'tangshan'=>'tangshan200', );
