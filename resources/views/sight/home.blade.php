@@ -1,7 +1,19 @@
 @extends("layout-1")
 
 @section("breadcrumb")
-        fff
+    <div class="sp"></div>
+    <div class="container">
+        <ol class="breadcrumb">
+          <li><a href="/">首页</a></li>
+          <li><a href="/sight">景点</a></li>
+        @if($city)
+            <li><a href="{{url('/sight/p'.$province->id.'.html')}}">{{$province->name}}</a></li>
+            <li class="active">{{$city->name}}</li>
+        @elseif($province)
+            <li class="active">{{$province->name}}</li>
+        @endif
+        </ol>
+    </div>
 @endsection
 
 @section("content")
@@ -64,11 +76,6 @@
         
     }
     </style>
-    
-    
-    
-    
-    
     
     <div class="container sight-home sight-home-province">
         <ul>

@@ -170,10 +170,16 @@
             .fr {
                 float:right!important
             }
+            .breadcrumb{
+                padding: 12px 15px;
+                margin-bottom: 0px;
+                list-style: none;
+                background-color: #fffdfb;
+                border-radius: 4px;
+                border: solid 1px #e5004f;
+            }
 		</style>
 	@show
-		
-
 		
 	</head>
 	<body>
