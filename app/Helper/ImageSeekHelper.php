@@ -5,7 +5,8 @@ class ImageSeekHelper {
 //for image seek
     static $sightImgPath = '/upload/sight/';
     static $secretImgPath = '/upload/travel/';
-    public static function makeDir($path){ 
+    static $foodImgPath = '/upload/food/';
+    public static function makeDir($path){
         $path = public_path() . $path . date("Y") . date("m") . "/";
         if(!file_exists($path)){//不存在则建立 
             $mk=@mkdir($path,0777, true); //权限 

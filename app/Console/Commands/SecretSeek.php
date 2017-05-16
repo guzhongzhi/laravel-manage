@@ -185,10 +185,12 @@ class SecretSeek extends Command {
         foreach($rows as $row){
             $type = $row->type;
           
-            if($type == 'ctrip'){
+            if($type == SeekerHelper::SEEK_CTRIP_TRAVEL_TYPE){
                 $content = SeekerHelper::insertCtripContent($row);
-            }else{
+            }elseif($type ==  SeekerHelper::SEEK_CNCN_TRAVEL_TYPE){
                 $content = SeekerHelper::insertCNCNContent($row);
+            }elseif($type ==  SeekerHelper::SEEK_CNCN_FOOD_TYPE){
+                $content = SeekerHelper::insertCNCNFoodContent($row);
             }
             //update the table
             $sql = "UPDATE search_url SET is_searched = 1 WHERE id = ?";

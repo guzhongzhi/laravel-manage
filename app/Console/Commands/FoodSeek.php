@@ -78,7 +78,7 @@ class FoodSeek extends Command {
             foreach($provinces as $province){
                 $provinceName = $province->name;
                 $pId = $province->id;
-                echo "Start to seek the cncn province - $provinceName: \n";
+                echo "Start to seek the cncn food province - $provinceName: \n";
                 $provicenPY = str_replace(' ', '', strtolower($province->name_en));
                 $provicenPY = rtrim($provicenPY, 'shi');
                 $sqlCity = "SELECT * FROM region WHERE parent_id = '$pId'";
@@ -115,12 +115,13 @@ class FoodSeek extends Command {
                     $mainData = array('main_domain_url'=>$mainDomainUrl, 'country_id'=>$cId, 'province_id'=>$pId, 'type'=>SeekerHelper::SEEK_CNCN_FOOD_TYPE);
                     SeekerHelper::insertCNCNUrl($grabUrl, $mainData);
                 }
-                echo "End to seek the cncn province - $provinceName.\n";
+                echo "End to seek the cncn food province - $provinceName.\n";
                 break;
                 
             }
+            die("chuan");
             if(count($provinces) > 0){
-                $start++;
+               $start++;
                 $cmd = "nohup php artisan food:seek 0 " .$start ."  1>> process.out 2>> process.err < /dev/null &";    //  
                 echo $cmd,"\n";
                 system($cmd);
