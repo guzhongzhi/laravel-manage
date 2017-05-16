@@ -2,7 +2,8 @@
 namespace App\Http\Controllers;
 
 use App\Model\Region;
-use App\Model\News;
+use App\Model\Food;
+use App\Model\Store;
 use DB;
 
 
@@ -12,7 +13,7 @@ use Illuminate\Http\Request;
 use App\Helper\PaginateHelper;
 use Illuminate\Support\Facades\Cookie;
 
-class TravelController extends Controller {
+class FoodController extends Controller {
 
 	/*
 	|--------------------------------------------------------------------------
@@ -45,16 +46,55 @@ class TravelController extends Controller {
 		return $this->provinceList($request, $provinceId=0);
 	}
 
+    public function provinceList(Request $request, $provinceId) {
+        $provinces = Region::getProvinces();
+        $searchForm = array(
+
+            "province_id"=>array(
+                "field_name"=>"province_id",
+                "input_type"=>"text",
+                "type"=>"=",
+                "label"=>"Province Id",
+                "value"=>($provinceId>0) ? $provinceId : null,
+            ),
+        );
+        $searchData = $request->get("filter", array());
+        $searchFormValue = PaginateHelper::initSearchFieldData($searchData,$searchForm);
+
+        $cityId  = $city = $province = null;
+        $province = Region::find($provinceId);
+        if($province && $province->parent_id != 1) {
+            $city = $province;
+            $cityId = $city->id;
+            $province = Region::find($city->parent_id);
+        }
+        
+        $cities = Region::getRetionsByParentId($provinceId);
+        
+        $paginateHelper = new PaginateHelper(Food::class);
+        $paginate = $paginateHelper->getPaginate($searchFormValue);
+        
+        return view('food.home', array(
+                "provinces"=>$provinces,
+                "cities"=>$cities,
+                "paginateHelper"=>$paginateHelper,
+                "paginate"=>$paginate,
+                "news"=>$paginate,
+                "provinceId"=>$provinceId,
+                "provinceId"=>$provinceId,
+                "province"=>$province,
+                "city"=>$city,
+                "cityId"=>$cityId,
+            )
+        );
+        
+		//return view('admin.system.menu', array("filter"=>$searchFormValue,"paginateHelper"=>$paginateHelper, "paginate"=>$paginate));
+        
+    }
+    
     public function cityList(Request $request, $cityId) {
         $provinces = Region::getProvinces();
         $searchForm = array(
-            "category_id"=>array(
-                "field_name"=>"category_id",
-                "input_type"=>"text",
-                "type"=>"=",
-                "label"=>"Category",
-                "value"=>News::CATEGORY_ID_TRAVEL,
-            ),
             "city_id"=>array(
                 "field_name"=>"city_id",
                 "input_type"=>"text",
@@ -74,10 +114,10 @@ class TravelController extends Controller {
         
         $cities = Region::getRetionsByParentId($province->id);
 
-        $paginateHelper = new PaginateHelper(News::class);
+        $paginateHelper = new PaginateHelper(Food::class);
         $paginate = $paginateHelper->getPaginate($searchFormValue);
         
-        return view('sight.home', array(
+        return view('food.home', array(
                 "provinces"=>$provinces,
                 "cities"=>$cities,
                 "paginateHelper"=>$paginateHelper,
@@ -91,86 +131,58 @@ class TravelController extends Controller {
         );
     }
     
-    public function provinceList(Request $request, $provinceId) {
-        $provinces = Region::getProvinces();
-        $searchForm = array(
-            "category_id"=>array(
-                "field_name"=>"category_id",
-                "input_type"=>"text",
-                "type"=>"=",
-                "label"=>"Category",
-                "value"=>News::CATEGORY_ID_TRAVEL,
-            ),
-            "province_id"=>array(
-                "field_name"=>"province_id",
-                "input_type"=>"text",
-                "type"=>"=",
-                "label"=>"Province Id",
-                "value"=>($provinceId>0) ? $provinceId : null,
-            ),
-        );
-        $searchData = $request->get("filter", array());
-        $searchFormValue = PaginateHelper::initSearchFieldData($searchData,$searchForm);
-
-        $cityId  = $city = $province = null;
-        $province = Region::find($provinceId);
-        
-       
-        if($province && $province->parent_id != 1) {
-            $city = $province;
-            $cityId = $city->id;
-            $province = Region::find($city->parent_id);
-        }
-        $cities = Region::getRetionsByParentId($provinceId);
-        $paginateHelper = new PaginateHelper(News::class);
-        $paginate = $paginateHelper->getPaginate($searchFormValue);
-        
-        return view('travel.home', array(
-                "provinces"=>$provinces,
-                "cities"=>$cities,
-                "paginateHelper"=>$paginateHelper,
-                "paginate"=>$paginate,
-                "news"=>$paginate,
-                "provinceId"=>$provinceId,
-                "provinceId"=>$provinceId,
-                "province"=>$province,
-                "city"=>$city,
-                "cityId"=>$cityId,
-            )
-        );
-        
-		//return view('admin.system.menu', array("filter"=>$searchFormValue,"paginateHelper"=>$paginateHelper, "paginate"=>$paginate));
-        
-    }
     
-    
-    public function travelDetail($newId) {
+    public function foodDetail($newId) {
         
-       
-       
-        if(Cookie::get('travel_'.$newId)){
+        if(Cookie::get('food_'.$newId)){
             $likeClass = 'link_like click_like';
         }else{
             $likeClass = 'link_like';
         }
         
-        $travel = News::find($newId);
-        $travel->click = $travel->click + 1;
-        $travel->save();
-        return view('travel.detail', array(
-                "travel"=>$travel,
+        $food = Food::find($newId);
+        
+        return view('food.detail', array(
+                "food"=>$food,
                 'likeClass'=>$likeClass,
             )
         );
         
     }
     
-    public function travelEnjoy(){
-        $newId = \Request::input('newId');
-        Cookie::queue('travel_'.$newId, 1, 3600*24);
-        $travel = News::find($newId);
-        $travel->like = $travel->like + 1;
-        $travel->save();
-        return $travel->like;
+    
+    public function storeDetail($newId){
+        if(Cookie::get('store_'.$newId)){
+            $likeClass = 'link_like click_like';
+        }else{
+            $likeClass = 'link_like';
+        }
+        
+        $store = Store::find($newId);
+        
+        return view('food.store_detail', array(
+                "store"=>$store,
+                'likeClass'=>$likeClass,
+            )
+        );
     }
+    
+    public function foodEnjoy(){
+        $newId = \Request::input('newId');
+        Cookie::queue('food_'.$newId, 1, 3600*24);
+        $food = Food::find($newId);
+        $food->like = $food->like + 1;
+        $food->save();
+        return $food->like;
+    }
+    
+    public function storeEnjoy(){
+        $newId = \Request::input('newId');
+        Cookie::queue('store_'.$newId, 1, 3600*24);
+        $store = Store::find($newId);
+        $store->like = $store->like + 1;
+        $store->save();
+        return $store->like;
+    }
+    
 }

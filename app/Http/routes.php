@@ -23,6 +23,16 @@ Route::get('/travel/c{id}.html', 'TravelController@cityList');
 Route::get('/travel/s-{id}.html', 'TravelController@travelDetail');
 Route::get('/travel/like', 'TravelController@travelEnjoy');
 
+
+Route::get('/food', 'FoodController@index');
+Route::get('/food/p{id}.html', 'FoodController@provinceList');
+Route::get('/food/c{id}.html', 'FoodController@cityList');
+Route::get('/food/d-{id}.html', 'FoodController@foodDetail');
+Route::get('/food/c{id}.html', 'FoodController@cityList');
+Route::get('/food/like', 'FoodController@foodEnjoy');
+Route::get('/store/like', 'FoodController@storeEnjoy');
+Route::get('/store/d-{id}.html', 'FoodController@storeDetail');
+
 Route::group(['prefix' => 'admin','namespace'=>'Admin'], function () {
     Route::group(["as"=>"admin.welcome"],function() {
         Route::get('', function(){
