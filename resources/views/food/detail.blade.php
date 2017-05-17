@@ -7,7 +7,19 @@
     <script src="/skin/food/js/food.js"></script>
     <div class="sp"></div>
     <div class="container">
-   
+        <ol class="breadcrumb">
+            <li><a href="/">首页</a></li>
+            <li><a href="/food">美食</a></li>
+            @if($city)
+                <li><a href="{{url('/food/p'.$province->id.'.html')}}">{{$province->name}}</a></li>
+                <li><a href="{{url('/food/c'.$city->id.'.html')}}">{{$city->name}}</a></li>
+            @elseif($province)
+                <li><a href="{{url('/food/p'.$province->id.'.html')}}">{{$province->name}}</a></li>
+            @endif
+            <li class="active">{{$food->title}}</li>
+        </ol>
+
+        <div class="gg930 mt20"></div>
         <div class="fleft two-left-big">
                 <div class="ctd_controls cf">
                    
@@ -50,8 +62,9 @@
                         
                         
                             <div class="gg930 mt20"></div>
+                            @if($food->getStores())
                             <div class="box_con mt20">
-                                <div class="tit"><strong>哪里吃火锅</strong></div>
+                                <div class="tit"><strong>哪里吃{{$food->title}}</strong></div>
                                 <div class="txt_tw">
                                     <ul>
                                         @foreach($food->getStores() as $store)
@@ -60,6 +73,7 @@
                                     </ul>
                                 </div>
                             </div>
+                            @endif
                         </div> 
                       
                     </div>

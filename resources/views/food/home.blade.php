@@ -114,11 +114,11 @@
     <div class="container sight-home sight-home-news">
         <div class="con_left" style="margin-right: 0px;"> 
             <div class="food_li" style="margin:0 auto;"> 
-                <div class="t"> 四川美食 </div> 
+                <div class="t"> {{$currentTitleName}}美食 </div>
                 <div style="background-color:#000000">
                     <div class="a" style="margin:0 auto;">  
                         @foreach($news as $new)
-                            <a href="{{$new->getFoodUrl()}}" target="_blank"> 
+                            <a href="{{$new->getFoodUrl()}}">
                                 <img src="{{$new->pic}}"> <div> <span>{{$new->title}}</span> <font> <i class="icon_huo"></i>热度 {{$new->like}}</font> <p>{{$new->getShortDesc()}}</p> </div> 
                             </a>  
                         @endforeach
