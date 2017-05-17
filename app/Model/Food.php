@@ -55,4 +55,11 @@ class Food extends Model {
         }
         return $province;
     }
+
+    public function getPic(){
+        if(!$this->pic){
+            $this->pic = '/skin/images/no_pic.gif';
+        }
+        return $this->pic;
+    }
 }

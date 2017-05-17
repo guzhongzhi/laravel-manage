@@ -44,5 +44,11 @@ class Store extends Model {
         $content = str_replace(array("\r\n", "\r", "\n", " "), "", $content);
         return mb_substr($content,0,200);
     }
-    
+
+    public function getPic(){
+        if(!$this->pic){
+            $this->pic = '/skin/images/no_pic.gif';
+        }
+        return $this->pic;
+    }
 }

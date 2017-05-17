@@ -44,7 +44,7 @@
                         <div class="side_main">
                             <div class="produce_info">
                                 <dl>
-                                    <dt><a><img src="{{$store->pic}}" alt="{{$store->title}}" border="0" width="210" height="140"></a></dt>
+                                    <dt><a><img src="{{$store->getPic()}}" alt="{{$store->title}}" border="0" width="210" height="140"></a></dt>
                                     <dd>
                                         <div class="title">
                                             <h1>{{$store->title}}</h1>

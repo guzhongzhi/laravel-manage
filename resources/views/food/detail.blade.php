@@ -45,7 +45,7 @@
                         <div class="side_main">
                             <div class="produce_info">
                                 <dl>
-                                    <dt><a><img src="{{$food->pic}}" alt="{{$food->title}}" border="0" width="210" height="140"></a></dt>
+                                    <dt><a><img src="{{$food->getPic()}}" alt="{{$food->title}}" border="0" width="210" height="140"></a></dt>
                                     <dd>
                                         <div class="title">
                                             <h1>{{$food->title}}</h1>
@@ -68,6 +68,9 @@
                                 <div class="txt_tw">
                                     <ul>
                                         @foreach($food->getStores() as $store)
+                                            @if(!$store->pic)
+                                                {{$store->pic = '\skin\images\no_pic.gif'}}
+                                            @endif
                                         <li><a href="/store/d-{{$store->id}}.html"><img src="{{$store->pic}}" width="210" height="140" alt="{{$store->title}}"><div class="text_con"><strong>{{$store->title}}</strong></div></a></li>
                                         @endforeach
                                     </ul>
