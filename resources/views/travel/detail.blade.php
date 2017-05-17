@@ -5,6 +5,19 @@
     <script src="/skin/travel/js/travel.js"></script>
     <div class="sp"></div>
     <div class="container">
+        <ol class="breadcrumb">
+            <li><a href="/">首页</a></li>
+            <li><a href="/travel">游记</a></li>
+            @if($city)
+                <li><a href="{{url('/travel/p'.$province->id.'.html')}}">{{$province->name}}</a></li>
+                <li><a href="{{url('/travel/c'.$city->id.'.html')}}">{{$city->name}}</a></li>
+            @elseif($province)
+                <li><a href="{{url('/travel/p'.$province->id.'.html')}}">{{$province->name}}</a></li>
+            @endif
+            <li class="active">{{$travel->title}}</li>
+        </ol>
+        <div class="sp"></div>
+        <div class="gg930 mt20"></div>
    
         <div class="fleft two-left-big">
                 <div class="ctd_controls cf">
@@ -43,46 +56,40 @@
                 </div>
             
         </div>
-       
-        
+
+
         <div class="fright two-right-small">
+
             <div>
-                <div style="padding:10px;background:#f33b7a;color:#FFF;font-weight:bold;">周边推荐</div>
+                <div style="padding:10px;background:#f33b7a;color:#FFF;font-weight:bold;">推荐景区</div>
                 <div class="sight-relation-right">
-                
-                <ul class="sight-relation">
-                <li><span class="glyphicon glyphicon-question-sign"></span> 周边景点</li>
-                <li><span class="glyphicon glyphicon-warning-sign"></span> 注意事项</li>
-                <li><span class="glyphicon glyphicon-flash"></span> 旅游佳季</li>
-                <li><span class="glyphicon glyphicon-thumbs-up"></span> 特色美食</li>
-                <li><span class="glyphicon glyphicon-screenshot"></span> 酒店住宿</li>
-                <li><span class="glyphicon glyphicon-plane"></span> 交通工具</li>
-                <li><span class="glyphicon glyphicon-tree-deciduous"></span> 风景图片</li>
-                <li><span class="glyphicon glyphicon-fire"></span> 旅游攻略</li>
-                </ul>
-                <div class="sp"></div>
+
+                    <ul class="sight-relation">
+                        @foreach(\App\Helper\TravelHelper::getRandSightList($cityId, $provinceId, 10) as $itemSight)
+                            <li><span class=""></span><a href="/sight/s-{{$itemSight->id}}.html">{{$itemSight->title}}</a></li>
+                        @endforeach
+                    </ul>
+                    <div class="sp"></div>
                 </div>
             </div>
-            
+
+            <div class="sp"></div>
+            <div>
+                <div style="padding:10px;background:#f33b7a;color:#FFF;font-weight:bold;">推荐游记</div>
+                <div class="sight-relation-right">
+
+                    <ul class="sight-relation">
+                        @foreach(\App\Helper\TravelHelper::getRandTravelList($cityId, $provinceId, 10) as $itemList)
+                            <li style="width:100%"><span class=""></span><a href="/travel/s-{{$itemList->id}}.html" title="{{$itemList->title}}">{{\App\Helper\TravelHelper::utf8Substr($itemList->title, 0, 16)}}</a></li>
+                        @endforeach
+                    </ul>
+                    <div class="sp"></div>
+                </div>
+            </div>
+
             <div class="sp"></div><div class="sp"></div>
-            
-            <div>
-                <div style="padding:10px;background:#f33b7a;color:#FFF;font-weight:bold;">热门目的地</div>
-                <div class="sight-relation-right">
-                
-                <ul class="sight-relation">
-                <li>周边景点</li>
-                <li>注意事项</li>
-                <li>旅游佳季</li>
-                <li>特色美食</li>
-                <li>酒店住宿</li>
-                <li>交通工具</li>
-                <li>风景图处</li>
-                <li>旅游攻略</li>
-                </ul>
-                <div class="sp"></div>
-                </div>
-            </div>
+
+
         </div>
         
         <div class="sp"></div>

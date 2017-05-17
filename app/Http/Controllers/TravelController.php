@@ -157,9 +157,24 @@ class TravelController extends Controller {
         $travel = News::find($newId);
         $travel->click = $travel->click + 1;
         $travel->save();
+        $city = $province = null;
+        $city = Region::find($travel->city_id);
+        $province = Region::find($travel->province_id);
+        if($city){
+            $mapCity = $city->name;
+            $cityId = $city->id;
+        }else{
+            $mapCity = $province->name;
+            $cityId = 0;
+        }
+        $provinceId = $province->id;
         return view('travel.detail', array(
                 "travel"=>$travel,
                 'likeClass'=>$likeClass,
+                'city'=>$city,
+                'province'=>$province,
+                'cityId'=>$cityId,
+                'provinceId'=>$provinceId,
             )
         );
         

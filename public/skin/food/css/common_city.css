@@ -197,12 +197,12 @@ input{font-family:"Microsoft Yahei";}
 .food_li .t a{ float:right; color:#999; font-size:14px; margin-right:20px;}
 .food_li .t a:hover{ color:#ff6600}
 .food_li .a{ margin-left:-14px;}
-.food_li .a a{ float:left; width:210px; height:247px; margin:20px 0 0 15px; -webkit-transition: all .3s linear; transition: all .3s linear;}
+.food_li .a a{ float:left; width:210px; height:260px; margin:20px 0 0 15px; -webkit-transition: all .3s linear; transition: all .3s linear;}
 .food_li .a img{ width:210px; display:block; height:140px;}
 .food_li .a span{ font-size:16px; line-height:41px; display:inline-block; max-width:105px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap; vertical-align:top;}
 .food_li .a font{ float:right; font-size:12px; color:#999; line-height:41px;}
-.food_li .a p{ border-top:#ddd dotted 1px; padding-top:6px; color:#666; height:55px; overflow:hidden;}
-.food_li .a div{ border:#ddd solid 1px; border-top:0; padding:10px; padding-top:0; height:97px;}
+.food_li .a p{ border-top:#ddd dotted 1px; padding-top:6px; color:#666; height:70px; overflow:hidden;}
+.food_li .a div{ border:#ddd solid 1px; border-top:0; padding:10px; padding-top:0; height:110px;}
 .food_li .a i{ margin:11px 5px 0 0;}
 .food_li .a a:hover{ box-shadow:0px 0 6px rgba(0, 0, 0, 0.2); -webkit-transform: translate3d(0, -3px, 0); transform: translate3d(0, -3px, 0);}
 

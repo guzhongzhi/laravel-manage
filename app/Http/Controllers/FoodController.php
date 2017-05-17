@@ -156,12 +156,19 @@ class FoodController extends Controller {
         $city = $province = null;
         $city = Region::find($food->city_id);
         $province = Region::find($food->province_id);
-
+        if($city){
+            $cityId = $city->id;
+        }else{
+            $cityId = 0;
+        }
+        $provinceId = $province->id;
         return view('food.detail', array(
                 "food"=>$food,
                 'likeClass'=>$likeClass,
                 'city'=>$city,
                 'province'=>$province,
+                'cityId'=>$cityId,
+                'provinceId'=>$provinceId,
             )
         );
         
@@ -179,11 +186,22 @@ class FoodController extends Controller {
         $city = $province = null;
         $city = Region::find($store->city_id);
         $province = Region::find($store->province_id);
+        if($city){
+            $mapCity = $city->name;
+            $cityId = $city->id;
+        }else{
+            $mapCity = $province->name;
+            $cityId = 0;
+        }
+        $provinceId = $province->id;
         return view('food.store_detail', array(
                 "store"=>$store,
                 'likeClass'=>$likeClass,
                 'city'=>$city,
                 'province'=>$province,
+                'mapCity'=>$mapCity,
+                'cityId'=>$cityId,
+                'provinceId'=>$provinceId,
             )
         );
     }
