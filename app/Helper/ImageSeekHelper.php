@@ -67,7 +67,7 @@ class ImageSeekHelper {
         $filename = self::getFilename($url); 
         //$filename =  date("dh").uniqid() . strrchr($filename, '.');
         $ext = strrchr($filename, '.');
-        $filename =  date("dh"). md5($filename) . $ext;
+        $filename =  date("d"). md5($filename) . $ext;
         //存放目录 
         $fileDir = self::makeDir($savepath); //建立存放目录 
         //文件地址 

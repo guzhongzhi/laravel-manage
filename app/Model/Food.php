@@ -29,9 +29,13 @@ class Food extends Model {
     }
     
     public function getStores(){
+        if($this->stores){
+            return $this->stores;
+        }
         $sql = "SELECT store.* FROM store LEFT JOIN food_store ON store.id = food_store.store_id WHERE food_store.food_id = ?";
         $stores = DB::select($sql, array($this->id));
-        return $stores;
+        $this->stores = $stores;
+        return $this->stores;
     }
     
     public function getShortDesc() {

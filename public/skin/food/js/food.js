@@ -26,7 +26,23 @@ $(
                     //do nothing
                 }
             }
-        ); 
+        );
+
+        $('.btn_map').click(
+                function(){
+                    if(this.className == 'btn_map J_btn_map'){
+                        this.className = 'btn_map J_btn_map open';
+                        $('.map').css('height','auto');
+                    }else{
+                        this.className = 'btn_map J_btn_map';
+                        $('.map').css('height','0');
+                    }
+
+                }
+
+        );
+
+
         
         
     }

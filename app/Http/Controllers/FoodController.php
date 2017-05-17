@@ -73,6 +73,14 @@ class FoodController extends Controller {
         
         $paginateHelper = new PaginateHelper(Food::class);
         $paginate = $paginateHelper->getPaginate($searchFormValue);
+
+        $currentTitleName = '';
+        if($city){
+            $currentTitleName = $city->name;
+        }elseif($province){
+            $currentTitleName = $province->name;
+        }
+
         
         return view('food.home', array(
                 "provinces"=>$provinces,
@@ -85,6 +93,7 @@ class FoodController extends Controller {
                 "province"=>$province,
                 "city"=>$city,
                 "cityId"=>$cityId,
+                "currentTitleName"=>$currentTitleName,
             )
         );
         
@@ -116,7 +125,9 @@ class FoodController extends Controller {
 
         $paginateHelper = new PaginateHelper(Food::class);
         $paginate = $paginateHelper->getPaginate($searchFormValue);
-        
+
+        $currentTitleName = $city->name;
+
         return view('food.home', array(
                 "provinces"=>$provinces,
                 "cities"=>$cities,
@@ -127,6 +138,7 @@ class FoodController extends Controller {
                 "province"=>$province,
                 "city"=>$city,
                 "cityId"=>$cityId,
+                "currentTitleName"=>$currentTitleName,
             )
         );
     }
@@ -141,10 +153,15 @@ class FoodController extends Controller {
         }
         
         $food = Food::find($newId);
-        
+        $city = $province = null;
+        $city = Region::find($food->city_id);
+        $province = Region::find($food->province_id);
+
         return view('food.detail', array(
                 "food"=>$food,
                 'likeClass'=>$likeClass,
+                'city'=>$city,
+                'province'=>$province,
             )
         );
         
@@ -159,10 +176,14 @@ class FoodController extends Controller {
         }
         
         $store = Store::find($newId);
-        
+        $city = $province = null;
+        $city = Region::find($store->city_id);
+        $province = Region::find($store->province_id);
         return view('food.store_detail', array(
                 "store"=>$store,
                 'likeClass'=>$likeClass,
+                'city'=>$city,
+                'province'=>$province,
             )
         );
     }

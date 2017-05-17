@@ -15,6 +15,7 @@ class Store extends Model {
         'like',
         'title',
         'user_id',
+        'is_seeked',
         'source_url',
         'source_url_secret',
         'pic',
@@ -23,9 +24,7 @@ class Store extends Model {
         'created_at',
         'updated_at',
     ];
-    
-    
-    
+
     public function getStoreUrl() {
         return "/store/d-" . $this->id.".html";
     }

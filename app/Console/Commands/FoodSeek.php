@@ -68,12 +68,6 @@ class FoodSeek extends Command {
             $sqlProvice = "SELECT * FROM region WHERE parent_id = '$cId' limit $start, 1";
             $provinces = DB::select($sqlProvice);
             //seek the url from the site url:http://chengdu.cncn.com/lvyougonglue/1
-           
-            
-            //for cncn
-            
-            //$grabUrl = 'http://you.ctrip.com/place/chengdu104.html';
-            //$grabUrl = 'http://you.ctrip.com/travels/chengdu104/1703488.html';
 
             foreach($provinces as $province){
                 $provinceName = $province->name;
@@ -81,6 +75,7 @@ class FoodSeek extends Command {
                 echo "Start to seek the cncn food province - $provinceName: \n";
                 $provicenPY = str_replace(' ', '', strtolower($province->name_en));
                 $provicenPY = rtrim($provicenPY, 'shi');
+                $provicenPY  = str_replace(array('(', ')', ','), '', $provicenPY);
                 $sqlCity = "SELECT * FROM region WHERE parent_id = '$pId'";
                 $cities = DB::select($sqlCity);
                 $checkHasCityUrlKey = false;
@@ -91,9 +86,19 @@ class FoodSeek extends Command {
                     if($city->name_en == 'Shixiaqu' || $city->name_en == 'Xian' || $city->name_en == 'shengzhixiaxianjixingzhengquhua'){
                         continue;
                     }
-                    $cityPY = str_replace(' ', '', strtolower($city->name_en));
-                    $cityPY = rtrim($cityPY, 'shi');
-                    //echo $city->id . " - " . $cityPY . "\n";
+
+                    //get it from the match
+                    $cityPY = SeekerHelper::getCcnCnUrlKey(strtolower($city->short_name_en));
+                    if(!$cityPY){
+                        $cityPY  = str_replace(' ', '', strtolower($city->name_en));
+                        $cityPY  = rtrim($cityPY, 'shi');
+                        $cityPY  = str_replace(array('(', ')', ','), '', $cityPY);
+                    }
+
+
+
+
+                    echo $city->id . " - " . $cityPY . PHP_EOL;
                     $mainDomainUrl = "http://$cityPY.cncn.com";
                     $grabUrl = "$mainDomainUrl/meishi/";
                     //echo $grabUrl;
@@ -119,7 +124,6 @@ class FoodSeek extends Command {
                 break;
                 
             }
-            die("chuan");
             if(count($provinces) > 0){
                $start++;
                 $cmd = "nohup php artisan food:seek 0 " .$start ."  1>> process.out 2>> process.err < /dev/null &";    //  
@@ -147,12 +151,10 @@ class FoodSeek extends Command {
                 }catch(\Exception $e){
                     //do nothing
                 }
+                //update the table
+                $sql = "UPDATE food_store_queue SET is_searched = 1 WHERE id = ?";
+                DB::update($sql, array($row->id));
             }
-            
-            //update the table
-            $sql = "UPDATE food_store_queue SET is_searched = 1 WHERE id = ?";
-            DB::update($sql, array($row->id));
-            
         }
         
         if(count($rows) > 0){
@@ -162,20 +164,6 @@ class FoodSeek extends Command {
             system($cmd);
         }
     }
-
-  
-
-     /**
-	 * Get the pages.
-	 *
-	 * @return 
-	 */
-     
-     protected function seachPage(){
-         
-     }
-     
-     
     
 	/**
 	 * Get the console command arguments.
