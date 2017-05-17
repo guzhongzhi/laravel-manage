@@ -1,11 +1,11 @@
-/*1000±»¿˝œ¬*/
+/*1000ÊØî‰æã‰∏ã*/
 .warp1000 .content{ width:1000px;}
-.warp1000 .con_left,.warp1000 .con_right{ }
+.warp1000 .con_left,.warp1000 .con_right{ width:730px;}
 .warp1000 .pro_top .txt{ width:310px;}
 /*.warp1000 .book_yli ul{ height:229px;}*/
 .warp1000 .book_imgli .txt{ width:420px;}
 .warp1000 .gg930 img{ width: 730px; }
-/*1000±»¿˝œ¬end*/
+/*1000ÊØî‰æã‰∏ãend*/
 
 
 
@@ -83,7 +83,7 @@ input{font-family:"Microsoft Yahei";}
 .icon_hot,.icon_new{ width:27px; height:17px;background-position:-171px -35px;}
 .icon_new{background-position:-202px -35px;}
 
-.con_left{float: left;  margin: 0px 20px 0px 0px;}
+.con_left{float: left; width: 100%; margin: 0px 20px 0px 0px;}
 .pro_top,.book_imgli,.food_li,.food_city{background: rgb(255, 255, 255); border: 1px solid rgb(221, 221, 221); border-image-source: initial; border-image-slice: initial; border-image-width: initial; border-image-outset: initial; border-image-repeat: initial; padding: 20px;}
 .pro_top .top img{width: 189px; height: 284px; background: url(images/glbot.png) 50% 100% no-repeat; padding-bottom: 9px;}
 .pro_top .txt{width: 502px; display: inline-block; vertical-align: top; margin-left: 20px;}
@@ -186,7 +186,7 @@ input{font-family:"Microsoft Yahei";}
 
 .zxli{ padding:10px 20px 10px 15px;}
 .zxli a{ display:block; border-left:#ddd solid 2px; color:#666; padding:5px 0 5px 13px; position:relative;}
-.zxli a:before{ content:"°Ò"; color:#ddd; background:#fff; line-height:0; height:8px; position:absolute; left:-6px; font-size:16px; padding-top:5px; top:50%; margin-top:-6px;}
+.zxli a:before{ content:"‚óè"; color:#ddd; background:#fff; line-height:0; height:8px; position:absolute; left:-6px; font-size:16px; padding-top:5px; top:50%; margin-top:-6px;}
 .zxli a:hover{ color:#ff9900;}
 .zxli a:hover:before{ color:#ff9900}
 
@@ -197,12 +197,12 @@ input{font-family:"Microsoft Yahei";}
 .food_li .t a{ float:right; color:#999; font-size:14px; margin-right:20px;}
 .food_li .t a:hover{ color:#ff6600}
 .food_li .a{ margin-left:-14px;}
-.food_li .a a{ float:left; width:210px; height:260px; margin:20px 0 0 15px; -webkit-transition: all .3s linear; transition: all .3s linear;}
+.food_li .a a{ float:left; width:210px; height:247px; margin:20px 0 0 15px; -webkit-transition: all .3s linear; transition: all .3s linear;}
 .food_li .a img{ width:210px; display:block; height:140px;}
 .food_li .a span{ font-size:16px; line-height:41px; display:inline-block; max-width:105px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap; vertical-align:top;}
 .food_li .a font{ float:right; font-size:12px; color:#999; line-height:41px;}
-.food_li .a p{ border-top:#ddd dotted 1px; padding-top:6px; color:#666; height:70px; overflow:hidden;}
-.food_li .a div{ border:#ddd solid 1px; border-top:0; padding:10px; padding-top:0; height:110px;}
+.food_li .a p{ border-top:#ddd dotted 1px; padding-top:6px; color:#666; height:55px; overflow:hidden;}
+.food_li .a div{ border:#ddd solid 1px; border-top:0; padding:10px; padding-top:0; height:97px;}
 .food_li .a i{ margin:11px 5px 0 0;}
 .food_li .a a:hover{ box-shadow:0px 0 6px rgba(0, 0, 0, 0.2); -webkit-transform: translate3d(0, -3px, 0); transform: translate3d(0, -3px, 0);}
 
@@ -241,7 +241,7 @@ input{font-family:"Microsoft Yahei";}
 
 .con_right{ float:left; width:930px;}
 
-/***π˙ƒ⁄≥« –…∏—°***/
+/***ÂõΩÂÜÖÂüéÂ∏ÇÁ≠õÈÄâ***/
 .citySelector {font-size:12px/1.5;background:none;text-align:left;}
 .cityslide {border:#ddd solid 1px;background:#fff;font-size:12px; margin-left:200px;}
 .cityslide li {margin:0px;padding:0 5px;cursor:pointer;color:#333;font-size:12px;width:230px;height:28px;line-height:28px;}
@@ -270,7 +270,7 @@ p.tip b {color:#333;font-size:12px;margin-right:3px}
 .hotCity .hot dl dt,.hotCity .iFlight dl dt {display:none}
 .hotCity .hot dd,.hotCity .iFlight dd {width:380px;}
 .hotCity .hot dd a,.hotCity .iFlight dd a {width:74px;}
-/***π˙º ≥« –…∏—°***/
+/***ÂõΩÈôÖÂüéÂ∏ÇÁ≠õÈÄâ***/
 #inter_city {cursor:pointer}
 .inter_city_box {border:1px solid #aaa;padding:12px;width:450px;background:#fff;overflow:hidden}
 .city_tab {overflow:hidden}
@@ -341,7 +341,7 @@ div[lang="zh-cn"]{ margin-left:-50px !important;}
 .content .tool1 li{ width:123px;}
 
 
-/*¬√”Œπ•¬‘–¬‘ˆ—˘ Ω*/
+/*ÊóÖÊ∏∏ÊîªÁï•Êñ∞Â¢ûÊ†∑Âºè*/
 .top_info{ padding:20px; border:1px solid #ddd; background:#fff; overflow:hidden;}
 .top_info .pic{ float:left;}
 .top_info .pic img{ display:block;}
