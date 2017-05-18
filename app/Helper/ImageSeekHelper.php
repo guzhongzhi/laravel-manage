@@ -61,7 +61,7 @@ class ImageSeekHelper {
         //读文件 
         $string = self::readFiletext($url); 
         if(empty($string)){ 
-            echo "no access for the file $string";exit; 
+            echo "no access for the file $url" . PHP_EOL;return '';
         } 
         //文件名 
         $filename = self::getFilename($url); 
@@ -109,10 +109,11 @@ class ImageSeekHelper {
         $picFirst = '';
         $picRrr = array_merge($picRrr, $imgRrr, $crtripRrr);
         $picRrr = array_unique($picRrr);
-       
+
         $matchImgUrls = array();
         foreach ($picRrr as $picItem) { //循环取出每幅图的地址 
             $dbFilePath = self::savePic($picItem,$imgPath); //下载并保存图片 如果需要添加图片域名，则直接加在dbFilePath前面
+            if(!$dbFilePath) continue;
             if(!$picFirst){
                 $picFirst = $dbFilePath;
             }

@@ -56,14 +56,14 @@ class News extends Model {
         return "/travel/s-" . $this->id.".html";
     }
     
-    public function getShortDesc() {
+    public function getShortDesc($number=200) {
         if($this->short_description) {
             return $this->short_description;
         }
         $content = $this->content;
         $content = preg_replace('/<\/?.*?>/is','',$content);
         $content = str_replace(array("\r\n", "\r", "\n", " "), "", $content);
-        return mb_substr($content,0,200);
+        return mb_substr($content,0,$number);
     }
     
     public function getProvince() {

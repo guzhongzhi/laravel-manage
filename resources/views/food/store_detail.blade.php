@@ -2,6 +2,7 @@
 @section("content")
     @parent
     <link rel="stylesheet" href="/skin/food/css/comm_v7.css">
+    <link rel="stylesheet" href="/skin/food/css/common_city.css">
     <link rel="stylesheet" href="/skin/food/css/food_detail.css">
     <script src="/skin/food/js/food.js"></script>
     <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=bTmOXFz6sEkPnLXGp07M6FOgvlUGPwfF"></script>
@@ -69,6 +70,24 @@
 
                                 </div>
                             </div>
+                            
+                            <div class="gg930 mt20"></div>
+                                <div class="book_imgli"><div class="top"><div class="tab j_tab"><a href="javascript:;" class="on" id="recommand_travel">推荐攻略</a><a href="javascript:;" id="new_travel">最新发布</a></div><a href="/travel/p{{$provinceId}}.html" class="more">更多旅游攻略&gt;</a></div>
+
+                                    <ul class="j_tab_con recommand_travel" style="display: block;">
+                                        @foreach(\App\Helper\TravelHelper::getRandTravelList($cityId, $provinceId, 10, 'recommand') AS $itemTravel)
+                                            <li><div class="biaoqian"><i class="icon_bq1">推荐</i></div><a href="{{$itemTravel->getTravelUrl()}}" target="_blank"><img src="{{$itemTravel->pic}}"></a><div class="txt"><div class="t"><a href="{{$itemTravel->getTravelUrl()}}" target="_blank">{{$itemTravel->title}}</a></div><div class="time">发表于：{{$itemTravel->created_at}}</div><a href="{{$itemTravel->getTravelUrl()}}" target="_blank"><span>{{$itemTravel->getShortDesc(80)}}</span></a></div><div class="i"><div><i class="icon_kan"></i>{{$itemTravel->click}}</div></div></li>
+                                        @endforeach
+                                    </ul>
+
+                                    <ul class="j_tab_con new_travel" style="display: none;">
+                                        @foreach(\App\Helper\TravelHelper::getRandTravelList($cityId, $provinceId, 10, 'new') AS $itemTravel)
+                                            <li><div class="biaoqian"><i class="icon_bq1">最新</i></div><a href="{{$itemTravel->getTravelUrl()}}" target="_blank"><img src="{{$itemTravel->pic}}"></a><div class="txt"><div class="t"><a href="{{$itemTravel->getTravelUrl()}}" target="_blank">{{$itemTravel->title}}</a></div><div class="time">发表于：{{$itemTravel->created_at}}</div><a href="{{$itemTravel->getTravelUrl()}}" target="_blank"><span>{{$itemTravel->getShortDesc(80)}}</span></a></div><div class="i"><div><i class="icon_kan"></i>{{$itemTravel->click}}</div></div></li>
+                                        @endforeach
+                                    </ul>
+
+                                </div>
+
                         </div>
 
                     </div>

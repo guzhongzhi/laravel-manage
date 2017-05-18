@@ -333,7 +333,7 @@ class SeekerHelper {
                 $calcTotal = 0;
                 foreach($matches[1] as $itemUrl){
                     $increase++;
-                    if($increase > 45){
+                    if($increase > 21){
                         return true; //temp to insert the url, will remove it on live
                     }
                     try{

@@ -47,7 +47,7 @@ class TravelHelper {
         return $result;
     }
 
-    public static function getRandTravelList($cityId=0, $provinceId=0, $limit=10){
+    public static function getRandTravelList($cityId=0, $provinceId=0, $limit=10, $orderType='rand'){
         $andSql = '';
         $p = array();
         $p[] = News::CATEGORY_ID_TRAVEL;
@@ -60,9 +60,22 @@ class TravelHelper {
             $p[] = $provinceId;
         }
 
-        $sql = "SELECT * FROM news WHERE category_id = ? $andSql ORDER BY RAND() LIMIT $limit";
+        $orderBy = '';
+        if($orderType == 'rand'){
+            $orderBy = 'ORDER BY RAND()';
+        }elseif($orderType == 'recommand'){
+            $orderBy = 'ORDER BY `like` DESC ';
+        }else{
+            $orderBy = 'ORDER BY `id` DESC ';
+        }
+
+        $sql = "SELECT * FROM news WHERE category_id = ? $andSql  $orderBy LIMIT $limit";
         $result = DB::select($sql, $p);
-        return $result;
+        $resultData = array();
+        foreach($result  as $resultObj){
+            $resultData[] = News::find($resultObj->id);
+        }
+        return $resultData;
     }
 
 
@@ -70,5 +83,7 @@ class TravelHelper {
         $out = mb_substr($string, $start, $length, 'utf-8') . '...';
         return $out;
     }
+
+
 
 }

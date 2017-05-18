@@ -42,6 +42,23 @@ $(
 
         );
 
+        $('.tab.j_tab a').click(
+            function(){
+                if(this.id == 'recommand_travel'){
+                    $(this).attr('class', 'on');
+                    $('#new_travel').attr('class', '');
+                    $('.recommand_travel').show();
+                    $('.new_travel').hide();
+                }else{
+                    $(this).attr('class', 'on');
+                    $('#recommand_travel').attr('class', '');
+                    $('.recommand_travel').hide();
+                    $('.new_travel').show();
+                }
+
+            }
+        );
+
 
         
         
