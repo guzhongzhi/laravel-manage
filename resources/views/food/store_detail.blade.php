@@ -72,7 +72,7 @@
                             </div>
                             
                             <div class="gg930 mt20"></div>
-                                <div class="book_imgli"><div class="top"><div class="tab j_tab"><a href="javascript:;" class="on" id="recommand_travel">推荐攻略</a><a href="javascript:;" id="new_travel">最新发布</a></div><a href="/travel/p{{$provinceId}}.html" class="more">更多旅游攻略&gt;</a></div>
+                                <div class="book_imgli"><div class="top"><div class="tab j_tab"><a href="javascript:;" class="on" id="recommand_travel">推荐攻略</a><a href="javascript:;" id="new_travel">最新发布</a></div><a href="/travel/p{{$provinceId}}.html" target="_blank" class="more">更多旅游攻略&gt;</a></div>
 
                                     <ul class="j_tab_con recommand_travel" style="display: block;">
                                         @foreach(\App\Helper\TravelHelper::getRandTravelList($cityId, $provinceId, 10, 'recommand') AS $itemTravel)
