@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Model\Region;
 use App\Model\News;
+use App\Model\Hotel;
 use DB;
 
 
@@ -154,8 +155,35 @@ class SightController extends Controller {
         return view('sight.detail', array(
                 "sight"=>$sight,
                 "recItems"=>$relatedSight,
+                "hotels"=>$this->getHotels(),
+                "travelNews"=>$this->getHotTravNews(),
             )
         );
         
+    }
+    
+    
+    protected function getHotTravNews($provinceId = null,$cityId = null) {
+        $sight = new News();
+        $queryBuilder = $sight->newQuery();
+        $queryBuilder->where("category_id",News::CATEGORY_ID_TRAVEL);
+        if($cityId) {
+            $queryBuilder->where("city_id",$cityId);
+        }
+        $queryBuilder->getQuery()->limit(12);
+        $items = $queryBuilder->get(array('*'));
+        return $items;
+    }
+    
+    protected function getHotels($provinceId = null,$cityId = null) {
+        
+        $hotel = new Hotel();
+        $queryBuilder = $hotel->newQuery();
+        if($cityId) {
+            $queryBuilder->where("city_id",$cityId);
+        }
+        $queryBuilder->getQuery()->limit(12);
+        $items = $queryBuilder->get(array('*'));
+        return $items;
     }
 }

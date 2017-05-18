@@ -21,9 +21,13 @@ class Region extends Model {
     }
     
     public function getChilds() {
-        return self::getRetionsByParentId($this->id * 1);
+        $data =  self::getRetionsByParentId($this->id * 1);
+        return $data;
     }
     
+    public function getHotelUrlKey($city = null) {
+        return ($city ? "c" : "p").strtolower($this->id).".html"; 
+    }
     public function getSightUrlKey($city = null) {
         return ($city ? "c" : "p").strtolower($this->id).".html";
     }

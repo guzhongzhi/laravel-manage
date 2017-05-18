@@ -52,6 +52,7 @@ class News extends Model {
         return "/sight/s-" . $this->id.".html";
     }
     
+    
     public function getTravelUrl() {
         return "/travel/s-" . $this->id.".html";
     }

@@ -194,6 +194,10 @@
                 clear:both;
                 height:100px;
             }
+            
+            .nav>li>a.active {
+                background-color: #ca0046;
+            }
 		</style>
 	@show
 		
@@ -207,15 +211,26 @@
     </div>
     <div class="container nav">
         
-        <ul class="nav">
-            <li><a href="/">首页</a></li>
-            <li><a href="{{url('sight/')}}">景点</a></li>
-            <li><a href="{{url('travel/')}}">游记</a></li>
+        <ul class="nav" id="top-nav">
+            <li class="nav-home"><a href="/">首页</a></li>
+            <li class="nav-sight"><a href="{{url('sight/')}}">景点</a></li>
+            <li class="nav-hotel"><a href="{{url('hotel/')}}">酒店</a></li>
+            <li class="nav-travel"><a href="{{url('travel/')}}">游记</a></li>
             <li><a href="/">国内游</a></li>
             <li><a href="/">出境游</a></li>
         </ul>
         <div class="clear"></div>
     </div>
+    <script language="javascript">
+    $(document).ready(function(){
+        var t = location.pathname.split("/");
+        if(t[1] == "" ) {
+            t[1] = "home";
+        }
+        $("#top-nav .nav-" + t[1] + " a").addClass("active");
+        
+    });
+    </script>
     @show
     <div class="clear"></div>
     

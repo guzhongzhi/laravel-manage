@@ -98,6 +98,37 @@
             
             
             
+                <style>
+                
+                .sight-hotel-list li,
+                .sight-hotel-list ul {
+                    list-style:none;
+                    margin:0;
+                    padding:0;
+                }
+                .sight-hotel-list div.img{
+                    height:200px;
+                    overflow: hidden;
+                    border: solid 1px #e1e1e1;
+                    text-align:center;
+                }
+                .sight-hotel-list li .title{
+                    padding:10px 0px;
+                }
+                .sight-hotel-list li img{
+                    width:99%;
+                    
+                }
+                .sight-hotel-list li{
+                    float:left;
+                    width:32%;
+                    height:270px;
+                    overflow:hidden;
+                    margin-right:1%;
+                    text-align:center;
+                }
+                
+                </style>
             
             
             
@@ -117,18 +148,40 @@
                     {!!$sight->content!!}
                 </div>
                 
-                <div class="tab-2 tab-section-content hidden">
-                 e
+                <div class="tab-2 tab-section-content hidden sight-hotel-list">
+                    <ul>
+                     @foreach($travelNews as $sight)
+                        <li class="hotel-hotel-list-item">
+                        <a href="{{$sight->getTravelUrl()}}" title="{{$sight->title}}">
+                        <div class="img"><img src="{{$sight->pic}}"/></div>
+                        <div class="title">{{$sight->title}}</div>
+                        <div class="sp"></div>
+                        </a>
+                        </li>
+                    @endforeach
+                    </ul>
+                    <div class="sp"></div>
                 </div>
-                
-                <div class="tab-3 tab-section-content hidden">
-                 f
+                <div class="tab-3 tab-section-content hidden sight-hotel-list">
+                <ul>
+                 @foreach($hotels as $hotel)
+                    <li class="sight-hotel-list-item">
+                    <a href="{{$hotel->getUrl()}}" title="{{$hotel->title}}">
+                    <div class="img"><img src="{{$hotel->pic}}"/></div>
+                    <div class="title">{{$hotel->title}}</div>
+                    <div class="sp"></div>
+                    </a>
+                    </li>
+                @endforeach
+                </ul>
+                <div class="sp"></div>
                 </div>
                 
                 <div class="tab-4 tab-section-content hidden">
                  d
                 </div>
             </div>
+            
         </div>
         <script language="javascript">
         $(".tab-section li").click(function(){

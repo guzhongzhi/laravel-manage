@@ -12,6 +12,12 @@
 */
 
 Route::get('/', 'WelcomeController@index');
+
+Route::get('/hotel', 'HotelController@index');
+Route::get('/hotel/s-{id}.html', 'HotelController@hotelDetail');
+Route::get('/hotel/p{id}.html', 'HotelController@provinceList');
+Route::get('/hotel/c{id}.html', 'HotelController@cityList');
+
 Route::get('/sight', 'SightController@index');
 Route::get('/sight/p{id}.html', 'SightController@provinceList');
 Route::get('/sight/c{id}.html', 'SightController@cityList');

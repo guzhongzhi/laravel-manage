@@ -4,7 +4,7 @@ use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use DB;
-include "Pinyin.php";
+include_once "Pinyin.php";
 use App\Model\Region;
 use App\Model\News;
 use App\Model\NewsImage;
@@ -260,7 +260,10 @@ class SightSeek extends Command {
             $city = $this->getCityByName($cityName,$province->id);
             if(!$city->id) {
                 $cities = $province->getChilds();
-                $city = array_pop($city);
+                $city = $cities->pop();
+                if(!$city) {
+                    $city = new Region();
+                }
             }
             
             preg_match('/<title>(.*?)<\/title>/is',$content,$matches);
