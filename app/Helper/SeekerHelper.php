@@ -156,6 +156,8 @@ class SeekerHelper {
                 preg_match('%<title>(.*?)</title>%si', $content, $matchTitle);
                 $newsTitle = isset($matchTitle[1]) ? $matchTitle[1] : "";
                 $newsContent = $ret->innertext;
+                $newsContent = preg_replace('%<a.*?href=".*?>(.*?)</a>%si', '$1', $newsContent);
+
                 preg_match('/<div id="showinfo">.*?([0-9]{4}-[0-9]{2}-[0-9]{2})/si', $newsContent, $matchTime);
                 $createdAt = $updatedAt = trim(isset($matchTime[1]) ? $matchTime[1] : date("Y-m-d H:i:s"));
                 
