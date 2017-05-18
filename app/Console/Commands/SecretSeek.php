@@ -68,12 +68,7 @@ class SecretSeek extends Command {
             $sqlProvice = "SELECT * FROM region WHERE parent_id = '$cId' limit $start, 1";
             $provinces = DB::select($sqlProvice);
             //seek the url from the site url:http://chengdu.cncn.com/lvyougonglue/1
-           
-            
             //for cncn
-            
-            //$grabUrl = 'http://you.ctrip.com/place/chengdu104.html';
-            //$grabUrl = 'http://you.ctrip.com/travels/chengdu104/1703488.html';
 
             foreach($provinces as $province){
                 $provinceName = $province->name;
@@ -118,10 +113,8 @@ class SecretSeek extends Command {
                 }
                 echo "End to seek the cncn province - $provinceName.\n";
             }
-            
-           
+
             //for http://you.ctrip.com/
-           
             $ctripUrl = "http://you.ctrip.com/travels/URL_KEY/t2.html";
             $mainDomainUrl = "http://you.ctrip.com";
             foreach($provinces as $province){
@@ -184,18 +177,22 @@ class SecretSeek extends Command {
         $rows = DB::select($sql);
         foreach($rows as $row){
             $type = $row->type;
-          
-            if($type == 'ctrip'){
+            echo "process url - " . $row->id . ' - ' . $row->url . PHP_EOL;
+            if($type == SeekerHelper::SEEK_CTRIP_TRAVEL_TYPE){
                 $content = SeekerHelper::insertCtripContent($row);
-            }else{
+            }elseif($type ==  SeekerHelper::SEEK_CNCN_TRAVEL_TYPE){
                 $content = SeekerHelper::insertCNCNContent($row);
+            }elseif($type ==  SeekerHelper::SEEK_CNCN_FOOD_TYPE){
+                $content = SeekerHelper::insertCNCNFoodContent($row);
+            }elseif($type ==  SeekerHelper::SEEK_CNCN_STORE_TYPE){
+                $content = SeekerHelper::insertCNCNStoreContent($row);
             }
             //update the table
             $sql = "UPDATE search_url SET is_searched = 1 WHERE id = ?";
             DB::update($sql, array($row->id));
+            echo "process done - " . $row->id . PHP_EOL;
         }
-        
-        die("Done");
+
         if(count($rows) > 0){
             $start = $start + 50;
             $cmd = "php artisan secret:seek 1 " .$start ."  1";    //  

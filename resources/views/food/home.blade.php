@@ -1,12 +1,13 @@
 @extends("layout-1")
 @section("breadcrumb")
+    <link rel="stylesheet" href="/skin/food/css/common_city.css">
     <div class="sp"></div>
     <div class="container">
         <ol class="breadcrumb">
           <li><a href="/">首页</a></li>
-          <li><a href="/travel">游记</a></li>
+          <li><a href="/food">美食</a></li>
         @if($city)
-            <li><a href="{{url('/travel/p'.$province->id.'.html')}}">{{$province->name}}</a></li>
+            <li><a href="{{url('/food/p'.$province->id.'.html')}}">{{$province->name}}</a></li>
             <li class="active">{{$city->name}}</li>
         @elseif($province)
             <li class="active">{{$province->name}}</li>
@@ -83,7 +84,7 @@
                 @if($cityId == $city->id)
                     active
                 @endif
-                "><a href="{{url('travel/'.$city->getSightUrlKey($city))}}">{{$city->name}}</a></li>
+                "><a href="{{url('food/'.$city->getSightUrlKey($city))}}">{{$city->name}}</a></li>
             @endforeach
             
         @else
@@ -93,7 +94,7 @@
                 @if($provinceId == $province->id)
                     active
                 @endif
-                "><a href="{{url('travel/'.$province->getSightUrlKey($city))}}">{{$province->name}}</a></li>
+                "><a href="{{url('food/'.$province->getSightUrlKey())}}">{{$province->name}}</a></li>
             @endforeach
         
         @endif
@@ -111,21 +112,20 @@
         
     <div class="sp"></div>
     <div class="container sight-home sight-home-news">
-        <ul>
-        @foreach($news as $new)
-            <li>
-                <div class="pic"><a href="{{$new->getTravelUrl()}}"><img src="{{$new->pic}}"/></a></div>
-                <div class="desc">
-                    <p class="title"><a href="{{$new->getTravelUrl()}}">{{$new->title}}</a></p>
-                    <p class="short_desc">{{$new->getShortDesc()}}</p>
+        <div class="con_left" style="margin-right: 0px;"> 
+            <div class="food_li" style="margin:0 auto;"> 
+                <div class="t"> {{$currentTitleName}}美食 </div>
+                <div style="background-color:#000000">
+                    <div class="a" style="margin:0 auto;">  
+                        @foreach($news as $new)
+                            <a href="{{$new->getFoodUrl()}}">
+                                <img src="{{$new->getPic()}}"> <div> <span>{{$new->title}}</span> <font> <i class="icon_huo"></i>热度 {{$new->like}}</font> <p>{{$new->getShortDesc()}}</p> </div>
+                            </a>  
+                        @endforeach
+                    </div>
                 </div>
-                <div class="sp"></div>
-            </li>
-            <li><div class="sp"></div></li>
-        @endforeach
-        </ul>
-        <div class="sp"></div>
-        
+            </div>
+        </div>
     </div>
     
     <div class="sp"></div>

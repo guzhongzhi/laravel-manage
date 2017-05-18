@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel {
 		'App\Console\Commands\SightSeek',
 		'App\Console\Commands\SecretSeek',
 		'App\Console\Commands\HotelSeek',
+		'App\Console\Commands\FoodSeek',
 	];
 
 	/**

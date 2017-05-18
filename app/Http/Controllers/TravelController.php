@@ -45,6 +45,52 @@ class TravelController extends Controller {
 		return $this->provinceList($request, $provinceId=0);
 	}
 
+    public function cityList(Request $request, $cityId) {
+        $provinces = Region::getProvinces();
+        $searchForm = array(
+            "category_id"=>array(
+                "field_name"=>"category_id",
+                "input_type"=>"text",
+                "type"=>"=",
+                "label"=>"Category",
+                "value"=>News::CATEGORY_ID_TRAVEL,
+            ),
+            "city_id"=>array(
+                "field_name"=>"city_id",
+                "input_type"=>"text",
+                "type"=>"=",
+                "label"=>"City Id",
+                "value"=>($cityId>0) ? $cityId : null,
+            ),
+        );
+        $searchData = $request->get("filter", array());
+        $searchFormValue = PaginateHelper::initSearchFieldData($searchData,$searchForm);
+        $city = $province = null;
+        $city = Region::find($cityId);
+        
+        
+        $province = Region::find($city->parent_id);
+        $provinceId = $province->id;
+        
+        $cities = Region::getRetionsByParentId($province->id);
+
+        $paginateHelper = new PaginateHelper(News::class);
+        $paginate = $paginateHelper->getPaginate($searchFormValue);
+        
+        return view('sight.home', array(
+                "provinces"=>$provinces,
+                "cities"=>$cities,
+                "paginateHelper"=>$paginateHelper,
+                "paginate"=>$paginate,
+                "news"=>$paginate,
+                "provinceId"=>$provinceId,
+                "province"=>$province,
+                "city"=>$city,
+                "cityId"=>$cityId,
+            )
+        );
+    }
+    
     public function provinceList(Request $request, $provinceId) {
         $provinces = Region::getProvinces();
         $searchForm = array(
@@ -66,16 +112,30 @@ class TravelController extends Controller {
         $searchData = $request->get("filter", array());
         $searchFormValue = PaginateHelper::initSearchFieldData($searchData,$searchForm);
 
+        $cityId  = $city = $province = null;
+        $province = Region::find($provinceId);
         
+       
+        if($province && $province->parent_id != 1) {
+            $city = $province;
+            $cityId = $city->id;
+            $province = Region::find($city->parent_id);
+        }
+        $cities = Region::getRetionsByParentId($provinceId);
         $paginateHelper = new PaginateHelper(News::class);
         $paginate = $paginateHelper->getPaginate($searchFormValue);
         
         return view('travel.home', array(
                 "provinces"=>$provinces,
+                "cities"=>$cities,
                 "paginateHelper"=>$paginateHelper,
                 "paginate"=>$paginate,
                 "news"=>$paginate,
                 "provinceId"=>$provinceId,
+                "provinceId"=>$provinceId,
+                "province"=>$province,
+                "city"=>$city,
+                "cityId"=>$cityId,
             )
         );
         
@@ -97,9 +157,24 @@ class TravelController extends Controller {
         $travel = News::find($newId);
         $travel->click = $travel->click + 1;
         $travel->save();
+        $city = $province = null;
+        $city = Region::find($travel->city_id);
+        $province = Region::find($travel->province_id);
+        if($city){
+            $mapCity = $city->name;
+            $cityId = $city->id;
+        }else{
+            $mapCity = $province->name;
+            $cityId = 0;
+        }
+        $provinceId = $province->id;
         return view('travel.detail', array(
                 "travel"=>$travel,
                 'likeClass'=>$likeClass,
+                'city'=>$city,
+                'province'=>$province,
+                'cityId'=>$cityId,
+                'provinceId'=>$provinceId,
             )
         );
         

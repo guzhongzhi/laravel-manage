@@ -5,7 +5,8 @@ class ImageSeekHelper {
 //for image seek
     static $sightImgPath = '/upload/sight/';
     static $secretImgPath = '/upload/travel/';
-    public static function makeDir($path){ 
+    static $foodImgPath = '/upload/food/';
+    public static function makeDir($path){
         $path = public_path() . $path . date("Y") . date("m") . "/";
         if(!file_exists($path)){//不存在则建立 
             $mk=@mkdir($path,0777, true); //权限 
@@ -60,13 +61,13 @@ class ImageSeekHelper {
         //读文件 
         $string = self::readFiletext($url); 
         if(empty($string)){ 
-            echo "no access for the file $string";exit; 
+            echo "no access for the file $url" . PHP_EOL;return '';
         } 
         //文件名 
         $filename = self::getFilename($url); 
         //$filename =  date("dh").uniqid() . strrchr($filename, '.');
         $ext = strrchr($filename, '.');
-        $filename =  date("dh"). md5($filename) . $ext;
+        $filename =  date("d"). md5($filename) . $ext;
         //存放目录 
         $fileDir = self::makeDir($savepath); //建立存放目录 
         //文件地址 
@@ -108,10 +109,11 @@ class ImageSeekHelper {
         $picFirst = '';
         $picRrr = array_merge($picRrr, $imgRrr, $crtripRrr);
         $picRrr = array_unique($picRrr);
-       
+
         $matchImgUrls = array();
         foreach ($picRrr as $picItem) { //循环取出每幅图的地址 
             $dbFilePath = self::savePic($picItem,$imgPath); //下载并保存图片 如果需要添加图片域名，则直接加在dbFilePath前面
+            if(!$dbFilePath) continue;
             if(!$picFirst){
                 $picFirst = $dbFilePath;
             }

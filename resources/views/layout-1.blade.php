@@ -211,11 +211,13 @@
     </div>
     <div class="container nav">
         
+
         <ul class="nav" id="top-nav">
             <li class="nav-home"><a href="/">首页</a></li>
             <li class="nav-sight"><a href="{{url('sight/')}}">景点</a></li>
             <li class="nav-hotel"><a href="{{url('hotel/')}}">酒店</a></li>
             <li class="nav-travel"><a href="{{url('travel/')}}">游记</a></li>
+            <li><a href="{{url('food/')}}">美食</a></li>
             <li><a href="/">国内游</a></li>
             <li><a href="/">出境游</a></li>
         </ul>
