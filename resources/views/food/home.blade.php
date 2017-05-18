@@ -119,7 +119,7 @@
                     <div class="a" style="margin:0 auto;">  
                         @foreach($news as $new)
                             <a href="{{$new->getFoodUrl()}}">
-                                <img src="{{$new->pic}}"> <div> <span>{{$new->title}}</span> <font> <i class="icon_huo"></i>热度 {{$new->like}}</font> <p>{{$new->getShortDesc()}}</p> </div> 
+                                <img src="{{$new->getPic()}}"> <div> <span>{{$new->title}}</span> <font> <i class="icon_huo"></i>热度 {{$new->like}}</font> <p>{{$new->getShortDesc()}}</p> </div>
                             </a>  
                         @endforeach
                     </div>
