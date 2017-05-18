@@ -20,7 +20,7 @@
         <div class="gg930 mt20"></div>
    
         <div class="fleft two-left-big">
-                <div class="ctd_controls cf">
+                <div class="ctd_controls cf" style="padding-left:0px;">
                     <a class="fl" href="javascript:;" rel="nofollow" id="only_text" title="只看文字"><i></i>只看文字</a>
                     <span class="fr">
                        
