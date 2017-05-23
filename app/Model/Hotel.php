@@ -7,6 +7,14 @@ class Hotel extends AutoModel {
     
 	protected $table = "hotel";
     
+    public function getMetaKeywords() {
+        return $this->meta_keywords;
+    }
+    
+    public function getMetaDescription() {
+        return $this->meta_description;
+    }
+    
     public function getUrl() {
         return "/hotel/s-" . $this->id .".html";
     }

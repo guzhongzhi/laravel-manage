@@ -10,6 +10,14 @@ class News extends Model {
     const CATEGORY_ID_FOOD = 5;
     const CATEGORY_ID_HOTEL = 6;
     
+    public function getMetaKeywords() {
+        return $this->meta_keywords;
+    }
+    
+    public function getMetaDescription() {
+        return $this->meta_description;
+    }
+    
 	protected $table = "news";
     protected $fillable = [
         'category_id', 

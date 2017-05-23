@@ -9,8 +9,8 @@
 
 </title>
 <meta name="title" content="{{$controller->getConfig()['site_name']}}" />
-<meta name="keywords" content="{{$controller->getConfig()['site_keywords']}}" />
-<meta name="description" content="{{$controller->getConfig()['site_description']}}" />
+<meta name="keywords" content="{{$hotel->getMetaKeywords()}}" />
+<meta name="description" content="{{$hotel->getMetaDescription()}}" />
 @endsection
 
 @section("breadcrumb")
