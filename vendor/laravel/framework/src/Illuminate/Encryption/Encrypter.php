@@ -55,8 +55,12 @@ class Encrypter implements EncrypterContract {
 	 */
 	public function encrypt($value)
 	{
+try {
+throw new \Exception('f');
+}catch(\Exception $ex){
+#echo $ex->__toString();
+}
 		$iv = mcrypt_create_iv($this->getIvSize(), $this->getRandomizer());
-
 		$value = base64_encode($this->padAndMcrypt($value, $iv));
 
 		// Once we have the encrypted value we will go ahead base64_encode the input
@@ -247,9 +251,9 @@ class Encrypter implements EncrypterContract {
 	 */
 	protected function getRandomizer()
 	{
-		if (defined('MCRYPT_DEV_URANDOM')) return MCRYPT_DEV_URANDOM;
+		#if (defined('MCRYPT_DEV_URANDOM')) return MCRYPT_DEV_URANDOM;
 
-		if (defined('MCRYPT_DEV_RANDOM')) return MCRYPT_DEV_RANDOM;
+		#if (defined('MCRYPT_DEV_RANDOM')) return MCRYPT_DEV_RANDOM;
 
 		mt_srand();
 
