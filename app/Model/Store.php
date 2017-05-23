@@ -25,6 +25,14 @@ class Store extends Model {
         'updated_at',
     ];
 
+
+    public function getMetaKeywords() {
+        return $this->meta_keywords;
+    }
+    
+    public function getMetaDescription() {
+        return $this->meta_description;
+    }
     public function getStoreUrl() {
         return "/store/d-" . $this->id.".html";
     }

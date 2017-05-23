@@ -22,6 +22,14 @@ class Food extends Model {
         'updated_at',
     ];
     
+  
+    public function getMetaKeywords() {
+        return $this->meta_keywords;
+    }
+    
+    public function getMetaDescription() {
+        return $this->meta_description;
+    }
     
     
     public function getFoodUrl() {

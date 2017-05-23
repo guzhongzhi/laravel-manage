@@ -1,4 +1,21 @@
 @extends("layout-1")
+
+
+@section('meta')
+<title>
+
+{{$food->getProvince()->name}} - {{$food->title}} -  
+
+{{$controller->getConfig()["site_name"]}}
+
+</title>
+<meta name="title" content="{{$controller->getConfig()['site_name']}}" />
+<meta name="keywords" content="{{$food->getMetaKeywords()}}" />
+<meta name="description" content="{{$food->getMetaDescription()}}" />
+@endsection
+
+
+
 @section("content")
     @parent
     <link rel="stylesheet" href="/skin/food/css/comm_v7.css">

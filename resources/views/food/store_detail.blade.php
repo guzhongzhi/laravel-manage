@@ -1,4 +1,20 @@
 @extends("layout-1")
+
+
+@section('meta')
+<title>
+
+{{$store->title}} -  
+
+{{$controller->getConfig()["site_name"]}}
+
+</title>
+<meta name="title" content="{{$controller->getConfig()['site_name']}}" />
+<meta name="keywords" content="{{$store->getMetaKeywords()}}" />
+<meta name="description" content="{{$store->getMetaDescription()}}" />
+@endsection
+
+
 @section("content")
     @parent
     <link rel="stylesheet" href="/skin/food/css/comm_v7.css">

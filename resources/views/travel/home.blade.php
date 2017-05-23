@@ -1,4 +1,21 @@
 @extends("layout-1")
+
+@section('meta')
+<title>
+
+@if($city)
+    {{$province->name}} - {{$city->name}} - 
+@elseif($province)
+    {{$province->name}} - 
+@endif
+游记列表 - 
+{{$controller->getConfig()["site_name"]}}
+
+</title>
+<meta name="title" content="{{$controller->getConfig()['site_name']}}" />
+<meta name="keywords" content="{{$controller->getConfig()['site_keywords']}}" />
+<meta name="description" content="{{$controller->getConfig()['site_description']}}" />
+@show
 @section("breadcrumb")
     <div class="sp"></div>
     <div class="container">

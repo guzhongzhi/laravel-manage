@@ -1,4 +1,18 @@
 @extends("layout-1")
+
+@section('meta')
+<title>
+
+{{$travel->getProvince()->name}} - {{$travel->title}} -  
+
+{{$controller->getConfig()["site_name"]}}
+
+</title>
+<meta name="title" content="{{$controller->getConfig()['site_name']}}" />
+<meta name="keywords" content="{{$travel->getMetaKeywords()}}" />
+<meta name="description" content="{{$travel->getMetaDescription()}}" />
+@endsection
+
 @section("content")
     @parent
     <link rel="stylesheet" href="/skin/travel/css/classic_travels_detail.v2.0.css">  
