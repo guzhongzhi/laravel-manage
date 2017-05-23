@@ -1,4 +1,18 @@
 @extends("layout-1")
+
+@section('meta')
+<title>
+
+{{$sight->getProvince()->name}} - {{$sight->title}} -  
+
+{{$controller->getConfig()["site_name"]}}
+
+</title>
+<meta name="title" content="{{$controller->getConfig()['site_name']}}" />
+<meta name="keywords" content="{{$controller->getConfig()['site_keywords']}}" />
+<meta name="description" content="{{$controller->getConfig()['site_description']}}" />
+@endsection
+
 @section("content")
     @parent
     

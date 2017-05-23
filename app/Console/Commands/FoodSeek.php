@@ -101,7 +101,7 @@ class FoodSeek extends Command {
                     echo $city->id . " - " . $cityPY . PHP_EOL;
                     $mainDomainUrl = "http://$cityPY.cncn.com";
                     $grabUrl = "$mainDomainUrl/meishi/";
-                    //echo $grabUrl;
+                    echo $grabUrl,PHP_EOL;
                     $checkValidate = SeekerHelper::checkUrlValidate($grabUrl);
 
                     if($checkValidate){

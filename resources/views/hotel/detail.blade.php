@@ -1,5 +1,17 @@
 @extends("layout-1")
 
+@section('meta')
+<title>
+
+{{$hotel->getProvince()->name}} - {{$hotel->title}} -  
+
+{{$controller->getConfig()["site_name"]}}
+
+</title>
+<meta name="title" content="{{$controller->getConfig()['site_name']}}" />
+<meta name="keywords" content="{{$controller->getConfig()['site_keywords']}}" />
+<meta name="description" content="{{$controller->getConfig()['site_description']}}" />
+@endsection
 
 @section("breadcrumb")
     <div class="sp"></div>

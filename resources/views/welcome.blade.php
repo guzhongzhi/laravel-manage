@@ -361,7 +361,7 @@
                             <ul class="index-sight-hot-u2l">
                             @foreach($controller->getFoods(0,16) as $s)
                                 <li style='overflow:hidden'>
-                                    <a href="/food/s-{{$s->id}}.html">{{$s->title}}</a>
+                                    <a href="/food/d-{{$s->id}}.html">{{$s->title}}</a>
                                 </li>
                             @endforeach
                             </ul>
@@ -388,7 +388,7 @@
                         <div role="tabpanel" class="tab-pane" id="food-tab-{{$city->id}}">
                         <ul class="index-sight-hot-ul">
                         @foreach($controller->getFoods($city->id) as $sight)
-                            <li><a href="/food/s-{{$s->id}}.html">
+                            <li><a href="/food/d-{{$s->id}}.html">
                                 <div><img src="{{$sight->pic}}" style="width:99%;height:150px"/></div>
                                 <div class="title">{{$sight->title}}</div>
                                 </a>
