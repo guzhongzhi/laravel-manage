@@ -1,8 +1,14 @@
 <html>
 	<head>
     @section("head")
-		<title>Laravel</title>
-        	<link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">  
+	
+    @section('meta')
+    <title>{{$controller->getConfig()["site_name"]}}</title>
+    <meta name="title" content="{{$controller->getConfig()['site_name']}}" />
+    <meta name="keywords" content="{{$controller->getConfig()['site_keywords']}}" />
+    <meta name="description" content="{{$controller->getConfig()['site_description']}}" />
+    @show
+    <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">  
 	<script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
 	<script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <style>
@@ -217,7 +223,7 @@
             <li class="nav-sight"><a href="{{url('sight/')}}">景点</a></li>
             <li class="nav-hotel"><a href="{{url('hotel/')}}">酒店</a></li>
             <li class="nav-travel"><a href="{{url('travel/')}}">游记</a></li>
-            <li><a href="{{url('food/')}}">美食</a></li>
+            <li class="nav-food"><a href="{{url('food/')}}">美食</a></li>
             <li><a href="/">国内游</a></li>
             <li><a href="/">出境游</a></li>
         </ul>

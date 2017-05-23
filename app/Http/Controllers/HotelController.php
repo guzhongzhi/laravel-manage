@@ -81,6 +81,7 @@ class HotelController extends Controller {
                 "province"=>$province,
                 "city"=>$city,
                 "cityId"=>$cityId,
+                "controller"=>$this,
             )
         );
     }
@@ -121,6 +122,7 @@ class HotelController extends Controller {
                 "province"=>$province,
                 "city"=>$city,
                 "cityId"=>$cityId,
+                "controller"=>$this,
             )
         );
         
@@ -144,6 +146,7 @@ class HotelController extends Controller {
                 "recItems"=>$relatedSight,
                 "sights"=>$this->getSights(),
                 "travelNews"=>$this->getHotTravNews(),
+                "controller"=>$this,
             )
         );
         

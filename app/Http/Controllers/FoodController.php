@@ -94,6 +94,7 @@ class FoodController extends Controller {
                 "city"=>$city,
                 "cityId"=>$cityId,
                 "currentTitleName"=>$currentTitleName,
+                "controller"=>$this,
             )
         );
         
@@ -139,6 +140,7 @@ class FoodController extends Controller {
                 "city"=>$city,
                 "cityId"=>$cityId,
                 "currentTitleName"=>$currentTitleName,
+                "controller"=>$this,
             )
         );
     }
@@ -169,6 +171,7 @@ class FoodController extends Controller {
                 'province'=>$province,
                 'cityId'=>$cityId,
                 'provinceId'=>$provinceId,
+                "controller"=>$this,
             )
         );
         
@@ -202,6 +205,7 @@ class FoodController extends Controller {
                 'mapCity'=>$mapCity,
                 'cityId'=>$cityId,
                 'provinceId'=>$provinceId,
+                "controller"=>$this,
             )
         );
     }

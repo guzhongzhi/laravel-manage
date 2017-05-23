@@ -31,4 +31,40 @@ class Region extends Model {
     public function getSightUrlKey($city = null) {
         return ($city ? "c" : "p").strtolower($this->id).".html";
     }
+    
+    public function getFirstChildItem() {
+        $childs = $this->getChilds();
+        $item = $childs->pop();
+        if($item) {
+            return $item;
+        }
+        return $this;
+    }
+    
+    public static function getCityByName($name,$provinceId = null) {
+        $sql = "SELECT * FROM region WHERE name like '%".$name."%' ";
+        
+        if($provinceId) {
+            $sql .=" AND parent_id = " . ($provinceId * 1);
+        }
+        
+        //echo $sql,PHP_EOL;
+        $rows = DB::select($sql);
+        $data = isset($rows[0]) ? $rows[0] : new Region();
+        if($data->id) {
+            return Region::find($data->id);
+        }
+        return $data;
+    }
+    
+    public static function getProvinceByName($name) {
+        $sql = "SELECT * FROM region WHERE name like '%".$name."%' AND parent_id = 1";
+        //echo $sql,PHP_EOL;
+        $rows = DB::select($sql);
+        $data = isset($rows[0]) ? $rows[0] : new Region();
+        if($data->id) {
+            return Region::find($data->id);
+        }
+        return $data;
+    }
 }

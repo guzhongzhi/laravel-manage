@@ -87,6 +87,7 @@ class SightController extends Controller {
                 "province"=>$province,
                 "city"=>$city,
                 "cityId"=>$cityId,
+                "controller"=>$this,
             )
         );
     }
@@ -134,6 +135,7 @@ class SightController extends Controller {
                 "province"=>$province,
                 "city"=>$city,
                 "cityId"=>$cityId,
+                "controller"=>$this,
             )
         );
         
@@ -157,6 +159,7 @@ class SightController extends Controller {
                 "recItems"=>$relatedSight,
                 "hotels"=>$this->getHotels(),
                 "travelNews"=>$this->getHotTravNews(),
+                "controller"=>$this,
             )
         );
         

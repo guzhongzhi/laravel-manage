@@ -87,6 +87,7 @@ class TravelController extends Controller {
                 "province"=>$province,
                 "city"=>$city,
                 "cityId"=>$cityId,
+                "controller"=>$this,
             )
         );
     }
@@ -136,6 +137,7 @@ class TravelController extends Controller {
                 "province"=>$province,
                 "city"=>$city,
                 "cityId"=>$cityId,
+                "controller"=>$this,
             )
         );
         
@@ -175,6 +177,7 @@ class TravelController extends Controller {
                 'province'=>$province,
                 'cityId'=>$cityId,
                 'provinceId'=>$provinceId,
+                "controller"=>$this,
             )
         );
         
