@@ -166,7 +166,6 @@
                     <li class="active" rel=".tab-1">酒店介绍</li>
                     <li rel=".tab-2">游记/攻略</li>
                     <li rel=".tab-3">附近景点</li>
-                    <li rel=".tab-4">跟团游</li>
                 </ul>
             </div>
             <div class="hotel-detail-tab-content tab-content tab-hotel" style="clear:both;border:solid 1px #e1e1e1;padding:10px;border-top:solid 2px #f33b7a">
@@ -206,9 +205,6 @@
                 <div class="sp"></div>
                 </div>
                 
-                <div class="tab-4 tab-section-content hidden">
-                 d
-                </div>
             </div>
             
         </div>

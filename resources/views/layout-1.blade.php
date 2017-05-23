@@ -224,8 +224,6 @@
             <li class="nav-hotel"><a href="{{url('hotel/')}}">酒店</a></li>
             <li class="nav-travel"><a href="{{url('travel/')}}">游记</a></li>
             <li class="nav-food"><a href="{{url('food/')}}">美食</a></li>
-            <li><a href="/">国内游</a></li>
-            <li><a href="/">出境游</a></li>
         </ul>
         <div class="clear"></div>
     </div>

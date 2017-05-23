@@ -15,7 +15,6 @@
 @endsection
 
 
-
 @section("content")
     @parent
     <link rel="stylesheet" href="/skin/food/css/comm_v7.css">
