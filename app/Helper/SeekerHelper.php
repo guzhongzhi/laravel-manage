@@ -340,6 +340,7 @@ class SeekerHelper {
                     }
                     try{
                         $itemUrl = $mainDomainUrl . $itemUrl;
+                        echo $itemUrl . PHP_EOL;
                         $sql = "INSERT INTO search_url(`id`, `url`, `url_secret`, `type`, `country_id`, `province_id`, `city_id`, `is_searched`, `created_at`, `updated_at`) VALUE (NULL, ?, ?, ?, ?, ?, ?, 0, NOW(), NOW())";
                         $p = array($itemUrl, sha1($itemUrl), 'ctrip', $countryId, $provinceId, $cityId);
                         DB::insert($sql, $p);
@@ -409,7 +410,7 @@ class SeekerHelper {
         }
     }
     public static function getCcnCnUrlKey($cityKey){
-        $maps = array('aba'=>'aba', 'gaz'=>'ganzi', 'lsy'=>'liangshan');
+        $maps = array('aba'=>'aba', 'gaz'=>'ganzi', 'lsy'=>'liangshan', 'hk'=>'hongkong', 'am'=>'macao');
         $cityUrlKey = isset($maps[$cityKey]) ? $maps[$cityKey] : "";
         return $cityUrlKey;
     }
