@@ -8,7 +8,7 @@
     <meta name="keywords" content="{{$controller->getConfig()['site_keywords']}}" />
     <meta name="description" content="{{$controller->getConfig()['site_description']}}" />
     @show
-    <link rel="stylesheet" href="/css/bootstrap.min.css">  
+    <link rel="stylesheet" href="/css/bootstrap.travel.min.css">  
     <script src="/js/jquery.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
         <style>
