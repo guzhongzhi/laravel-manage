@@ -43,6 +43,15 @@ class SecretSeek extends Command {
         $arguments = $this->argument();
         $type = $arguments['type'];
         $start = $arguments['start'];
+        $shellCommand = "ps aux | grep 'php artisan secret:seek ".$type."' | awk '{print $2}'";
+        $result = shell_exec($shellCommand);
+        $resultArray = explode("\n", $result);
+        $resultArray = array_diff($resultArray, array(""));
+        $resultArray = array_unique($resultArray);
+        $countNumber = count($resultArray);
+        if($countNumber > 3){
+            die("No need to process it, wait the process." . PHP_EOL);
+        }
         if($type == 0){
             $this->grabPages($start);
         }else{
