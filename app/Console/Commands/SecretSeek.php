@@ -72,8 +72,10 @@ class SecretSeek extends Command {
                 $provinceName = $province->name;
                 $pId = $province->id;
                 echo "Start to seek the cncn province - $provinceName: \n";
+                $provicenPY = SeekerHelper::getCnCnUrlKey(strtolower($province->short_name_en));
                 $provicenPY = str_replace(' ', '', strtolower($province->name_en));
                 $provicenPY = rtrim($provicenPY, 'shi');
+                $provicenPY  = str_replace(array('(', ')', ','), '', $provicenPY);
                 $sqlCity = "SELECT * FROM region WHERE parent_id = '$pId'";
                 $cities = DB::select($sqlCity);
                 $checkHasCityUrlKey = false;
@@ -84,8 +86,13 @@ class SecretSeek extends Command {
                     if($city->name_en == 'Shixiaqu' || $city->name_en == 'Xian' || $city->name_en == 'shengzhixiaxianjixingzhengquhua'){
                         continue;
                     }
-                    $cityPY = str_replace(' ', '', strtolower($city->name_en));
-                    $cityPY = rtrim($cityPY, 'shi');
+                    $cityPY = SeekerHelper::getCnCnUrlKey(strtolower($city->short_name_en));
+                    if(!$cityPY){
+                        $cityPY  = str_replace(' ', '', strtolower($city->name_en));
+                        $cityPY  = rtrim($cityPY, 'shi');
+                        $cityPY  = str_replace(array('(', ')', ','), '', $cityPY);
+                    }
+
                     //echo $city->id . " - " . $cityPY . "\n";
                     $mainDomainUrl = "http://$cityPY.cncn.com";
                     $grabUrl = "$mainDomainUrl/lvyougonglue/1";
