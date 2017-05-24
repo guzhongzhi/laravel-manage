@@ -170,7 +170,7 @@ class SecretSeek extends Command {
             
             if(count($provinces) > 0){
                 $start++;
-                $cmd = "php artisan secret:seek 0 " .$start ." ";    //  
+                $cmd = "nohup php artisan secret:seek 0 " .$start ." ";    //  
                 echo $cmd,"\n";
                 system($cmd);
             }

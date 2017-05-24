@@ -6,13 +6,13 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 
 abstract class Controller extends BaseController {
 
-	use DispatchesCommands, ValidatesRequests;
+    use DispatchesCommands, ValidatesRequests;
 
     public function getConfig() {
         return array(
-            "site_name"=>"AA旅游网",
-            "site_keywords"=>"AA旅游网",
-            "site_description"=>"AA旅游网",
+            "site_name"=>"愈惜旅游网",
+            "site_keywords"=>"愈惜旅游网,旅游,旅游网,旅游线路,旅游攻略,国内游",
+            "site_description"=>"愈惜旅游网为您提供最新的旅游资讯，旅游线路，旅游功率。",
         );
     }
 }
