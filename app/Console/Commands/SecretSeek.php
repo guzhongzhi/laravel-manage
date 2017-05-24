@@ -43,7 +43,7 @@ class SecretSeek extends Command {
         $arguments = $this->argument();
         $type = $arguments['type'];
         $start = $arguments['start'];
-        $shellCommand = "ps aux | grep 'php artisan secret:seek ".$type."' | awk '{print $2}'";
+        $shellCommand = "ps aux | grep 'artisan secret:seek ".$type."' | awk '{print $2}'";
         $result = shell_exec($shellCommand);
         $resultArray = explode("\n", $result);
         $resultArray = array_diff($resultArray, array(""));
@@ -179,7 +179,7 @@ class SecretSeek extends Command {
             
             if(count($provinces) > 0){
                 $start++;
-                $cmd = "nohup php artisan secret:seek 0 " .$start ."  1>> process.out 2>> process.err < /dev/null &";    //  
+                $cmd = "nohup php ".base_path()."/artisan secret:seek 0 " .$start ."  1>> process.out 2>> process.err < /dev/null &";    //  
                 echo $cmd,"\n";
                 system($cmd);
                 break;
@@ -213,7 +213,7 @@ class SecretSeek extends Command {
 
         if(count($rows) > 0){
             $start = $start + 50;
-            $cmd = "nohup php artisan secret:seek 1 " .$start ."  1>> process.out 2>> process.err < /dev/null &";    //  
+            $cmd = "nohup php ".base_path()."/artisan secret:seek 1 " .$start ."  1>> process.out 2>> process.err < /dev/null &";    //  
             echo $cmd,"\n";
             system($cmd);
         }
