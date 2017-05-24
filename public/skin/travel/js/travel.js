@@ -5,7 +5,11 @@ $(
                 this.src = $(this).attr('data-original');
             }
         );
-        
+        $('.img_box img').each(
+            function(){
+                this.src = $(this).attr('data-original');
+            }
+        );
         $('#only_text').click(
             function(){
                 if($(this).attr('class') == 'fl'){
