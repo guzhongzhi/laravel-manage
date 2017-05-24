@@ -8,9 +8,9 @@
     <meta name="keywords" content="{{$controller->getConfig()['site_keywords']}}" />
     <meta name="description" content="{{$controller->getConfig()['site_description']}}" />
     @show
-    <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">  
-    <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">  
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
         <style>
         .tab-section-content {
             min-height:150px;
