@@ -104,7 +104,7 @@ class ImageSeekHelper {
         $patternSrc = '/<[img|IMG].*?src=[\'|\"](.*?(?:[\.gif|\.png|\.jpg]))[\'|\"].*?[\/]?>/'; 
         preg_match_all($patternSrc, $content, $matchSrc); 
         $imgRrr = isset($matchSrc[1]) ? $matchSrc[1] : array(); 
-        preg_match_all('/<a target=[\'|"].*?share-pic.*?href=[\'|"](.*?)[\'|"]/si', $content, $matchSrc); //special for ctrip site
+        preg_match_all('/<a.*?share-pic.*?href=[\'|"](.*?)[\'|"]/si', $content, $matchSrc); //special for ctrip site
         $crtripRrr = isset($matchSrc[1]) ? $matchSrc[1] : array(); 
         $picFirst = '';
         $picRrr = array_merge($picRrr, $imgRrr, $crtripRrr);
