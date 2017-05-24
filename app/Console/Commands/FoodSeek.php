@@ -131,6 +131,7 @@ class FoodSeek extends Command {
                 $cmd = "nohup php artisan food:seek 0 " .$start ."  1>> process.out 2>> process.err < /dev/null &";    //  
                 echo $cmd,"\n";
                 system($cmd);
+                break;
             }
         
         }
