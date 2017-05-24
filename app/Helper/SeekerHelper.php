@@ -7,11 +7,11 @@ use App\Model\Store;
 class SeekerHelper {
 
     const SEEK_CNCN_TRAVEL_TYPE = 'cncn';
-	const SEEK_CNCN_FOOD_TYPE = 'cncn_food';
+    const SEEK_CNCN_FOOD_TYPE = 'cncn_food';
     const SEEK_CNCN_STORE_TYPE = 'cncn_store';
     const SEEK_CTRIP_TRAVEL_TYPE = 'ctrip';
-	public static function curlInitData($url, $retry=5){
-	    usleep(1000000);
+    public static function curlInitData($url, $retry=5){
+        sleep(rand(1,4));
         global $con;
         $binfo = array(
             'Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; .NET CLR 2.0.50727; InfoPath.2; AskTbPTV/5.17.0.25589; Alexa Toolbar)',
@@ -27,7 +27,7 @@ class SeekerHelper {
         $cipRandB = mt_rand(8,254);
         $cipRandC = mt_rand(8,254);
         $cip = $cipRandA.'.'.$cipRandB.'.'.$cipRandC.'.'.mt_rand(0,254);
-		$xip = $cip;
+        $xip = $cip;
         //$xip = $cipRandA.'.'.$cipRandB.'.'.$cipRandC.'.'.mt_rand(0,254);
         #$cip = '180.97.33.107';
         #$xip = '180.97.33.107';
