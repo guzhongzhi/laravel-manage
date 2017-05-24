@@ -149,7 +149,7 @@ class FoodSeek extends Command {
     
     
     protected function processQueue($start){
-        $sql = "SELECT * FROM food_store_queue WHERE is_searched = 0 limit $start, 50";
+        $sql = "SELECT * FROM food_store_queue WHERE is_searched = 0 limit $start, 10";
         $rows = DB::select($sql);
         foreach($rows as $row){
             $foodId = $row->food_id;

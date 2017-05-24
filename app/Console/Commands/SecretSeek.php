@@ -191,7 +191,7 @@ class SecretSeek extends Command {
     }
     
     protected function insertPageContent($start){
-        $sql = "SELECT * FROM search_url WHERE is_searched = 0 limit $start, 50";
+        $sql = "SELECT * FROM search_url WHERE is_searched = 0 limit $start, 10";
         $rows = DB::select($sql);
         foreach($rows as $row){
             $type = $row->type;
@@ -212,7 +212,7 @@ class SecretSeek extends Command {
         }
 
         if(count($rows) > 0){
-            $start = $start + 50;
+            //$start = $start + 50;
             $cmd = "nohup php ".base_path()."/artisan secret:seek 1 " .$start ."  1>> process.out 2>> process.err < /dev/null &";    //  
             echo $cmd,"\n";
             system($cmd);
