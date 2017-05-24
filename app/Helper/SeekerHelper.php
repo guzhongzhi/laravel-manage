@@ -409,7 +409,7 @@ class SeekerHelper {
             DB::insert($sql, $p);
         }
     }
-    public static function getCcnCnUrlKey($cityKey){
+    public static function getCnCnUrlKey($cityKey){
         $maps = array('aba'=>'aba', 'gaz'=>'ganzi', 'lsy'=>'liangshan', 'hk'=>'hongkong', 'am'=>'macao');
         $cityUrlKey = isset($maps[$cityKey]) ? $maps[$cityKey] : "";
         return $cityUrlKey;
