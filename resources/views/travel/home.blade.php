@@ -64,11 +64,11 @@
     }
     .sight-home-news li div.pic {
         float:left;
-        width:150px;
+        width:152px;
         border:solid 1px #e1e1e1;
         display:table-sell;
         vertical-align:middle;
-        height: 130px;
+        height: 132px;
     }
     .sight-home-news li div.desc {
         float:left;
@@ -131,7 +131,7 @@
         <ul>
         @foreach($news as $new)
             <li>
-                <div class="pic"><a href="{{$new->getTravelUrl()}}"><img src="{{$new->pic}}"/></a></div>
+                <div class="pic"><a href="{{$new->getTravelUrl()}}"><img src="{{$new->getPic()}}"/></a></div>
                 <div class="desc">
                     <p class="title"><a href="{{$new->getTravelUrl()}}">{{$new->title}}</a></p>
                     <p class="short_desc">{{$new->getShortDesc()}}</p>
