@@ -73,9 +73,11 @@ class SecretSeek extends Command {
                 $pId = $province->id;
                 echo "Start to seek the cncn province - $provinceName: \n";
                 $provicenPY = SeekerHelper::getCnCnUrlKey(strtolower($province->short_name_en));
-                $provicenPY = str_replace(' ', '', strtolower($province->name_en));
-                $provicenPY = rtrim($provicenPY, 'shi');
-                $provicenPY  = str_replace(array('(', ')', ','), '', $provicenPY);
+                if(!$provicenPY){
+                    $provicenPY = str_replace(' ', '', strtolower($province->name_en));
+                    $provicenPY = rtrim($provicenPY, 'shi');
+                    $provicenPY  = str_replace(array('(', ')', ','), '', $provicenPY);
+                }
                 $sqlCity = "SELECT * FROM region WHERE parent_id = '$pId'";
                 $cities = DB::select($sqlCity);
                 $checkHasCityUrlKey = false;
