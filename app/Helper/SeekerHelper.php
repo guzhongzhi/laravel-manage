@@ -99,7 +99,7 @@ class SeekerHelper {
 
                         $increase++;
                         if($increase > 5){
-                            return true; //temp to insert the url, will remove it on live
+                            //return true; //temp to insert the url, will remove it on live
                         }
                         $url   = $mainDomainUrl . $item->href;
                         echo $url .  PHP_EOL;
@@ -336,7 +336,7 @@ class SeekerHelper {
                 foreach($matches[1] as $itemUrl){
                     $increase++;
                     if($increase > 21){
-                        return true; //temp to insert the url, will remove it on live
+                        //return true; //temp to insert the url, will remove it on live
                     }
                     try{
                         $itemUrl = $mainDomainUrl . $itemUrl;

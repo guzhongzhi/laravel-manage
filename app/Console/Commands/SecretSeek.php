@@ -10,36 +10,36 @@ use App\Helper\SeekerHelper;
 
 class SecretSeek extends Command {
 
-	/**
-	 * The console command name.
-	 *
-	 * @var string
-	 */
-	protected $name = 'secret:seek';
+    /**
+     * The console command name.
+     *
+     * @var string
+     */
+    protected $name = 'secret:seek';
 
-	/**
-	 * The console command description.
-	 *
-	 * @var string
-	 */
-	protected $description = 'Command description.';
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Command description.';
 
-	/**
-	 * Create a new command instance.
-	 *
-	 * @return void
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-	}
+    /**
+     * Create a new command instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
 
-	/**
-	 * Execute the console command.
-	 *
-	 * @return mixed
-	 */
-	public function fire(){
+    /**
+     * Execute the console command.
+     *
+     * @return mixed
+     */
+    public function fire(){
         $arguments = $this->argument();
         $type = $arguments['type'];
         $start = $arguments['start'];
@@ -48,15 +48,13 @@ class SecretSeek extends Command {
         }else{
             $this->insertPageContent($start);
         }
-        var_dump($arguments);
-        die();
-	}
+    }
 
     /**
-	 * Get the pages.
-	 *
-	 * @return 
-	 */
+     * Get the pages.
+     *
+     * @return 
+     */
      
      protected function grabPages($start){
          
@@ -204,10 +202,10 @@ class SecretSeek extends Command {
   
 
      /**
-	 * Get the pages.
-	 *
-	 * @return 
-	 */
+     * Get the pages.
+     *
+     * @return 
+     */
      
      protected function seachPage(){
          
@@ -215,30 +213,30 @@ class SecretSeek extends Command {
      
      
     
-	/**
-	 * Get the console command arguments.
-	 *
-	 * @return array
-	 */
-	protected function getArguments()
-	{
-		return [
-			['type', InputArgument::REQUIRED, 'the type of seek, 0->grab, 1->search'],
-			['start', InputArgument::REQUIRED, 'the start of the number'],
-			
-		];
-	}
+    /**
+     * Get the console command arguments.
+     *
+     * @return array
+     */
+    protected function getArguments()
+    {
+        return [
+            ['type', InputArgument::REQUIRED, 'the type of seek, 0->grab, 1->search'],
+            ['start', InputArgument::REQUIRED, 'the start of the number'],
+            
+        ];
+    }
 
-	/**
-	 * Get the console command options.
-	 *
-	 * @return array
-	 */
-	protected function getOptions()
-	{
-		return [
-			//['example', null, InputOption::VALUE_OPTIONAL, 'An example option.', null],
-		];
-	}
+    /**
+     * Get the console command options.
+     *
+     * @return array
+     */
+    protected function getOptions()
+    {
+        return [
+            //['example', null, InputOption::VALUE_OPTIONAL, 'An example option.', null],
+        ];
+    }
 
 }
