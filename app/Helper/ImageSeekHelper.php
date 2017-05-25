@@ -110,7 +110,8 @@ class ImageSeekHelper {
         $picRrr = array_merge($picRrr, $imgRrr, $crtripRrr);
         $picRrr = array_unique($picRrr);
         if(count($picRrr) > 40 ){ //如果图片过多，则不下载该游记
-            $contentPic = array();
+            $content = preg_replace('%<div id="img.*?</div>%si', '', $content);
+            $contentPic = array('pic'=>'', 'content'=>$content);
             return $contentPic;
         }
 
