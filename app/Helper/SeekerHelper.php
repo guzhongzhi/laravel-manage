@@ -417,7 +417,17 @@ class SeekerHelper {
     }
     public static function getCnCnUrlKey($cityKey){
         $maps = array('aba'=>'aba', 'gaz'=>'ganzi', 'lsy'=>'liangshan', 'hk'=>'hongkong', 'am'=>'macao', 
-                       'xj'=>'xinjiang', 'nx'=>'ningxia', 'xz'=>'xizang', 'sn'=>'shannxi'
+                       'xj'=>'xinjiang', 'nx'=>'ningxia', 'xz'=>'xizang', 'sn'=>'shannxi', 'hhht'=>'huhehaote',
+                       'cfs'=>'chifeng', 'ordos'=>'ordos', 'hlbr'=>'hulunbuir', 'byar'=>'bayannur',
+                       'wlcb'=>'ulanqab', 'hin'=>'hinggan', 'xgo'=>'xilingol', 'alm'=>'alashan', 'ybz'=>'yanbian',
+                       'jmu'=>'jiamusi', 'dhl'=>'daxinganling', 'hns'=>'maanshan', 'liuan'=>'luan', 'esh'=>'enshi',
+                       'xxz'=>'xiangxi', 'qxz'=>'qianxinan', 'qnd'=>'qiandongnan', 'qnz'=>'qiannan', 'cxd'=>'chuxiong',
+                       'hhz'=>'honghe', 'wsz'=>'wenshan', 'xsb'=>'xishuangbanna', 'dlz'=>'dali', 'dhg'=>'dehong',
+                       'nuj'=>'nujiang', 'lxh'=>'linxia', 'gnz'=>'gannan', 'hbz'=>'haibei', 'hnz'=>'huangnan',
+                       'hnn'=>'hainanzhou', 'gol'=>'golog', 'ysz'=>'yushu', 'hxz'=>'haixi', 'tud'=>'tulufan',
+                       'hmd'=>'hami', 'cjz'=>'changji', 'bor'=>'bortala', 'akd'=>'akesu', 'ksi'=>'kashi', 'hod'=>'hetian',
+                       'ild'=>'yili', 'tcd'=>'tacheng', 'ald'=>'altay'
+                       
                 );
         $cityUrlKey = isset($maps[$cityKey]) ? $maps[$cityKey] : "";
         return $cityUrlKey;

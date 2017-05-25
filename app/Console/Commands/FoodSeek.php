@@ -84,6 +84,7 @@ class FoodSeek extends Command {
                 if(!$provicenPY){
                     $provicenPY = str_replace(' ', '', strtolower($province->name_en));
                     $provicenPY  = preg_replace('/sheng$/si', '', $provicenPY);
+                    $provicenPY  = preg_replace('/diqu$/si', '', $provicenPY);
                     $provicenPY  = str_replace(array('(', ')', ','), '', $provicenPY);
                 }
                 
@@ -103,6 +104,7 @@ class FoodSeek extends Command {
                     if(!$cityPY){
                         $cityPY  = str_replace(' ', '', strtolower($city->name_en));
                         $cityPY  = preg_replace('/shi$/si', '', $cityPY);
+                        $cityPY  = preg_replace('/diqu$/si', '', $cityPY);
                         $cityPY  = str_replace(array('(', ')', ','), '', $cityPY);
                     }
 
