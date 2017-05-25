@@ -67,7 +67,7 @@
             @if($provinceId == $province->id)
                 active
             @endif
-            "><a href="{{url('sight/'.$province->getSightUrlKey())}}">{{$province->name}}</a></li>
+            "><a href="{{url('travel/'.$province->getSightUrlKey())}}">{{$province->name}}</a></li>
         @endforeach
         </ul>
         <div class="sp"></div>
@@ -86,9 +86,9 @@
         <ul>
         @foreach($news as $new)
             <li>
-                <div class="pic"><a href="{{$new->getSightUrl()}}"><img src="{{$new->pic}}"/></a></div>
+                <div class="pic"><a href="{{$new->getTravelUrl()}}"><img src="{{$new->pic}}"/></a></div>
                 <div class="desc">
-                    <p class="title"><a href="{{$new->getSightUrl()}}">{{$new->title}}</a></p>
+                    <p class="title"><a href="{{$new->getTravelUrl()}}">{{$new->title}}</a></p>
                     <p class="short_desc">{{$new->getShortDesc()}}</p>
                 </div>
                 <div class="sp"></div>
