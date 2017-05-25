@@ -77,7 +77,7 @@ class TravelController extends Controller {
         $paginateHelper = new PaginateHelper(News::class);
         $paginate = $paginateHelper->getPaginate($searchFormValue);
         
-        return view('sight.home', array(
+        return view('travel.home', array(
                 "provinces"=>$provinces,
                 "cities"=>$cities,
                 "paginateHelper"=>$paginateHelper,
