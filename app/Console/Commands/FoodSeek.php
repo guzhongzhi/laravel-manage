@@ -83,7 +83,7 @@ class FoodSeek extends Command {
                 $provicenPY = SeekerHelper::getCnCnUrlKey(strtolower($province->short_name_en));
                 if(!$provicenPY){
                     $provicenPY = str_replace(' ', '', strtolower($province->name_en));
-                    $provicenPY = rtrim($provicenPY, 'shi');
+                    $provicenPY  = preg_replace('/sheng$/si', '', $provicenPY);
                     $provicenPY  = str_replace(array('(', ')', ','), '', $provicenPY);
                 }
                 
@@ -102,7 +102,7 @@ class FoodSeek extends Command {
                     $cityPY = SeekerHelper::getCnCnUrlKey(strtolower($city->short_name_en));
                     if(!$cityPY){
                         $cityPY  = str_replace(' ', '', strtolower($city->name_en));
-                        $cityPY  = rtrim($cityPY, 'shi');
+                        $cityPY  = preg_replace('/shi$/si', '', $cityPY);
                         $cityPY  = str_replace(array('(', ')', ','), '', $cityPY);
                     }
 
