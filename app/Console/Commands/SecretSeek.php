@@ -84,7 +84,7 @@ class SecretSeek extends Command {
                 $provicenPY = SeekerHelper::getCnCnUrlKey(strtolower($province->short_name_en));
                 if(!$provicenPY){
                     $provicenPY = str_replace(' ', '', strtolower($province->name_en));
-                    $provicenPY = rtrim($provicenPY, 'shi');
+                    $provicenPY = rtrim($provicenPY, 'sheng');
                     $provicenPY  = str_replace(array('(', ')', ','), '', $provicenPY);
                 }
                 $sqlCity = "SELECT * FROM region WHERE parent_id = '$pId'";

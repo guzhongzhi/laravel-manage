@@ -416,7 +416,9 @@ class SeekerHelper {
         }
     }
     public static function getCnCnUrlKey($cityKey){
-        $maps = array('aba'=>'aba', 'gaz'=>'ganzi', 'lsy'=>'liangshan', 'hk'=>'hongkong', 'am'=>'macao');
+        $maps = array('aba'=>'aba', 'gaz'=>'ganzi', 'lsy'=>'liangshan', 'hk'=>'hongkong', 'am'=>'macao', 
+                       'xj'=>'xinjiang', 'nx'=>'ningxia', 'xz'=>'xizang', 'sn'=>'shannxi'
+                );
         $cityUrlKey = isset($maps[$cityKey]) ? $maps[$cityKey] : "";
         return $cityUrlKey;
     }
