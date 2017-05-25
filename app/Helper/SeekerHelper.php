@@ -395,7 +395,7 @@ class SeekerHelper {
             preg_match('%(<div class="ctd_content.*)<div class="ctd_theend">%si', $content, $matchContent);
             $newsContent = isset($matchContent[1]) ? $matchContent[1] : "";
             $newsContent = preg_replace('%<div class="ctd_content_controls.*?</h3>%si', '', $newsContent);
-            $newsContent = preg_replace('%<a target="_blank" class="gs_a_poi.*?href=".*?>(.*?)</a>%si', '$1', $newsContent);
+            $newsContent = preg_replace('%<a.*?class="gs_a_poi.*?href=".*?>(.*?)</a>%si', '$1', $newsContent);
             //$newsContent = strip_tags($newsContent, '<p><br><div><img><dd><h3><h2><h1><ul><li><span>');
             
             preg_match('%<h3>.*?发表于(.*?)</h3>%si', $newsContent, $matchTime);
