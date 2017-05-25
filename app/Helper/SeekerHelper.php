@@ -161,14 +161,17 @@ class SeekerHelper {
                 preg_match('/<div id="showinfo">.*?([0-9]{4}-[0-9]{2}-[0-9]{2})/si', $newsContent, $matchTime);
                 $createdAt = $updatedAt = trim(isset($matchTime[1]) ? $matchTime[1] : date("Y-m-d H:i:s"));
                 
-                $newsContent = ImageSeekHelper::seekPicAndSave($newsContent, 'secret');           
-                $pic = $newsContent['pic'];
-                $newsContent = $newsContent['content'];
-                
-                $sql = "INSERT INTO news(`id`, `category_id`, `city_id`, `province_id`, `country_id`, `rate`, `title`, `meta_keywords`, `meta_description`, `short_description`, `editor`, `source_url`, `pic`, `content`, `created_at`, `updated_at`) VALUE (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?); ";
-                $newsShortDescription = '';
-                $p = array('2', $data->city_id, $data->province_id, $data->country_id, 0, $newsTitle, $newsKeywords, $newsDescription, $newsShortDescription, '', $url, $pic, $newsContent, $createdAt, $updatedAt);
-                DB::insert($sql, $p);       
+                $newsContent = ImageSeekHelper::seekPicAndSave($newsContent, 'secret');       
+                if($newsContent){
+                    $pic = $newsContent['pic'];
+                    $newsContent = $newsContent['content'];
+                    
+                    $sql = "INSERT INTO news(`id`, `category_id`, `city_id`, `province_id`, `country_id`, `rate`, `title`, `meta_keywords`, `meta_description`, `short_description`, `editor`, `source_url`, `pic`, `content`, `created_at`, `updated_at`) VALUE (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?); ";
+                    $newsShortDescription = '';
+                    $p = array('2', $data->city_id, $data->province_id, $data->country_id, 0, $newsTitle, $newsKeywords, $newsDescription, $newsShortDescription, '', $url, $pic, $newsContent, $createdAt, $updatedAt);
+                    DB::insert($sql, $p);   
+                }
+                    
             }
             
         }
@@ -398,15 +401,18 @@ class SeekerHelper {
             preg_match('%<h3>.*?发表于(.*?)</h3>%si', $newsContent, $matchTime);
             $createdAt = $updatedAt = trim(isset($matchTime[1]) ? $matchTime[1] : date("Y-m-d H:i:s"));
             
-            $newsContent = ImageSeekHelper::seekPicAndSave($newsContent, 'secret');           
-            $pic = $newsContent['pic'];
-            $newsContent = $newsContent['content'];  
+            $newsContent = ImageSeekHelper::seekPicAndSave($newsContent, 'secret');  
+            if($newsContent){
+                $pic = $newsContent['pic'];
+                $newsContent = $newsContent['content'];  
+                
+                //insert into news
+                $sql = "INSERT INTO news(`id`, `category_id`, `city_id`, `province_id`, `country_id`, `rate`, `title`, `meta_keywords`, `meta_description`, `short_description`, `editor`, `source_url`, `pic`, `content`, `created_at`, `updated_at`) VALUE (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?); ";
+                $newsShortDescription = '';
+                $p = array('2', $data->city_id, $data->province_id, $data->country_id, 0, $newsTitle, $newsKeywords, $newsDescription, $newsShortDescription, '', $url, $pic, $newsContent, $createdAt, $updatedAt);
+                DB::insert($sql, $p);
+            }
             
-            //insert into news
-            $sql = "INSERT INTO news(`id`, `category_id`, `city_id`, `province_id`, `country_id`, `rate`, `title`, `meta_keywords`, `meta_description`, `short_description`, `editor`, `source_url`, `pic`, `content`, `created_at`, `updated_at`) VALUE (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?); ";
-            $newsShortDescription = '';
-            $p = array('2', $data->city_id, $data->province_id, $data->country_id, 0, $newsTitle, $newsKeywords, $newsDescription, $newsShortDescription, '', $url, $pic, $newsContent, $createdAt, $updatedAt);
-            DB::insert($sql, $p);
         }
     }
     public static function getCnCnUrlKey($cityKey){

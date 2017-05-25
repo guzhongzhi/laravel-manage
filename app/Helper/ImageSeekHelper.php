@@ -109,6 +109,10 @@ class ImageSeekHelper {
         $picFirst = '';
         $picRrr = array_merge($picRrr, $imgRrr, $crtripRrr);
         $picRrr = array_unique($picRrr);
+        if(count($picRrr) > 40 ){ //如果图片过多，则不下载该游记
+            $contentPic = array();
+            return $contentPic;
+        }
 
         $matchImgUrls = array();
         foreach ($picRrr as $picItem) { //循环取出每幅图的地址 
