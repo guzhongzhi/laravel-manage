@@ -23,13 +23,13 @@ class TravelHelper {
         $sqlInt = "SELECT ROUND(RAND() * ((SELECT count(*) FROM `food` WHERE 1 $andSqlMin1))+(SELECT id FROM `food` WHERE 1 $andSqlMin2 LIMIT 1)) AS int_number";
         $intNumberObj = DB::selectOne($sqlInt);
         $intNumber = $intNumberObj->int_number;
-        if(!$intNumber){
-            $intNumber = 0;
+        if($intNumber){
+            $queryBuilder->where('id', '>=', $intNumber);
         }
-        $queryBuilder->where('id', '>=', $intNumber);
+
 
         if($limit){
-            $queryBuilder->paginate($limit);
+            $queryBuilder->take($limit);
         }
         $resultData = $queryBuilder->get();
         return $resultData;
@@ -60,16 +60,16 @@ class TravelHelper {
             $sqlInt = "SELECT ROUND(RAND() * ((SELECT count(*) FROM `news` WHERE 1 $andSqlMin1))+(SELECT id FROM `news` WHERE 1 $andSqlMin2 LIMIT 1)) AS int_number";
             $intNumberObj = DB::selectOne($sqlInt);
             $intNumber = $intNumberObj->int_number;
-            if(!$intNumber){
-                $intNumber = 0;
+            if($intNumber){
+                $queryBuilder->where('id', '>=', $intNumber);
             }
-            $queryBuilder->where('id', '>=', $intNumber);
+
         }else{
             $queryBuilder->orderBy('id', 'desc');
         }
 
         if($limit){
-            $queryBuilder->paginate($limit);
+            $queryBuilder->take($limit);
         }
         $resultData = $queryBuilder->get();
         return $resultData;
