@@ -79,7 +79,7 @@
                 <div class="sight-relation-right">
 
                     <ul class="sight-relation">
-                        @foreach(\App\Helper\TravelHelper::getNewslList($cityId, $provinceId, \App\Model\News::CATEGORY_ID_SIGHT, 10, 'recommand') as $itemSight)
+                        @foreach(\App\Helper\TravelHelper::getNewsList($cityId, $provinceId, \App\Model\News::CATEGORY_ID_SIGHT, 10, 'recommand') as $itemSight)
                             <li><span class=""></span><a href="{{$itemSight->getSightUrl()}}">{{$itemSight->title}}</a></li>
                         @endforeach
                     </ul>
@@ -93,7 +93,7 @@
                 <div class="sight-relation-right">
 
                     <ul class="sight-relation">
-                        @foreach(\App\Helper\TravelHelper::getNewslList($cityId, $provinceId, \App\Model\News::CATEGORY_ID_TRAVEL,10, 'recommand') as $itemList)
+                        @foreach(\App\Helper\TravelHelper::getNewsList($cityId, $provinceId, \App\Model\News::CATEGORY_ID_TRAVEL,10, 'recommand') as $itemList)
                             <li style="width:100%"><span class=""></span><a href="{{$itemSight->getTravelUrl()}}" title="{{$itemList->title}}">{{\App\Helper\TravelHelper::utf8Substr($itemList->title, 0, 16)}}</a></li>
                         @endforeach
                     </ul>

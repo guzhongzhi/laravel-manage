@@ -51,9 +51,8 @@ class TravelHelper {
         return $result;
     }
 
-    public static function getNewslList($cityId=0, $provinceId=0, $categoryId=0, $limit=10, $orderType='rand'){
+    public static function getNewsList($cityId=0, $provinceId=0, $categoryId=0, $limit=10, $orderType='rand'){
         $queryBuilder = News::query();
-        $andSqlMax = '';
         $andSqlMin1 = '';
         $andSqlMin2 = '';
 
