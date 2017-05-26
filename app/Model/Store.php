@@ -41,7 +41,7 @@ class Store extends Model {
         $star = $this->rate / 5 * 100;
         return $star;
     }
-    
+
     
     public function getShortDesc() {
         if($this->short_description) {

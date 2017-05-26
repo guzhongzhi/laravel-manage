@@ -71,10 +71,7 @@
                                 <div class="txt_tw">
                                     <ul>
                                         @foreach($food->getStores() as $store)
-                                            @if(!$store->pic)
-                                                {{$store->pic = '\skin\images\no_pic.gif'}}
-                                            @endif
-                                        <li><a href="/store/d-{{$store->id}}.html"><img src="{{$store->pic}}" width="210" height="140" alt="{{$store->title}}"><div class="text_con"><strong>{{$store->title}}</strong></div></a></li>
+                                        <li><a href="/store/d-{{$store->id}}.html"><img src="{{$store->getPic()}}" width="210" height="140" alt="{{$store->title}}"><div class="text_con"><strong>{{$store->title}}</strong></div></a></li>
                                         @endforeach
                                     </ul>
                                 </div>
@@ -111,7 +108,7 @@
                 <div class="sight-relation-right">
 
                     <ul class="sight-relation">
-                        @foreach(\App\Helper\TravelHelper::getNewslList($cityId, $provinceId, \App\Model\News::CATEGORY_ID_SIGHT, 10) as $itemSight)
+                        @foreach(\App\Helper\TravelHelper::getNewsList($cityId, $provinceId, \App\Model\News::CATEGORY_ID_SIGHT, 10) as $itemSight)
                             <li><span class=""></span><a href="/sight/s-{{$itemSight->id}}.html">{{$itemSight->title}}</a></li>
                         @endforeach
                     </ul>
