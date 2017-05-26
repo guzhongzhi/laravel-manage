@@ -76,6 +76,9 @@ class TravelHelper {
             $sqlInt = "SELECT ROUND(RAND() * ((SELECT count(*) FROM `news` WHERE 1 $andSqlMin1))+(SELECT MIN(id) FROM `news` WHERE 1 $andSqlMin2)) AS int_number";
             $intNumberObj = DB::selectOne($sqlInt);
             $intNumber = $intNumberObj->int_number;
+            if(!$intNumber){
+                $intNumber = 0;
+            }
             $queryBuilder->where('id', '>=', $intNumber);
         }else{
             $queryBuilder->orderBy('id', 'desc');
