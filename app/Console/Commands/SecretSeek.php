@@ -209,7 +209,12 @@ class SecretSeek extends Command {
                 $content = SeekerHelper::insertCNCNStoreContent($row);
             }
             //update the table
-            $sql = "UPDATE search_url SET is_searched = 1 WHERE id = ?";
+            if($content){
+                $sql = "UPDATE search_url SET is_searched = 1 WHERE id = ?";
+            }else{
+                $sql = "UPDATE search_url SET is_searched = 2 WHERE id = ?";
+            }
+            
             DB::update($sql, array($row->id));
             echo "process done - " . $row->id . PHP_EOL;
         }
