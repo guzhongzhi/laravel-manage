@@ -79,8 +79,8 @@
                 <div class="sight-relation-right">
 
                     <ul class="sight-relation">
-                        @foreach(\App\Helper\TravelHelper::getRandSightList($cityId, $provinceId, 10) as $itemSight)
-                            <li><span class=""></span><a href="/sight/s-{{$itemSight->id}}.html">{{$itemSight->title}}</a></li>
+                        @foreach(\App\Helper\TravelHelper::getNewslList($cityId, $provinceId, \App\Model\News::CATEGORY_ID_SIGHT, 10, 'recommand') as $itemSight)
+                            <li><span class=""></span><a href="{{$itemSight->getSightUrl()}}">{{$itemSight->title}}</a></li>
                         @endforeach
                     </ul>
                     <div class="sp"></div>
@@ -93,8 +93,8 @@
                 <div class="sight-relation-right">
 
                     <ul class="sight-relation">
-                        @foreach(\App\Helper\TravelHelper::getRandTravelList($cityId, $provinceId, 10) as $itemList)
-                            <li style="width:100%"><span class=""></span><a href="/travel/s-{{$itemList->id}}.html" title="{{$itemList->title}}">{{\App\Helper\TravelHelper::utf8Substr($itemList->title, 0, 16)}}</a></li>
+                        @foreach(\App\Helper\TravelHelper::getNewslList($cityId, $provinceId, \App\Model\News::CATEGORY_ID_TRAVEL,10, 'recommand') as $itemList)
+                            <li style="width:100%"><span class=""></span><a href="{{$itemSight->getTravelUrl()}}" title="{{$itemList->title}}">{{\App\Helper\TravelHelper::utf8Substr($itemList->title, 0, 16)}}</a></li>
                         @endforeach
                     </ul>
                     <div class="sp"></div>

@@ -1,6 +1,7 @@
 <?php 
 namespace App\Http\Controllers;
 
+use App\Helper\TravelHelper;
 use App\Model\Region;
 use App\Model\News;
 use DB;

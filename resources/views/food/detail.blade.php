@@ -111,7 +111,7 @@
                 <div class="sight-relation-right">
 
                     <ul class="sight-relation">
-                        @foreach(\App\Helper\TravelHelper::getRandSightList($cityId, $provinceId, 10) as $itemSight)
+                        @foreach(\App\Helper\TravelHelper::getNewslList($cityId, $provinceId, \App\Model\News::CATEGORY_ID_SIGHT, 10) as $itemSight)
                             <li><span class=""></span><a href="/sight/s-{{$itemSight->id}}.html">{{$itemSight->title}}</a></li>
                         @endforeach
                     </ul>
