@@ -20,7 +20,7 @@ class TravelHelper {
             $andSqlMin1 .= " AND city_id = '$cityId'";
             $andSqlMin2 .= " AND city_id = '$cityId'";
         }
-        $sqlInt = "SELECT ROUND(RAND() * ((SELECT count(*) FROM `food` WHERE 1 $andSqlMin1))+(SELECT id FROM `food` WHERE 1 $andSqlMin2 ORDER BY id desc LIMIT 1)) AS int_number";
+        $sqlInt = "SELECT ROUND(RAND() * ((SELECT count(*) FROM `food` WHERE 1 $andSqlMin1))+(SELECT id FROM `food` WHERE 1 $andSqlMin2 LIMIT 1)) AS int_number";
         $intNumberObj = DB::selectOne($sqlInt);
         $intNumber = $intNumberObj->int_number;
         if(!$intNumber){
@@ -57,7 +57,7 @@ class TravelHelper {
         }
 
         if($orderType == 'recommand'){
-            $sqlInt = "SELECT ROUND(RAND() * ((SELECT count(*) FROM `news` WHERE 1 $andSqlMin1))+(SELECT id FROM `news` WHERE 1 $andSqlMin2 ORDER BY id desc LIMIT 1)) AS int_number";
+            $sqlInt = "SELECT ROUND(RAND() * ((SELECT count(*) FROM `news` WHERE 1 $andSqlMin1))+(SELECT id FROM `news` WHERE 1 $andSqlMin2 LIMIT 1)) AS int_number";
             $intNumberObj = DB::selectOne($sqlInt);
             $intNumber = $intNumberObj->int_number;
             if(!$intNumber){
