@@ -108,7 +108,7 @@
 
                 <ul class="sight-relation">
                     @foreach(\App\Helper\TravelHelper::getRandFoodList($cityId, $provinceId, 10) as $itemFood)
-                        <li><span class=""></span><a href="/food/d-{{$itemFood->id}}.html">{{$itemFood->title}}</a></li>
+                        <li><span class=""></span><a href="{{$itemFood->getFoodUrl()}}">{{$itemFood->title}}</a></li>
                     @endforeach
                 </ul>
                 <div class="sp"></div>
