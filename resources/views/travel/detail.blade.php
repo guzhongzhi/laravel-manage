@@ -60,7 +60,7 @@
                 <div class="ctd_content">
                     <div class="ctd_content_controls cf">
                         <h2>{{$travel->title}}</h2>
-                        <h3>发表于：{{$travel->created_at}}</h3>
+                        <!--<h3>发表于：{{$travel->created_at}}</h3>-->
                     </div>
                     {!!$travel->content!!}
                       
