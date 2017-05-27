@@ -376,7 +376,7 @@ class SeekerHelper {
     
     public static function insertCtripContent($data){
         $url = $data->url;
-        $url = 'http://you.ctrip.com/travels/tianjin154/3195663.html';
+        //$url = 'http://you.ctrip.com/travels/tianjin154/3195663.html';
         $content = self::curlInitData($url);
         echo "Search $url \n";
         if($content){            
@@ -403,7 +403,6 @@ class SeekerHelper {
             $newsContent = isset($matchContent[1]) ? $matchContent[1] : "";
             $newsContent = preg_replace('%<div class="ctd_content.*?</h3>%si', '', $newsContent);
             $newsContent = preg_replace('%<a((?!share).)*?class="gs_a_poi.*?href=".*?>(.*?)</a>%si', '$2', $newsContent);
-            echo $newsContent;die("windy");
             //$newsContent = strip_tags($newsContent, '<p><br><div><img><dd><h3><h2><h1><ul><li><span>');
 
             $newsContent = ImageSeekHelper::seekPicAndSave($newsContent, 'secret');  
@@ -418,8 +417,6 @@ class SeekerHelper {
                     DB::insert($sql, $p);
                     return true;
                 }
-                
-                
             }
             
         }
