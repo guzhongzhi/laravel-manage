@@ -376,10 +376,8 @@ class SeekerHelper {
     
     
     public static function insertCtripContent($data){
-        $content = file_get_contents('111.html');
         $url = $data->url;
         //$url = 'http://you.ctrip.com/travels/tianjin154/3195663.html';
-        $url = 'http://you.ctrip.com/travels/beijing1/3461879.html';
         $content = self::curlInitData($url);
         echo "Search $url \n";
         if($content){
