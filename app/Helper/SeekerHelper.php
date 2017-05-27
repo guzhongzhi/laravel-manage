@@ -19,18 +19,20 @@ class SeekerHelper {
             'Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; .NET4.0C; Alexa Toolbar)',
             'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)',
             'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322; .NET CLR 2.0.50727)',
+            '*Baiduspider+(+http://www.baidu.com/search/spider.htm")',
         );
 
-        //$cipRandA = mt_rand(8,254);
-        $cipRandA =  mt_rand(110,230);
-        //$cipRandB = 97;
-        $cipRandB = mt_rand(8,254);
+        $cipRandA = '123';
+        //$cipRandA =  mt_rand(110,230);
+        $cipRandB = '125';
+        //$cipRandB = mt_rand(8,254);
         $cipRandC = mt_rand(8,254);
         $cip = $cipRandA.'.'.$cipRandB.'.'.$cipRandC.'.'.mt_rand(0,254);
-        $xip = $cip;
+        //$xip = $cip;
         //$xip = $cipRandA.'.'.$cipRandB.'.'.$cipRandC.'.'.mt_rand(0,254);
         #$cip = '180.97.33.107';
         #$xip = '180.97.33.107';
+        $xip = '127.0.0.1';
         $header = array(
             'CLIENT-IP:'.$cip,
             'X-FORWARDED-FOR:'.$xip,
