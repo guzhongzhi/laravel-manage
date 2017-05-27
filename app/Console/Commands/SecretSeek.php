@@ -194,7 +194,7 @@ class SecretSeek extends Command {
     }
     
     protected function insertPageContent($start){
-        $sql = "SELECT * FROM search_url WHERE is_searched = 0 limit $start, 10";
+        $sql = "SELECT * FROM search_url WHERE is_searched = 0 AND `type`='ctrip' limit $start, 10";
         $rows = DB::select($sql);
         foreach($rows as $row){
             $type = $row->type;
