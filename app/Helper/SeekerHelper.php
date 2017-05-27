@@ -394,16 +394,17 @@ class SeekerHelper {
             preg_match('%<title>(.*?)</title>%si', $content, $matchTitle);
             $newsTitle = isset($matchTitle[1]) ? $matchTitle[1] : "";
             $newsTitle = str_replace('【携程攻略】', '', $newsTitle);
+
+            preg_match('%<h3>.*?发表于(.*?)</h3>%si', $content, $matchTime);
+            $createdAt = $updatedAt = trim(isset($matchTime[1]) ? $matchTime[1] : date("Y-m-d H:i:s"));
         
             preg_match('%(<div class="ctd_content.*)<div class="ctd_theend">%si', $content, $matchContent);
             $newsContent = isset($matchContent[1]) ? $matchContent[1] : "";
-            $newsContent = preg_replace('%<div class="ctd_content_controls.*?</h3>%si', '', $newsContent);
-            $newsContent = preg_replace('%<a.*?class="gs_a_poi.*?href=".*?>(.*?)</a>%si', '$1', $newsContent);
+            $newsContent = preg_replace('%<div class="ctd_content.*?</h3>%si', '', $newsContent);
+            $newsContent = preg_replace('%%<a((?!share).)*?class="gs_a_poi.*?href=".*?>(.*?)</a>%si', '$2', $newsContent);
+            echo $newsContent;die("windy");
             //$newsContent = strip_tags($newsContent, '<p><br><div><img><dd><h3><h2><h1><ul><li><span>');
-            
-            preg_match('%<h3>.*?发表于(.*?)</h3>%si', $newsContent, $matchTime);
-            $createdAt = $updatedAt = trim(isset($matchTime[1]) ? $matchTime[1] : date("Y-m-d H:i:s"));
-            
+
             $newsContent = ImageSeekHelper::seekPicAndSave($newsContent, 'secret');  
             if($newsContent){
                 $pic = $newsContent['pic'];
