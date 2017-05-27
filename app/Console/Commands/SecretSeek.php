@@ -43,6 +43,7 @@ class SecretSeek extends Command {
         $arguments = $this->argument();
         $type = $arguments['type'];
         $start = $arguments['start'];
+        $seekType = $arguments['seek_type'];
         $shellCommand = "ps aux | grep 'artisan secret:seek ".$type."' | awk '{print $2}'";
         $result = shell_exec($shellCommand);
         $resultArray = explode("\n", $result);
@@ -55,7 +56,7 @@ class SecretSeek extends Command {
         if($type == 0){
             $this->grabPages($start);
         }else{
-            $this->insertPageContent($start);
+            $this->insertPageContent($start, $seekType);
         }
     }
 
@@ -193,9 +194,13 @@ class SecretSeek extends Command {
 
     }
     
-    protected function insertPageContent($start){
-        $sql = "SELECT * FROM search_url WHERE is_searched = 0 AND `type`='ctrip' limit $start, 10";
-        $rows = DB::select($sql);
+    protected function insertPageContent($start, $seekType){
+         if(!$seekType){
+             die("Error SeekType" . PHP_EOL);
+         }
+        $p = array($seekType);
+        $sql = "SELECT * FROM search_url WHERE is_searched = 0 AND `type`=? limit $start, 10";
+        $rows = DB::select($sql, $p);
         foreach($rows as $row){
             $type = $row->type;
             echo "process url - " . $row->id . ' - ' . $row->url . PHP_EOL;
@@ -221,7 +226,7 @@ class SecretSeek extends Command {
 
         if(count($rows) > 0){
             //$start = $start + 50;
-            $cmd = "nohup php ".base_path()."/artisan secret:seek 1 " .$start ."  1>> process.out 2>> process.err < /dev/null &";    //  
+            $cmd = "nohup php ".base_path()."/artisan secret:seek 1 $start $seekType  1>> process.out 2>> process.err < /dev/null &";    //
             echo $cmd,"\n";
             system($cmd);
         }
@@ -251,6 +256,7 @@ class SecretSeek extends Command {
         return [
             ['type', InputArgument::REQUIRED, 'the type of seek, 0->grab, 1->search'],
             ['start', InputArgument::REQUIRED, 'the start of the number'],
+            ['seek_type', InputArgument::OPTIONAL, 'ctrip,cncn'],
             
         ];
     }

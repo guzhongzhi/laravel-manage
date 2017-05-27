@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\DB;
 use App\Helper\ImageSeekHelper;
 use App\Model\Food;
 use App\Model\Store;
+use App\Model\News;
 class SeekerHelper {
 
     const SEEK_CNCN_TRAVEL_TYPE = 'cncn';
@@ -170,7 +171,7 @@ class SeekerHelper {
                     if(mb_strlen($newsContent,'utf8') > 100){
                         $sql = "INSERT INTO news(`id`, `category_id`, `city_id`, `province_id`, `country_id`, `rate`, `title`, `meta_keywords`, `meta_description`, `short_description`, `editor`, `source_url`, `pic`, `content`, `created_at`, `updated_at`) VALUE (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?); ";
                         $newsShortDescription = '';
-                        $p = array('2', $data->city_id, $data->province_id, $data->country_id, 0, $newsTitle, $newsKeywords, $newsDescription, $newsShortDescription, '', $url, $pic, $newsContent, $createdAt, $updatedAt);
+                        $p = array(News::CATEGORY_ID_TRAVEL, $data->city_id, $data->province_id, $data->country_id, 0, $newsTitle, $newsKeywords, $newsDescription, $newsShortDescription, '', $url, $pic, $newsContent, $createdAt, $updatedAt);
                         DB::insert($sql, $p);  
                         return true;
                     }
@@ -399,7 +400,7 @@ class SeekerHelper {
             preg_match('%<h3>.*?发表于(.*?)</h3>%si', $content, $matchTime);
             $createdAt = $updatedAt = trim(isset($matchTime[1]) ? $matchTime[1] : date("Y-m-d H:i:s"));
         
-            preg_match('%(<div class="ctd_content.*)<div class="ctd_theend">%si', $content, $matchContent);
+            preg_match('%(<div class="ctd_content.*)</div>.*?<div class="ctd_theend">%si', $content, $matchContent);
             $newsContent = isset($matchContent[1]) ? $matchContent[1] : "";
             $newsContent = preg_replace('%<div class="ctd_content.*?</h3>%si', '', $newsContent);
             $newsContent = preg_replace('%<a((?!share).)*?class="gs_a_poi.*?href=".*?>(.*?)</a>%si', '$2', $newsContent);
@@ -413,7 +414,7 @@ class SeekerHelper {
                     //insert into news
                     $sql = "INSERT INTO news(`id`, `category_id`, `city_id`, `province_id`, `country_id`, `rate`, `title`, `meta_keywords`, `meta_description`, `short_description`, `editor`, `source_url`, `pic`, `content`, `created_at`, `updated_at`) VALUE (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?); ";
                     $newsShortDescription = '';
-                    $p = array('2', $data->city_id, $data->province_id, $data->country_id, 0, $newsTitle, $newsKeywords, $newsDescription, $newsShortDescription, '', $url, $pic, $newsContent, $createdAt, $updatedAt);
+                    $p = array(News::CATEGORY_ID_TRAVEL, $data->city_id, $data->province_id, $data->country_id, 0, $newsTitle, $newsKeywords, $newsDescription, $newsShortDescription, '', $url, $pic, $newsContent, $createdAt, $updatedAt);
                     DB::insert($sql, $p);
                     return true;
                 }

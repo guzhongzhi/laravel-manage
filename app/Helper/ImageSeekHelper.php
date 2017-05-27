@@ -109,9 +109,9 @@ class ImageSeekHelper {
         $picFirst = '';
         $picRrr = array_merge($picRrr, $imgRrr, $crtripRrr);
         $picRrr = array_unique($picRrr);
-        if(count($picRrr) > 40 ){ //如果图片过多，则不下载该游记
+        if(count($picRrr) > 40 ){ //如果图片过多，则不下载该游记图片
             echo "Pic too many - " . count($picRrr) . PHP_EOL;
-            $content = preg_replace('%<div id="img.*?</div>%si', '', $content);
+            //$content = preg_replace('%<div id="img.*?</div>%si', '', $content);
             $contentPic = array('pic'=>$picRrr[0], 'content'=>$content);
             return $contentPic;
         }
