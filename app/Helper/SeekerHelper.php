@@ -376,11 +376,14 @@ class SeekerHelper {
     
     
     public static function insertCtripContent($data){
+        $content = file_get_contents('111.html');
         $url = $data->url;
         //$url = 'http://you.ctrip.com/travels/tianjin154/3195663.html';
+        $url = 'http://you.ctrip.com/travels/beijing1/3461879.html';
         $content = self::curlInitData($url);
         echo "Search $url \n";
-        if($content){            
+        if($content){
+            //$content = mb_convert_encoding($content, 'utf8', 'gbk');
             preg_match('/<meta name="keywords" content="(.*?)".*<meta name="description" content="(.*?)"/si', $content, $matchMeta);
             $newsKeywords    = isset($matchMeta[1]) ? $matchMeta[1] : "";
             $newsDescription = isset($matchMeta[2]) ? $matchMeta[2] : "";
@@ -399,12 +402,20 @@ class SeekerHelper {
 
             preg_match('%<h3>.*?发表于(.*?)</h3>%si', $content, $matchTime);
             $createdAt = $updatedAt = trim(isset($matchTime[1]) ? $matchTime[1] : date("Y-m-d H:i:s"));
-        
-            preg_match('%(<div class="ctd_content.*)</div>.*?<div class="ctd_theend">%si', $content, $matchContent);
+
+           // file_put_contents("111.html", $content);
+            preg_match('%(<div class="ctd_content".*?)<div class="ctd_theend">%si', $content, $matchContent);
             $newsContent = isset($matchContent[1]) ? $matchContent[1] : "";
+
+
+
             $newsContent = preg_replace('%<div class="ctd_content.*?</h3>%si', '', $newsContent);
             $newsContent = preg_replace('%<a((?!share).)*?class="gs_a_poi.*?href=".*?>(.*?)</a>%si', '$2', $newsContent);
+            $newsContent = preg_replace('%(.*)</div>%si', '$1', $newsContent);
             //$newsContent = strip_tags($newsContent, '<p><br><div><img><dd><h3><h2><h1><ul><li><span>');
+            //$newsContent = '<div class="ctd_content">fsdfsdfs</div>';
+            $newsContent = preg_replace('%<div class="ctd_content">(.*)</div>%si', '$1', $newsContent);
+            $newsContent = preg_replace('%(.*)</div>%si', '$1', $newsContent);
 
             $newsContent = ImageSeekHelper::seekPicAndSave($newsContent, 'secret');  
             if($newsContent){
