@@ -44,7 +44,7 @@ class SecretSeek extends Command {
         $type = $arguments['type'];
         $start = $arguments['start'];
         $seekType = $arguments['seek_type'];
-        $shellCommand = "ps aux | grep 'artisan secret:seek ".$type."' | awk '{print $2}'";
+        $shellCommand = "ps aux | grep 'artisan secret:seek $type $seekType' | awk '{print $2}'";
         $result = shell_exec($shellCommand);
         $resultArray = explode("\n", $result);
         $resultArray = array_diff($resultArray, array(""));
