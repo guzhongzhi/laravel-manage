@@ -404,12 +404,12 @@ class SeekerHelper {
             preg_match('%(<div class="ctd_content".*?)<div class="ctd_theend">%sim', $content, $matchContent);
             $newsContent = isset($matchContent[1]) ? $matchContent[1] : "";
 
-            $newsContent = preg_replace('%<div class="ctd_content.*?</h3>%sim', '', $newsContent);
+            $newsContent = preg_replace('%<div class="ctd_content">.*?</h3>%sim', '<div class="ctd_content">', $newsContent);
             $newsContent = preg_replace('%<a((?!share).)*?class="gs_a_poi.*?href=".*?>(.*?)</a>%sim', '$2', $newsContent);
             //$newsContent = strip_tags($newsContent, '<p><br><div><img><dd><h3><h2><h1><ul><li><span>');
             //$newsContent = '<div class="ctd_content">fsdfsdfs</div>';
             $newsContent = preg_replace('%<div class="ctd_content">(.*)</div>%sim', '$1', $newsContent);
-            $newsContent = preg_replace('%(.*)</div>%sim', '$1', $newsContent);
+            //$newsContent = preg_replace('%(.*)</div>%sim', '$1', $newsContent);
             $newsContent = ImageSeekHelper::seekPicAndSave($newsContent, 'secret');
             if($newsContent){
                 $pic = $newsContent['pic'];
