@@ -10,6 +10,12 @@ $(
                 this.src = $(this).attr('data-original');
             }
         );
+        $('.img img').each(
+            function(){
+                this.src = $(this).attr('data-original');
+            }
+        );
+
         $('#only_text').click(
             function(){
                 if($(this).attr('class') == 'fl'){
