@@ -12,7 +12,7 @@ class SeekerHelper {
     const SEEK_CNCN_STORE_TYPE = 'cncn_store';
     const SEEK_CTRIP_TRAVEL_TYPE = 'ctrip';
     public static function curlInitData($url, $retry=5){
-        sleep(rand(1,2));
+        sleep(rand(1,3));
         global $con;
         $binfo = array(
             'Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; .NET CLR 2.0.50727; InfoPath.2; AskTbPTV/5.17.0.25589; Alexa Toolbar)',
