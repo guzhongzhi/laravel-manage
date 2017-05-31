@@ -10,53 +10,60 @@ use App\Helper\SeekerHelper;
 
 class FoodSeek extends Command {
 
-	/**
-	 * The console command name.
-	 *
-	 * @var string
-	 */
-	protected $name = 'food:seek';
+    /**
+     * The console command name.
+     *
+     * @var string
+     */
+    protected $name = 'food:seek';
 
-	/**
-	 * The console command description.
-	 *
-	 * @var string
-	 */
-	protected $description = 'Command description.';
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Command description.';
 
-	/**
-	 * Create a new command instance.
-	 *
-	 * @return void
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-	}
+    /**
+     * Create a new command instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
 
-	/**
-	 * Execute the console command.
-	 *
-	 * @return mixed
-	 */
-	public function fire(){
+    /**
+     * Execute the console command.
+     *
+     * @return mixed
+     */
+    public function fire(){
         $arguments = $this->argument();
         $type = $arguments['type'];
         $start = $arguments['start'];
+        $shellCommand = "ps aux | grep 'artisan food:seek ".$type."' | awk '{print $2}'";
+        $result = shell_exec($shellCommand);
+        $resultArray = explode("\n", $result);
+        $resultArray = array_diff($resultArray, array(""));
+        $resultArray = array_unique($resultArray);
+        $countNumber = count($resultArray);
+        if($countNumber > 3){
+            die("No need to process it, wait the process." . PHP_EOL);
+        }
         if($type == 0){
             $this->grabPages($start);
         }else{
             $this->processQueue($start);
         }
-        var_dump($arguments);
-        die();
-	}
+    }
 
     /**
-	 * Get the pages.
-	 *
-	 * @return 
-	 */
+     * Get the pages.
+     *
+     * @return 
+     */
      
      protected function grabPages($start){
          
@@ -73,9 +80,14 @@ class FoodSeek extends Command {
                 $provinceName = $province->name;
                 $pId = $province->id;
                 echo "Start to seek the cncn food province - $provinceName: \n";
-                $provicenPY = str_replace(' ', '', strtolower($province->name_en));
-                $provicenPY = rtrim($provicenPY, 'shi');
-                $provicenPY  = str_replace(array('(', ')', ','), '', $provicenPY);
+                $provicenPY = SeekerHelper::getCnCnUrlKey(strtolower($province->short_name_en));
+                if(!$provicenPY){
+                    $provicenPY = str_replace(' ', '', strtolower($province->name_en));
+                    $provicenPY  = preg_replace('/sheng$/si', '', $provicenPY);
+                    $provicenPY  = preg_replace('/diqu$/si', '', $provicenPY);
+                    $provicenPY  = str_replace(array('(', ')', ','), '', $provicenPY);
+                }
+                
                 $sqlCity = "SELECT * FROM region WHERE parent_id = '$pId'";
                 $cities = DB::select($sqlCity);
                 $checkHasCityUrlKey = false;
@@ -88,10 +100,11 @@ class FoodSeek extends Command {
                     }
 
                     //get it from the match
-                    $cityPY = SeekerHelper::getCcnCnUrlKey(strtolower($city->short_name_en));
+                    $cityPY = SeekerHelper::getCnCnUrlKey(strtolower($city->short_name_en));
                     if(!$cityPY){
                         $cityPY  = str_replace(' ', '', strtolower($city->name_en));
-                        $cityPY  = rtrim($cityPY, 'shi');
+                        $cityPY  = preg_replace('/shi$/si', '', $cityPY);
+                        $cityPY  = preg_replace('/diqu$/si', '', $cityPY);
                         $cityPY  = str_replace(array('(', ')', ','), '', $cityPY);
                     }
 
@@ -125,10 +138,11 @@ class FoodSeek extends Command {
                 
             }
             if(count($provinces) > 0){
-               $start++;
-                $cmd = "nohup php artisan food:seek 0 " .$start ."  1>> process.out 2>> process.err < /dev/null &";    //  
+                $start++;
+                $cmd = "nohup php ".base_path()."/artisan food:seek 0 " .$start ."  1>> process.out 2>> process.err < /dev/null &";    //  
                 echo $cmd,"\n";
                 system($cmd);
+                break;
             }
         
         }
@@ -137,7 +151,7 @@ class FoodSeek extends Command {
     
     
     protected function processQueue($start){
-        $sql = "SELECT * FROM food_store_queue WHERE is_searched = 0 limit $start, 50";
+        $sql = "SELECT * FROM food_store_queue WHERE is_searched = 0 limit $start, 10";
         $rows = DB::select($sql);
         foreach($rows as $row){
             $foodId = $row->food_id;
@@ -159,36 +173,36 @@ class FoodSeek extends Command {
         
         if(count($rows) > 0){
             //$start = $start + 50;
-            $cmd = "nohup php artisan food:seek 1 " .$start ."  1>> process.out 2>> process.err < /dev/null &";    //  
+            $cmd = "nohup php ".base_path()."/artisan food:seek 1 " .$start ."  1>> process.out 2>> process.err < /dev/null &";    //  
             echo $cmd,"\n";
             system($cmd);
         }
     }
     
-	/**
-	 * Get the console command arguments.
-	 *
-	 * @return array
-	 */
-	protected function getArguments()
-	{
-		return [
-			['type', InputArgument::REQUIRED, 'the type of seek, 0->grab, 1->search'],
-			['start', InputArgument::REQUIRED, 'the start of the number'],
-			
-		];
-	}
+    /**
+     * Get the console command arguments.
+     *
+     * @return array
+     */
+    protected function getArguments()
+    {
+        return [
+            ['type', InputArgument::REQUIRED, 'the type of seek, 0->grab, 1->search'],
+            ['start', InputArgument::REQUIRED, 'the start of the number'],
+            
+        ];
+    }
 
-	/**
-	 * Get the console command options.
-	 *
-	 * @return array
-	 */
-	protected function getOptions()
-	{
-		return [
-			//['example', null, InputOption::VALUE_OPTIONAL, 'An example option.', null],
-		];
-	}
+    /**
+     * Get the console command options.
+     *
+     * @return array
+     */
+    protected function getOptions()
+    {
+        return [
+            //['example', null, InputOption::VALUE_OPTIONAL, 'An example option.', null],
+        ];
+    }
 
 }

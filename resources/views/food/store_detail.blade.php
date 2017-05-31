@@ -79,13 +79,13 @@
                                 <div class="book_imgli"><div class="top"><div class="tab j_tab"><a href="javascript:;" class="on" id="recommand_travel">推荐攻略</a><a href="javascript:;" id="new_travel">最新发布</a></div><a href="/travel/p{{$provinceId}}.html" target="_blank" class="more">更多旅游攻略&gt;</a></div>
 
                                     <ul class="j_tab_con recommand_travel" style="display: block;">
-                                        @foreach(\App\Helper\TravelHelper::getRandTravelList($cityId, $provinceId, 10, 'recommand') AS $itemTravel)
+                                        @foreach(\App\Helper\TravelHelper::getNewsList($cityId, $provinceId, \App\Model\News::CATEGORY_ID_TRAVEL, 10, 'recommand') AS $itemTravel)
                                             <li><div class="biaoqian"><i class="icon_bq1">推荐</i></div><a href="{{$itemTravel->getTravelUrl()}}" target="_blank"><img src="{{$itemTravel->pic}}"></a><div class="txt"><div class="t"><a href="{{$itemTravel->getTravelUrl()}}" target="_blank">{{$itemTravel->title}}</a></div><div class="time">发表于：{{$itemTravel->created_at}}</div><a href="{{$itemTravel->getTravelUrl()}}" target="_blank"><span>{{$itemTravel->getShortDesc(80)}}</span></a></div><div class="i"><div><i class="icon_kan"></i>{{$itemTravel->click}}</div></div></li>
                                         @endforeach
                                     </ul>
 
                                     <ul class="j_tab_con new_travel" style="display: none;">
-                                        @foreach(\App\Helper\TravelHelper::getRandTravelList($cityId, $provinceId, 10, 'new') AS $itemTravel)
+                                        @foreach(\App\Helper\TravelHelper::getNewsList($cityId, $provinceId, \App\Model\News::CATEGORY_ID_TRAVEL, 10, 'new') AS $itemTravel)
                                             <li><div class="biaoqian"><i class="icon_bq1">最新</i></div><a href="{{$itemTravel->getTravelUrl()}}" target="_blank"><img src="{{$itemTravel->pic}}"></a><div class="txt"><div class="t"><a href="{{$itemTravel->getTravelUrl()}}" target="_blank">{{$itemTravel->title}}</a></div><div class="time">发表于：{{$itemTravel->created_at}}</div><a href="{{$itemTravel->getTravelUrl()}}" target="_blank"><span>{{$itemTravel->getShortDesc(80)}}</span></a></div><div class="i"><div><i class="icon_kan"></i>{{$itemTravel->click}}</div></div></li>
                                         @endforeach
                                     </ul>
@@ -109,7 +109,7 @@
 
                 <ul class="sight-relation">
                     @foreach(\App\Helper\TravelHelper::getRandFoodList($cityId, $provinceId, 10) as $itemFood)
-                        <li><span class=""></span><a href="/food/d-{{$itemFood->id}}.html">{{$itemFood->title}}</a></li>
+                        <li><span class=""></span><a href="{{$itemFood->getFoodUrl()}}">{{$itemFood->title}}</a></li>
                     @endforeach
                 </ul>
                 <div class="sp"></div>
@@ -123,7 +123,7 @@
                 <div class="sight-relation-right">
 
                     <ul class="sight-relation">
-                        @foreach(\App\Helper\TravelHelper::getRandSightList($cityId, $provinceId, 10) as $itemSight)
+                        @foreach(\App\Helper\TravelHelper::getNewsList($cityId, $provinceId, \App\Model\News::CATEGORY_ID_SIGHT, 10, 'recommand') as $itemSight)
                             <li><span class=""></span><a href="/sight/s-{{$itemSight->id}}.html">{{$itemSight->title}}</a></li>
                         @endforeach
                     </ul>

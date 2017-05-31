@@ -7,75 +7,73 @@ use App\Model\Food;
 use App\Model\Store;
 class TravelHelper {
     public static function getRandFoodList($cityId=0, $provinceId=0, $limit=10){
-        $andSql = '';
-        $p = array();
-        if($cityId){
-            $andSql .= ' AND city_id = ?';
-            $p[] = $cityId;
-        }
+        $andSqlMin1 = '';
+        $andSqlMin2 = '';
+        $queryBuilder = Food::query();
         if($provinceId){
-            $andSql .= ' AND province_id = ?';
-            $p[] = $provinceId;
+            $queryBuilder->where('province_id', '=', $provinceId);
+            $andSqlMin1 .= " AND province_id = '$provinceId'";
+            $andSqlMin2 .= " AND province_id = '$provinceId'";
         }
-        /*
-        $sql = "SELECT t1.* 
-                    FROM `food` AS t1 JOIN (SELECT ROUND(RAND() * ((SELECT MAX(id) FROM `food` $andSql)-(SELECT MIN(id) FROM `food` $andSql))+(SELECT MIN(id) FROM `food` $andSql)) AS id) AS t2 
-                    WHERE t1.id >= t2.id $andSql 
-                    ORDER BY t1.id LIMIT $limit; ";
-        */
-        $sql = "SELECT food.* FROM food WHERE 1 $andSql ORDER BY RAND() limit $limit";
-        //ECHO $sql;var_dump($p);die();
-        $result = DB::select($sql, $p);
-        return $result;
-    }
-
-    public static function getRandSightList($cityId=0, $provinceId=0, $limit=10){
-        $andSql = '';
-        $p = array();
-        $p[] = News::CATEGORY_ID_SIGHT;
         if($cityId){
-            $andSql .= ' AND city_id = ? ';
-            $p[] = $cityId;
+            $queryBuilder->where('city_id', '=', $cityId);
+            $andSqlMin1 .= " AND city_id = '$cityId'";
+            $andSqlMin2 .= " AND city_id = '$cityId'";
         }
-        if($provinceId){
-            $andSql .= ' AND province_id = ?';
-            $p[] = $provinceId;
-        }
-
-        $sql = "SELECT * FROM news WHERE category_id = ? $andSql ORDER BY RAND() LIMIT $limit";
-        $result = DB::select($sql, $p);
-        return $result;
-    }
-
-    public static function getRandTravelList($cityId=0, $provinceId=0, $limit=10, $orderType='rand'){
-        $andSql = '';
-        $p = array();
-        $p[] = News::CATEGORY_ID_TRAVEL;
-        if($cityId){
-            $andSql .= ' AND city_id = ?';
-            $p[] = $cityId;
-        }
-        if($provinceId){
-            $andSql .= ' AND province_id = ?';
-            $p[] = $provinceId;
+        $sqlInt = "SELECT ROUND(RAND() * ((SELECT count(*) FROM `food` WHERE 1 $andSqlMin1))+(SELECT id FROM `food` WHERE 1 $andSqlMin2 LIMIT 1)) AS int_number";
+        $intNumberObj = DB::selectOne($sqlInt);
+        $intNumber = $intNumberObj->int_number;
+        if($intNumber){
+            $queryBuilder->where('id', '>=', $intNumber);
         }
 
-        $orderBy = '';
-        if($orderType == 'rand'){
-            $orderBy = 'ORDER BY RAND()';
-        }elseif($orderType == 'recommand'){
-            $orderBy = 'ORDER BY `like` DESC ';
-        }else{
-            $orderBy = 'ORDER BY `id` DESC ';
-        }
 
-        $sql = "SELECT * FROM news WHERE category_id = ? $andSql  $orderBy LIMIT $limit";
-        $result = DB::select($sql, $p);
-        $resultData = array();
-        foreach($result  as $resultObj){
-            $resultData[] = News::find($resultObj->id);
+        if($limit){
+            $queryBuilder->take($limit);
         }
+        $resultData = $queryBuilder->get();
         return $resultData;
+    }
+
+    public static function getNewsList($cityId=0, $provinceId=0, $categoryId=0, $limit=10, $orderType='rand'){
+        $queryBuilder = News::query();
+        $andSqlMin1 = '';
+        $andSqlMin2 = '';
+
+        if($categoryId){
+            $queryBuilder->where('category_id', '=', $categoryId);
+            $andSqlMin1 .= " AND category_id = '$categoryId'";
+            $andSqlMin2 .= " AND category_id = '$categoryId'";
+        }
+        if($provinceId){
+            $queryBuilder->where('province_id', '=', $provinceId);
+            $andSqlMin1 .= " AND province_id = '$provinceId'";
+            $andSqlMin2 .= " AND province_id = '$provinceId'";
+        }
+        if($cityId){
+            $queryBuilder->where('city_id', '=', $cityId);
+            $andSqlMin1 .= " AND city_id = '$cityId'";
+            $andSqlMin2 .= " AND city_id = '$cityId'";
+        }
+
+        if($orderType == 'recommand'){
+            $sqlInt = "SELECT ROUND(RAND() * ((SELECT count(*) FROM `news` WHERE 1 $andSqlMin1))+(SELECT id FROM `news` WHERE 1 $andSqlMin2 LIMIT 1)) AS int_number";
+            $intNumberObj = DB::selectOne($sqlInt);
+            $intNumber = $intNumberObj->int_number;
+            if($intNumber){
+                $queryBuilder->where('id', '>=', $intNumber);
+            }
+
+        }else{
+            $queryBuilder->orderBy('id', 'desc');
+        }
+
+        if($limit){
+            $queryBuilder->take($limit);
+        }
+        $resultData = $queryBuilder->get();
+        return $resultData;
+
     }
 
 

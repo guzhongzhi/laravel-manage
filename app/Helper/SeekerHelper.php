@@ -4,14 +4,15 @@ use Illuminate\Support\Facades\DB;
 use App\Helper\ImageSeekHelper;
 use App\Model\Food;
 use App\Model\Store;
+use App\Model\News;
 class SeekerHelper {
 
     const SEEK_CNCN_TRAVEL_TYPE = 'cncn';
-	const SEEK_CNCN_FOOD_TYPE = 'cncn_food';
+    const SEEK_CNCN_FOOD_TYPE = 'cncn_food';
     const SEEK_CNCN_STORE_TYPE = 'cncn_store';
     const SEEK_CTRIP_TRAVEL_TYPE = 'ctrip';
-	public static function curlInitData($url, $retry=5){
-	    usleep(1000000);
+    public static function curlInitData($url, $retry=5){
+        sleep(rand(1,3));
         global $con;
         $binfo = array(
             'Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; .NET CLR 2.0.50727; InfoPath.2; AskTbPTV/5.17.0.25589; Alexa Toolbar)',
@@ -19,18 +20,20 @@ class SeekerHelper {
             'Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; .NET4.0C; Alexa Toolbar)',
             'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)',
             'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322; .NET CLR 2.0.50727)',
+            '*Baiduspider+(+http://www.baidu.com/search/spider.htm")',
         );
 
-        //$cipRandA = mt_rand(8,254);
-        $cipRandA =  mt_rand(110,230);
-        //$cipRandB = 97;
-        $cipRandB = mt_rand(8,254);
+        $cipRandA = '123';
+        //$cipRandA =  mt_rand(110,230);
+        $cipRandB = '125';
+        //$cipRandB = mt_rand(8,254);
         $cipRandC = mt_rand(8,254);
         $cip = $cipRandA.'.'.$cipRandB.'.'.$cipRandC.'.'.mt_rand(0,254);
-		$xip = $cip;
+        //$xip = $cip;
         //$xip = $cipRandA.'.'.$cipRandB.'.'.$cipRandC.'.'.mt_rand(0,254);
         #$cip = '180.97.33.107';
         #$xip = '180.97.33.107';
+        $xip = '127.0.0.1';
         $header = array(
             'CLIENT-IP:'.$cip,
             'X-FORWARDED-FOR:'.$xip,
@@ -99,7 +102,7 @@ class SeekerHelper {
 
                         $increase++;
                         if($increase > 5){
-                            return true; //temp to insert the url, will remove it on live
+                            //return true; //temp to insert the url, will remove it on live
                         }
                         $url   = $mainDomainUrl . $item->href;
                         echo $url .  PHP_EOL;
@@ -161,18 +164,22 @@ class SeekerHelper {
                 preg_match('/<div id="showinfo">.*?([0-9]{4}-[0-9]{2}-[0-9]{2})/si', $newsContent, $matchTime);
                 $createdAt = $updatedAt = trim(isset($matchTime[1]) ? $matchTime[1] : date("Y-m-d H:i:s"));
                 
-                $newsContent = ImageSeekHelper::seekPicAndSave($newsContent, 'secret');           
-                $pic = $newsContent['pic'];
-                $newsContent = $newsContent['content'];
-                
-                $sql = "INSERT INTO news(`id`, `category_id`, `city_id`, `province_id`, `country_id`, `rate`, `title`, `meta_keywords`, `meta_description`, `short_description`, `editor`, `source_url`, `pic`, `content`, `created_at`, `updated_at`) VALUE (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?); ";
-                $newsShortDescription = '';
-                $p = array('2', $data->city_id, $data->province_id, $data->country_id, 0, $newsTitle, $newsKeywords, $newsDescription, $newsShortDescription, '', $url, $pic, $newsContent, $createdAt, $updatedAt);
-                DB::insert($sql, $p);       
+                $newsContent = ImageSeekHelper::seekPicAndSave($newsContent, 'secret');       
+                if($newsContent){
+                    $pic = $newsContent['pic'];
+                    $newsContent = $newsContent['content'];
+                    if(mb_strlen($newsContent,'utf8') > 100){
+                        $sql = "INSERT INTO news(`id`, `category_id`, `city_id`, `province_id`, `country_id`, `rate`, `title`, `meta_keywords`, `meta_description`, `short_description`, `editor`, `source_url`, `pic`, `content`, `created_at`, `updated_at`) VALUE (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?); ";
+                        $newsShortDescription = '';
+                        $p = array(News::CATEGORY_ID_TRAVEL, $data->city_id, $data->province_id, $data->country_id, 0, $newsTitle, $newsKeywords, $newsDescription, $newsShortDescription, '', $url, $pic, $newsContent, $createdAt, $updatedAt);
+                        DB::insert($sql, $p);  
+                        return true;
+                    }
+                } 
             }
             
         }
-        
+        return false;
     }
 
 
@@ -336,10 +343,11 @@ class SeekerHelper {
                 foreach($matches[1] as $itemUrl){
                     $increase++;
                     if($increase > 21){
-                        return true; //temp to insert the url, will remove it on live
+                        //return true; //temp to insert the url, will remove it on live
                     }
                     try{
                         $itemUrl = $mainDomainUrl . $itemUrl;
+                        echo $itemUrl . PHP_EOL;
                         $sql = "INSERT INTO search_url(`id`, `url`, `url_secret`, `type`, `country_id`, `province_id`, `city_id`, `is_searched`, `created_at`, `updated_at`) VALUE (NULL, ?, ?, ?, ?, ?, ?, 0, NOW(), NOW())";
                         $p = array($itemUrl, sha1($itemUrl), 'ctrip', $countryId, $provinceId, $cityId);
                         DB::insert($sql, $p);
@@ -371,8 +379,9 @@ class SeekerHelper {
         $url = $data->url;
         $content = self::curlInitData($url);
         echo "Search $url \n";
-        if($content){            
-            preg_match('/<meta name="keywords" content="(.*?)".*<meta name="description" content="(.*?)"/si', $content, $matchMeta);
+        if($content){
+            //$content = mb_convert_encoding($content, 'utf8', 'gbk');
+            preg_match('/<meta name="keywords" content="(.*?)".*<meta name="description" content="(.*?)"/sim', $content, $matchMeta);
             $newsKeywords    = isset($matchMeta[1]) ? $matchMeta[1] : "";
             $newsDescription = isset($matchMeta[2]) ? $matchMeta[2] : "";
             $newsDescription = str_replace('携程攻略社区!', '', $newsDescription);
@@ -384,32 +393,54 @@ class SeekerHelper {
                 preg_match('%<div class="ctd_head_con.*?<h1 class="title1">(.*?)</h1>%si', $content, $matchTitle);
                 $newsTitle = isset($matchTitle[1]) ? $matchTitle[1] : "";
             } */
-            preg_match('%<title>(.*?)</title>%si', $content, $matchTitle);
+            preg_match('%<title>(.*?)</title>%sim', $content, $matchTitle);
             $newsTitle = isset($matchTitle[1]) ? $matchTitle[1] : "";
             $newsTitle = str_replace('【携程攻略】', '', $newsTitle);
-        
-            preg_match('%(<div class="ctd_content.*)<div class="ctd_theend">%si', $content, $matchContent);
-            $newsContent = isset($matchContent[1]) ? $matchContent[1] : "";
-            $newsContent = preg_replace('%<div class="ctd_content_controls.*?</h3>%si', '', $newsContent);
-            $newsContent = preg_replace('%<a target="_blank" class="gs_a_poi.*?href=".*?>(.*?)</a>%si', '$1', $newsContent);
-            //$newsContent = strip_tags($newsContent, '<p><br><div><img><dd><h3><h2><h1><ul><li><span>');
-            
-            preg_match('%<h3>.*?发表于(.*?)</h3>%si', $newsContent, $matchTime);
+
+            preg_match('%<h3>.*?发表于(.*?)</h3>%sim', $content, $matchTime);
             $createdAt = $updatedAt = trim(isset($matchTime[1]) ? $matchTime[1] : date("Y-m-d H:i:s"));
+
+           // file_put_contents("111.html", $content);
+            preg_match('%(<div class="ctd_content".*?)<div class="ctd_theend">%sim', $content, $matchContent);
+            $newsContent = isset($matchContent[1]) ? $matchContent[1] : "";
+
+            $newsContent = preg_replace('%<div class="ctd_content">.*?</h3>%sim', '<div class="ctd_content">', $newsContent);
+            $newsContent = preg_replace('%<a((?!share).)*?class="gs_a_poi.*?href=".*?>(.*?)</a>%sim', '$2', $newsContent);
+            //$newsContent = strip_tags($newsContent, '<p><br><div><img><dd><h3><h2><h1><ul><li><span>');
+            //$newsContent = '<div class="ctd_content">fsdfsdfs</div>';
+            $newsContent = preg_replace('%<div class="ctd_content">(.*)</div>%sim', '$1', $newsContent);
+            //$newsContent = preg_replace('%(.*)</div>%sim', '$1', $newsContent);
+            $newsContent = ImageSeekHelper::seekPicAndSave($newsContent, 'secret');
+            if($newsContent){
+                $pic = $newsContent['pic'];
+                $newsContent = $newsContent['content'];  
+                if(mb_strlen($newsContent,'utf8') > 100){
+                    //insert into news
+                    $sql = "INSERT INTO news(`id`, `category_id`, `city_id`, `province_id`, `country_id`, `rate`, `title`, `meta_keywords`, `meta_description`, `short_description`, `editor`, `source_url`, `pic`, `content`, `created_at`, `updated_at`) VALUE (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?); ";
+                    $newsShortDescription = '';
+                    $p = array(News::CATEGORY_ID_TRAVEL, $data->city_id, $data->province_id, $data->country_id, 0, $newsTitle, $newsKeywords, $newsDescription, $newsShortDescription, '', $url, $pic, $newsContent, $createdAt, $updatedAt);
+                    DB::insert($sql, $p);
+                    return true;
+                }
+            }
             
-            $newsContent = ImageSeekHelper::seekPicAndSave($newsContent, 'secret');           
-            $pic = $newsContent['pic'];
-            $newsContent = $newsContent['content'];  
-            
-            //insert into news
-            $sql = "INSERT INTO news(`id`, `category_id`, `city_id`, `province_id`, `country_id`, `rate`, `title`, `meta_keywords`, `meta_description`, `short_description`, `editor`, `source_url`, `pic`, `content`, `created_at`, `updated_at`) VALUE (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?); ";
-            $newsShortDescription = '';
-            $p = array('2', $data->city_id, $data->province_id, $data->country_id, 0, $newsTitle, $newsKeywords, $newsDescription, $newsShortDescription, '', $url, $pic, $newsContent, $createdAt, $updatedAt);
-            DB::insert($sql, $p);
         }
+        return false;
     }
-    public static function getCcnCnUrlKey($cityKey){
-        $maps = array('aba'=>'aba', 'gaz'=>'ganzi', 'lsy'=>'liangshan');
+    public static function getCnCnUrlKey($cityKey){
+        $maps = array('aba'=>'aba', 'gaz'=>'ganzi', 'lsy'=>'liangshan', 'hk'=>'hongkong', 'am'=>'macao', 
+                       'xj'=>'xinjiang', 'nx'=>'ningxia', 'xz'=>'xizang', 'sn'=>'shannxi', 'hhht'=>'huhehaote',
+                       'cfs'=>'chifeng', 'ordos'=>'ordos', 'hlbr'=>'hulunbuir', 'byar'=>'bayannur',
+                       'wlcb'=>'ulanqab', 'hin'=>'hinggan', 'xgo'=>'xilingol', 'alm'=>'alashan', 'ybz'=>'yanbian',
+                       'jmu'=>'jiamusi', 'dhl'=>'daxinganling', 'hns'=>'maanshan', 'liuan'=>'luan', 'esh'=>'enshi',
+                       'xxz'=>'xiangxi', 'qxz'=>'qianxinan', 'qnd'=>'qiandongnan', 'qnz'=>'qiannan', 'cxd'=>'chuxiong',
+                       'hhz'=>'honghe', 'wsz'=>'wenshan', 'xsb'=>'xishuangbanna', 'dlz'=>'dali', 'dhg'=>'dehong',
+                       'nuj'=>'nujiang', 'lxh'=>'linxia', 'gnz'=>'gannan', 'hbz'=>'haibei', 'hnz'=>'huangnan',
+                       'hnn'=>'hainanzhou', 'gol'=>'golog', 'ysz'=>'yushu', 'hxz'=>'haixi', 'tud'=>'tulufan',
+                       'hmd'=>'hami', 'cjz'=>'changji', 'bor'=>'bortala', 'akd'=>'akesu', 'ksi'=>'kashi', 'hod'=>'hetian',
+                       'ild'=>'yili', 'tcd'=>'tacheng', 'ald'=>'altay'
+                       
+                );
         $cityUrlKey = isset($maps[$cityKey]) ? $maps[$cityKey] : "";
         return $cityUrlKey;
     }

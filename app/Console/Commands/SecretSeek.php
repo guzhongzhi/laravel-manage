@@ -10,53 +10,62 @@ use App\Helper\SeekerHelper;
 
 class SecretSeek extends Command {
 
-	/**
-	 * The console command name.
-	 *
-	 * @var string
-	 */
-	protected $name = 'secret:seek';
+    /**
+     * The console command name.
+     *
+     * @var string
+     */
+    protected $name = 'secret:seek';
 
-	/**
-	 * The console command description.
-	 *
-	 * @var string
-	 */
-	protected $description = 'Command description.';
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Command description.';
 
-	/**
-	 * Create a new command instance.
-	 *
-	 * @return void
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-	}
+    /**
+     * Create a new command instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
 
-	/**
-	 * Execute the console command.
-	 *
-	 * @return mixed
-	 */
-	public function fire(){
+    /**
+     * Execute the console command.
+     *
+     * @return mixed
+     */
+    public function fire(){
         $arguments = $this->argument();
         $type = $arguments['type'];
         $start = $arguments['start'];
+        $seekType = $arguments['seek_type'];
+        $shellCommand = "ps aux | grep 'artisan secret:seek $type $start $seekType' | awk '{print $2}'";
+        echo $shellCommand . PHP_EOL;
+        $result = shell_exec($shellCommand);
+        $resultArray = explode("\n", $result);
+        $resultArray = array_diff($resultArray, array(""));
+        $resultArray = array_unique($resultArray);
+        $countNumber = count($resultArray);
+        if($countNumber > 3){
+            die("No need to process it, wait the process." . PHP_EOL);
+        }
         if($type == 0){
             $this->grabPages($start);
         }else{
-            $this->insertPageContent($start);
+            $this->insertPageContent($start, $seekType);
         }
-        var_dump($arguments);
-        die();
-	}
+    }
 
     /**
-	 * Get the pages.
-	 *
-	 * @return 
-	 */
+     * Get the pages.
+     *
+     * @return 
+     */
      
      protected function grabPages($start){
          
@@ -74,8 +83,13 @@ class SecretSeek extends Command {
                 $provinceName = $province->name;
                 $pId = $province->id;
                 echo "Start to seek the cncn province - $provinceName: \n";
-                $provicenPY = str_replace(' ', '', strtolower($province->name_en));
-                $provicenPY = rtrim($provicenPY, 'shi');
+                $provicenPY = SeekerHelper::getCnCnUrlKey(strtolower($province->short_name_en));
+                if(!$provicenPY){
+                    $provicenPY = str_replace(' ', '', strtolower($province->name_en));
+                    $provicenPY  = preg_replace('/sheng$/si', '', $provicenPY);
+                    $provicenPY  = preg_replace('/diqu$/si', '', $provicenPY);
+                    $provicenPY  = str_replace(array('(', ')', ','), '', $provicenPY);
+                }
                 $sqlCity = "SELECT * FROM region WHERE parent_id = '$pId'";
                 $cities = DB::select($sqlCity);
                 $checkHasCityUrlKey = false;
@@ -86,8 +100,15 @@ class SecretSeek extends Command {
                     if($city->name_en == 'Shixiaqu' || $city->name_en == 'Xian' || $city->name_en == 'shengzhixiaxianjixingzhengquhua'){
                         continue;
                     }
-                    $cityPY = str_replace(' ', '', strtolower($city->name_en));
-                    $cityPY = rtrim($cityPY, 'shi');
+                    $cityPY = SeekerHelper::getCnCnUrlKey(strtolower($city->short_name_en));
+                    if(!$cityPY){
+                        $cityPY  = str_replace(' ', '', strtolower($city->name_en));
+                        $cityPY  = preg_replace('/shi$/si', '', $cityPY);
+                        $cityPY  = preg_replace('/diqu$/si', '', $cityPY);
+                        $cityPY  = str_replace(array('(', ')', ','), '', $cityPY);
+
+                    }
+
                     //echo $city->id . " - " . $cityPY . "\n";
                     $mainDomainUrl = "http://$cityPY.cncn.com";
                     $grabUrl = "$mainDomainUrl/lvyougonglue/1";
@@ -163,18 +184,24 @@ class SecretSeek extends Command {
             
             if(count($provinces) > 0){
                 $start++;
-                $cmd = "php artisan secret:seek 0 " .$start ." ";    //  
+                $cmd = "nohup php ".base_path()."/artisan secret:seek 0 " .$start ."  1>> process.out 2>> process.err < /dev/null &";    //  
                 echo $cmd,"\n";
                 system($cmd);
+                break;
             }
+           
         
         }
 
     }
     
-    protected function insertPageContent($start){
-        $sql = "SELECT * FROM search_url WHERE is_searched = 0 limit $start, 50";
-        $rows = DB::select($sql);
+    protected function insertPageContent($start, $seekType){
+         if(!$seekType){
+             die("Error SeekType" . PHP_EOL);
+         }
+        $p = array($seekType);
+        $sql = "SELECT * FROM search_url WHERE is_searched = 0 AND `type`=? limit $start, 10";
+        $rows = DB::select($sql, $p);
         foreach($rows as $row){
             $type = $row->type;
             echo "process url - " . $row->id . ' - ' . $row->url . PHP_EOL;
@@ -188,14 +215,19 @@ class SecretSeek extends Command {
                 $content = SeekerHelper::insertCNCNStoreContent($row);
             }
             //update the table
-            $sql = "UPDATE search_url SET is_searched = 1 WHERE id = ?";
+            if($content){
+                $sql = "UPDATE search_url SET is_searched = 1 WHERE id = ?";
+            }else{
+                $sql = "UPDATE search_url SET is_searched = 2 WHERE id = ?";
+            }
+            
             DB::update($sql, array($row->id));
             echo "process done - " . $row->id . PHP_EOL;
         }
 
         if(count($rows) > 0){
-            $start = $start + 50;
-            $cmd = "php artisan secret:seek 1 " .$start ."  1";    //  
+            //$start = $start + 50;
+            $cmd = "nohup php ".base_path()."/artisan secret:seek 1 $start $seekType  1>> process.out 2>> process.err < /dev/null &";    //
             echo $cmd,"\n";
             system($cmd);
         }
@@ -204,10 +236,10 @@ class SecretSeek extends Command {
   
 
      /**
-	 * Get the pages.
-	 *
-	 * @return 
-	 */
+     * Get the pages.
+     *
+     * @return 
+     */
      
      protected function seachPage(){
          
@@ -215,30 +247,31 @@ class SecretSeek extends Command {
      
      
     
-	/**
-	 * Get the console command arguments.
-	 *
-	 * @return array
-	 */
-	protected function getArguments()
-	{
-		return [
-			['type', InputArgument::REQUIRED, 'the type of seek, 0->grab, 1->search'],
-			['start', InputArgument::REQUIRED, 'the start of the number'],
-			
-		];
-	}
+    /**
+     * Get the console command arguments.
+     *
+     * @return array
+     */
+    protected function getArguments()
+    {
+        return [
+            ['type', InputArgument::REQUIRED, 'the type of seek, 0->grab, 1->search'],
+            ['start', InputArgument::REQUIRED, 'the start of the number'],
+            ['seek_type', InputArgument::OPTIONAL, 'ctrip,cncn'],
+            
+        ];
+    }
 
-	/**
-	 * Get the console command options.
-	 *
-	 * @return array
-	 */
-	protected function getOptions()
-	{
-		return [
-			//['example', null, InputOption::VALUE_OPTIONAL, 'An example option.', null],
-		];
-	}
+    /**
+     * Get the console command options.
+     *
+     * @return array
+     */
+    protected function getOptions()
+    {
+        return [
+            //['example', null, InputOption::VALUE_OPTIONAL, 'An example option.', null],
+        ];
+    }
 
 }

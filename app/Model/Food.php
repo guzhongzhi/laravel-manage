@@ -1,6 +1,7 @@
 <?php namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Model\Store;
 use DB;
 
 class Food extends Model {
@@ -40,9 +41,10 @@ class Food extends Model {
         if($this->stores){
             return $this->stores;
         }
-        $sql = "SELECT store.* FROM store LEFT JOIN food_store ON store.id = food_store.store_id WHERE food_store.food_id = ?";
-        $stores = DB::select($sql, array($this->id));
-        $this->stores = $stores;
+        $buildQuery = Store::query();
+        $buildQuery->where('food_store.food_id', $this->id);
+        $buildQuery->join('food_store', 'food_store.store_id', '=', 'store.id');
+        $this->stores = $buildQuery->get();
         return $this->stores;
     }
     

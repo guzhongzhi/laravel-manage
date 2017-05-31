@@ -60,13 +60,12 @@
                 <div class="ctd_content">
                     <div class="ctd_content_controls cf">
                         <h2>{{$travel->title}}</h2>
-                        <h3>发表于：{{$travel->created_at}}</h3>
-                     
-                        {!!$travel->content!!}
+                        <!--<h3>发表于：{{$travel->created_at}}</h3>-->
+                    </div>
+                    {!!$travel->content!!}
                       
-                    </div>
-                    <div class="ctd_theend">
-                    </div>
+
+                    <div class="ctd_theend"></div>
                 </div>
             
         </div>
@@ -79,8 +78,8 @@
                 <div class="sight-relation-right">
 
                     <ul class="sight-relation">
-                        @foreach(\App\Helper\TravelHelper::getRandSightList($cityId, $provinceId, 10) as $itemSight)
-                            <li><span class=""></span><a href="/sight/s-{{$itemSight->id}}.html">{{$itemSight->title}}</a></li>
+                        @foreach(\App\Helper\TravelHelper::getNewsList($cityId, $provinceId, \App\Model\News::CATEGORY_ID_SIGHT, 10, 'recommand') as $itemSight)
+                            <li><span class=""></span><a href="{{$itemSight->getSightUrl()}}">{{$itemSight->title}}</a></li>
                         @endforeach
                     </ul>
                     <div class="sp"></div>
@@ -93,8 +92,8 @@
                 <div class="sight-relation-right">
 
                     <ul class="sight-relation">
-                        @foreach(\App\Helper\TravelHelper::getRandTravelList($cityId, $provinceId, 10) as $itemList)
-                            <li style="width:100%"><span class=""></span><a href="/travel/s-{{$itemList->id}}.html" title="{{$itemList->title}}">{{\App\Helper\TravelHelper::utf8Substr($itemList->title, 0, 16)}}</a></li>
+                        @foreach(\App\Helper\TravelHelper::getNewsList($cityId, $provinceId, \App\Model\News::CATEGORY_ID_TRAVEL,10, 'recommand') as $itemList)
+                            <li style="width:100%"><span class=""></span><a href="{{$itemList->getTravelUrl()}}" title="{{$itemList->title}}">{{\App\Helper\TravelHelper::utf8Substr($itemList->title, 0, 16)}}</a></li>
                         @endforeach
                     </ul>
                     <div class="sp"></div>

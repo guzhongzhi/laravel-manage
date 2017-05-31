@@ -104,11 +104,17 @@ class ImageSeekHelper {
         $patternSrc = '/<[img|IMG].*?src=[\'|\"](.*?(?:[\.gif|\.png|\.jpg]))[\'|\"].*?[\/]?>/'; 
         preg_match_all($patternSrc, $content, $matchSrc); 
         $imgRrr = isset($matchSrc[1]) ? $matchSrc[1] : array(); 
-        preg_match_all('/<a target=[\'|"].*?share-pic.*?href=[\'|"](.*?)[\'|"]/si', $content, $matchSrc); //special for ctrip site
+        preg_match_all('/<a.*?share-pic.*?href=[\'|"](.*?)[\'|"]/si', $content, $matchSrc); //special for ctrip site
         $crtripRrr = isset($matchSrc[1]) ? $matchSrc[1] : array(); 
         $picFirst = '';
         $picRrr = array_merge($picRrr, $imgRrr, $crtripRrr);
         $picRrr = array_unique($picRrr);
+        if(count($picRrr) > 40 ){ //如果图片过多，则不下载该游记图片
+            echo "Pic too many - " . count($picRrr) . PHP_EOL;
+            //$content = preg_replace('%<div id="img.*?</div>%si', '', $content);
+            $contentPic = array('pic'=>$picRrr[0], 'content'=>$content);
+            return $contentPic;
+        }
 
         $matchImgUrls = array();
         foreach ($picRrr as $picItem) { //循环取出每幅图的地址 

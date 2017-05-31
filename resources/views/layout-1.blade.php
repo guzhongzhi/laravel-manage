@@ -1,16 +1,16 @@
 <html>
-	<head>
+    <head>
     @section("head")
-	
+    
     @section('meta')
     <title>{{$controller->getConfig()["site_name"]}}</title>
     <meta name="title" content="{{$controller->getConfig()['site_name']}}" />
     <meta name="keywords" content="{{$controller->getConfig()['site_keywords']}}" />
     <meta name="description" content="{{$controller->getConfig()['site_description']}}" />
     @show
-    <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">  
-	<script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
-	<script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/css/bootstrap.travel.min.css">  
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
         <style>
         .tab-section-content {
             min-height:150px;
@@ -95,7 +95,7 @@
                 margin:0;
             }
             .top-banner{
-                height:90px;
+                height:160px;
                 
             }
             .nav ul{
@@ -204,15 +204,15 @@
             .nav>li>a.active {
                 background-color: #ca0046;
             }
-		</style>
-	@show
-		
-	</head>
-	<body>
+        </style>
+    @show
+        
+    </head>
+    <body>
     @section("top")
     <div class="container">
-        <div class="top-banner">
-            <img src="/skin/images/banner.png"/>
+        <div class="top-banner" style=" background-image: url(/skin/images/banner.png)">
+            <image src="/skin/images/logo.png" />
         </div>
     </div>
     <div class="container nav">
@@ -248,9 +248,10 @@
     @section("content")
     
     @show
-	<div class="sp"></div>
+    <div class="sp"></div>
     @section("bottom")
         <div style="border-top:solid 2px #f55b90;background:#f5f5f5;padding:10px 10%;">
+        <!--
             <div class="row">
               <div class="col-md-3">去旅行</div>
               <div class="col-md-3">最热门</div>
@@ -258,14 +259,13 @@
               <div class="col-md-3">帮助中心</div>
             </div>
             <div class="sp"></div>
+            -->
         <div class="" style="text-align:center;font-size:12px;line-height:24px;">
-        主题旅游： 温泉旅游  春节旅游  端午节旅游  暑假旅游  中秋旅游  十一旅游  圣诞旅游  蜜月旅游  海岛游  踏青  club med  夏令营旅游 <br/>
-        国内旅游： 海南旅游  云南旅游  厦门旅游  广西旅游  九寨沟旅游  峨眉山旅游  三亚旅游 <br/>
-        出境旅游： 香港  泰国旅游  西班牙旅游  日本旅游  新加坡旅游  澳大利亚旅游  马来西亚旅游  马尔代夫旅游  迪拜旅游 <br/>
-        合作专区：贵宾服务专区 中国民生银行 <br/>
+            站长联系：<a href="mailto:admin@yuxiclub.com">admin@yuxiclub.com</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Copyright © 2017 · All Rights Reserved : 愈惜旅游网 <br />
+            网站备案号: 蜀ICP备17014098号-1 
         </div>
         </div>
         
     @show
-	</body>
+    </body>
 </html>

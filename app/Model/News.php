@@ -65,6 +65,13 @@ class News extends Model {
         return "/travel/s-" . $this->id.".html";
     }
     
+    public function getPic(){
+        if(!$this->pic){
+            $this->pic = '/skin/images/no_pic.png';
+        }
+        return $this->pic;
+    }
+    
     public function getShortDesc($number=200) {
         if($this->short_description) {
             return $this->short_description;
