@@ -212,11 +212,11 @@
                 <li><span class="glyphicon glyphicon-question-sign"></span> <a href="/sight/c{{$sight->city_id}}.html">周边景点</a></li>
                 <li><span class="glyphicon glyphicon-warning-sign"></span> 注意事项</li>
                 <li><span class="glyphicon glyphicon-flash"></span> 旅游佳季</li>
-                <li><span class="glyphicon glyphicon-thumbs-up"></span> <a href="/food/c{{$hotel->city_id}}.html">特色美食</a></li>
-                <li><span class="glyphicon glyphicon-screenshot"></span> <a href="/hotel/c{{$hotel->city_id}}.html">酒店住宿</a></li>
+                <li><span class="glyphicon glyphicon-thumbs-up"></span> <a href="/food/c{{$sight->city_id}}.html">特色美食</a></li>
+                <li><span class="glyphicon glyphicon-screenshot"></span> <a href="/hotel/c{{$sight->city_id}}.html">酒店住宿</a></li>
                 <li><span class="glyphicon glyphicon-plane"></span> 交通工具</li>
                 <li><span class="glyphicon glyphicon-tree-deciduous"></span> 风景图片</li>
-                <li><span class="glyphicon glyphicon-fire"></span> <a href="/travel/c{{$hotel->city_id}}.html">旅游攻略</a></li>
+                <li><span class="glyphicon glyphicon-fire"></span> <a href="/travel/c{{$sight->city_id}}.html">旅游攻略</a></li>
                 </ul>
                 <div class="sp"></div>
                 </div>
