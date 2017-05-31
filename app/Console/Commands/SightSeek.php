@@ -152,7 +152,7 @@ class SightSeek extends Command {
                 $maxPage = $matches[1][0];
                 
                 $this->seekCtripSight($content,$sightName);
-                $maxPage = 2;
+                //$maxPage = 2;
                 for($p = 2;$p<=$maxPage;$p++) {
                     
                     echo PHP_EOL;
