@@ -135,8 +135,12 @@ class HotelSeek extends Command {
         
         echo $description;
         
+        $phone = "";
         preg_match_all('/电话\s*:\s*([0-9\-]*)/is',$allDesc,$matches);
-        $phone = trim($matches[1][0],"-");
+        if(isset($matches[1][0])) {
+            $phone = trim($matches[1][0],"-");
+        }
+        
         
         
         $data = array(
