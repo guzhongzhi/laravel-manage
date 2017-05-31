@@ -26,6 +26,14 @@ class Store extends Model {
     ];
 
 
+    public function getProvince() {
+        $province = Region::find($this->province_id);
+        if(!$province) {
+            $province = new Region();
+        }
+        return $province;
+    }
+    
     public function getMetaKeywords() {
         return $this->meta_keywords;
     }

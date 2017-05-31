@@ -4,6 +4,7 @@
 @section('meta')
 <title>
 
+{{$store->getProvince()->name}} -  
 {{$store->title}} -  
 
 {{$controller->getConfig()["site_name"]}}
