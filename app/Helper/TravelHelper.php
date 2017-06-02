@@ -65,6 +65,7 @@ class TravelHelper {
             }
 
         }else{
+			//order by id desc
             $queryBuilder->orderBy('id', 'desc');
         }
 

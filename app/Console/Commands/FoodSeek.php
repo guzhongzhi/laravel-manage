@@ -85,6 +85,7 @@ class FoodSeek extends Command {
                     $provicenPY = str_replace(' ', '', strtolower($province->name_en));
                     $provicenPY  = preg_replace('/sheng$/si', '', $provicenPY);
                     $provicenPY  = preg_replace('/diqu$/si', '', $provicenPY);
+					$provicenPY  = preg_replace('/shi$/si', '', $provicenPY);
                     $provicenPY  = str_replace(array('(', ')', ','), '', $provicenPY);
                 }
                 

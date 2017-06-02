@@ -6,6 +6,8 @@ class ImageSeekHelper {
     static $sightImgPath = '/upload/sight/';
     static $secretImgPath = '/upload/travel/';
     static $foodImgPath = '/upload/food/';
+    static $hotelImgPath = '/upload/hotel/';
+    static $hotelImgLimitNumber = 50; //for each city, the number of hotel we will download.
     public static function makeDir($path){
         $path = public_path() . $path . date("Y") . date("m") . "/";
         if(!file_exists($path)){//不存在则建立 
@@ -79,6 +81,14 @@ class ImageSeekHelper {
         self::writeFiletext($filepath,$string); 
         return $dbFilePath; 
     }
+
+    public static function seekPicArray($imgs, $savepath=''){
+        $pics = array();
+        foreach($imgs as $itemImg){
+            $pics[] = self::savePic($itemImg, $savepath);
+        }
+        return $pics;
+    }
     
     /**
     * @parm $seekType 'secret', 'sight' 
@@ -130,6 +140,138 @@ class ImageSeekHelper {
         //echo $content;
         $contentPic = array('pic'=>$picFirst, 'content'=>$content);
         return $contentPic;
+    }
+
+
+    /**
+    +----------------------------------------------------------
+     * 取得图像信息
+     *
+    +----------------------------------------------------------
+     * @static
+     * @access public
+    +----------------------------------------------------------
+     * @param string $image 图像文件名
+    +----------------------------------------------------------
+     * @return mixed
+    +----------------------------------------------------------
+     */
+    public static function getImageInfo($img) {
+        $imageInfo = getimagesize($img);
+        if( $imageInfo!== false) {
+            $imageType = strtolower(substr(image_type_to_extension($imageInfo[2]),1));
+            $imageSize = filesize($img);
+            $info = array(
+                "width"		=>$imageInfo[0],
+                "height"	=>$imageInfo[1],
+                "type"		=>$imageType,
+                "size"		=>$imageSize,
+                "mime"		=>$imageInfo['mime'],
+            );
+            return $info;
+        }else {
+            return false;
+        }
+    }
+
+    /**
+    +----------------------------------------------------------
+     * 生成缩略图
+    +----------------------------------------------------------
+     * @static
+     * @access public
+    +----------------------------------------------------------
+     * @param string $image  原图
+
+     * @param string $dstFile 缩略图文件
+     * @param string $maxWidth  宽度
+     * @param string $maxHeight  高度
+     * @param string $type 图像格式
+     * @param boolean $interlace 启用隔行扫描
+
+    +----------------------------------------------------------
+     * @return void
+    +----------------------------------------------------------
+     */
+    public static function makeThumb($srcFile, $dstFile, $suofang=0,$maxWidth=500,$maxHeight=500,$type='',$interlace=true){
+        // 获取原图信息
+        if(file_exists($dstFile)){
+            return $dstFile;
+        }
+        $info  = self::getImageInfo($srcFile);
+        if($info !== false) {
+            $srcWidth  = $info['width'];
+            $srcHeight = $info['height'];
+            $type = empty($type)?$info['type']:$type;
+            $type = strtolower($type);
+            $interlace  =  $interlace? 1:0;
+            unset($info);
+            if ($suofang==0) {
+                $width  = $srcWidth;
+                $height = $srcHeight;
+            } else {
+                $scale = min($maxWidth/$srcWidth, $maxHeight/$srcHeight); // 计算缩放比例
+                if($scale>=1) {
+                    // 超过原图大小不再缩略
+                    $width   =  $srcWidth;
+                    $height  =  $srcHeight;
+                }else{
+                    // 缩略图尺寸
+                    $width  = (int)($srcWidth*$scale);	//147
+                    $height = (int)($srcHeight*$scale);	//199
+                }
+                $width = $maxWidth; //固定高宽
+                $height = $maxHeight; //固定高宽
+            }
+
+            // 载入原图
+            $createFun = 'ImageCreateFrom'.($type=='jpg'?'jpeg':$type);
+
+            $srcImg     = $createFun($srcFile);
+
+            //创建缩略图
+            if($type!='gif' && function_exists('imagecreatetruecolor'))
+                $thumbImg = imagecreatetruecolor($width, $height);
+            else
+                $thumbImg = imagecreate($width, $height);
+
+            // 复制图片
+            if(function_exists("ImageCopyResampled"))
+                imagecopyresampled($thumbImg, $srcImg, 0, 0, 0, 0, $width, $height, $srcWidth,$srcHeight);
+            else
+                imagecopyresized($thumbImg, $srcImg, 0, 0, 0, 0, $width, $height,  $srcWidth,$srcHeight);
+            if('gif'==$type || 'png'==$type) {
+                //imagealphablending($thumbImg, false);//取消默认的混色模式
+                //imagesavealpha($thumbImg,true);//设定保存完整的 alpha 通道信息
+                $background_color  =  imagecolorallocate($thumbImg,  0,255,0);  //  指派一个绿色
+                imagecolortransparent($thumbImg,$background_color);  //  设置为透明色，若注释掉该行则输出绿色的图
+            }
+            // 对jpeg图形设置隔行扫描
+            if('jpg'==$type || 'jpeg'==$type) 	imageinterlace($thumbImg,$interlace);
+            //$gray=ImageColorAllocate($thumbImg,255,0,0);
+            //ImageString($thumbImg,2,5,5,"ThinkPHP",$gray);
+            // 生成图片
+            $imageFun = 'image'.($type=='jpg'?'jpeg':$type);
+            $imageFun = 'imagejpeg';
+            $length = strlen("00.".$type) * (-1);
+            $_type = substr($srcFile,-4);
+            $length = ($type != $_type ? $length+1 : $length);
+            $imageFun($thumbImg,$dstFile,100);
+
+            imagedestroy($thumbImg);
+            imagedestroy($srcImg);
+            return $dstFile ;					//返回缩略图的路径，字符串
+
+
+        }
+        return false;
+    }
+
+    public static function getThumFileSrc($originalSrc){
+        $position = strripos($originalSrc, '/');
+        $fileDir  = substr($originalSrc, 0, $position+1);
+        $thumbSrc = $fileDir . sha1(substr($originalSrc, $position+1)).".jpg";
+        return $thumbSrc;
     }
     
 }

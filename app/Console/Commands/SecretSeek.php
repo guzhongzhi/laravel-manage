@@ -88,6 +88,7 @@ class SecretSeek extends Command {
                     $provicenPY = str_replace(' ', '', strtolower($province->name_en));
                     $provicenPY  = preg_replace('/sheng$/si', '', $provicenPY);
                     $provicenPY  = preg_replace('/diqu$/si', '', $provicenPY);
+					$provicenPY  = preg_replace('/shi$/si', '', $provicenPY);
                     $provicenPY  = str_replace(array('(', ')', ','), '', $provicenPY);
                 }
                 $sqlCity = "SELECT * FROM region WHERE parent_id = '$pId'";
@@ -213,6 +214,8 @@ class SecretSeek extends Command {
                 $content = SeekerHelper::insertCNCNFoodContent($row);
             }elseif($type ==  SeekerHelper::SEEK_CNCN_STORE_TYPE){
                 $content = SeekerHelper::insertCNCNStoreContent($row);
+            }elseif($type ==  SeekerHelper::SEEK_TUNIU_HOTEL_TYPE){
+                $content = SeekerHelper::insertTuniuHotelContent($row);
             }
             //update the table
             if($content){
@@ -220,7 +223,6 @@ class SecretSeek extends Command {
             }else{
                 $sql = "UPDATE search_url SET is_searched = 2 WHERE id = ?";
             }
-            
             DB::update($sql, array($row->id));
             echo "process done - " . $row->id . PHP_EOL;
         }

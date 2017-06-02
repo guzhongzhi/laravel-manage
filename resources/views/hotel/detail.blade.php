@@ -24,156 +24,95 @@
         </ol>
     </div>
 @endsection
-
 @section("content")
     @parent
-    
+    <script language="javascript" src="/js/jquery.sliderPro.min.js"></script>
+    <script language="javascript" src="/skin/hotel/js/hotel.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/slider/slider-pro.min.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="/skin/hotel/css/hotel.css" media="screen"/>
     <div class="sp"></div>
     <div class="container">
         <div class="fleft two-left-big">
             <div class="hotel-detail-title">
-            <h1>{{$hotel->getProvince()->name}} {{$hotel->title}}</h1>
+            <h1>{{$hotel->title}}</h1>
             </div>
             <div class="sp"></div>
             
             
             <div class="short-desc-view-on-detail">
-            {{$hotel->getShortDesc()}}
+            {{$hotel->address}}
             </div>
             
             
             <div class="sp"></div>
-            <style>
-            
-            .sp-thumbnail-image-container  {
-                width:170px;
-            }
-            .sp-thumbnail-image-container img {
-                width:150px;
-            }
-            </style>
-            
             <div style="border:solid 1px #e2e2e2">
             
-    <script language="javascript" src="/js/jquery.sliderPro.min.js"></script>
-    
-    
-    
-    
-    
-<link rel="stylesheet" type="text/css" href="/css/slider/slider-pro.min.css" media="screen"/>
-<script type="text/javascript">
-	$( document ).ready(function( $ ) {
-		$( '#example5' ).sliderPro({
-			width: 740,
-			height: 500,
-			orientation: 'vertical',
-			loop: false,
-			arrows: true,
-			buttons: false,
-			thumbnailsPosition: 'right',
-			thumbnailPointer: true,
-			thumbnailWidth: 170,
-			breakpoints: {
-				800: {
-					thumbnailsPosition: 'bottom',
-					thumbnailWidth: 170,
-					thumbnailHeight: 100
-				},
-				500: {
-					thumbnailsPosition: 'bottom',
-					thumbnailWidth: 120,
-					thumbnailHeight: 50
-				}
-			}
-		});
-        $(".slider-pro").css("max-width","100%");
-	});
-</script>
-            
-        <div id="example5" class="slider-pro">
-          <div class="sp-slides">
-          
-            @foreach($hotel->getImages() as $image)
-            <div class="sp-slide">
-                <img class="sp-image" src="css/images/blank.gif" data-src="{{$image->url}}" data-retina="{{$image->url}}"/>
-                <div class="sp-caption"></div>
-            </div>
-            @endforeach
-          </div>
-  
-        <div class="sp-thumbnails">
+                <div id="example5" class="slider-pro">
+                    <div class="sp-slides">
 
-        @foreach($hotel->getImages() as $image)
-    
-            <div class="sp-thumbnail">
-              <div class="sp-thumbnail-image-container"> <img class="sp-thumbnail-image" src="{{$image->url}}"/> </div>
-              <div class="sp-thumbnail-text">
-                <div class="sp-thumbnail-title"> {{$hotel->title}}</div>
-                <div class="sp-thumbnail-description"></div>
-              </div>
-            </div>
-            
-            
-            @endforeach
-            
-          </div>
-        </div> 
-         </div>
-            
-            
-            
-            
-                <style>
-                
-                .hotel-hotel-list li,
-                .hotel-hotel-list ul {
-                    list-style:none;
-                    margin:0;
-                    padding:0;
-                }
-                .hotel-hotel-list div.img{
-                    height:200px;
-                    overflow: hidden;
-                    border: solid 1px #e1e1e1;
-                    text-align:center;
-                }
-                .hotel-hotel-list li .title{
-                    padding:10px 0px;
-                }
-                .hotel-hotel-list li img{
-                    width:99%;
-                    
-                }
-                .hotel-hotel-list li{
-                    float:left;
-                    width:32%;
-                    height:250px;
-                    overflow:hidden;
-                    margin-right:1%;
-                    text-align:center;
-                }
-                
-                </style>
-            
-            
-            
+                    @foreach($hotel->getImages() as $image)
+                    <div class="sp-slide">
+                        <img class="sp-image" src="/skin/images/blank.gif" data-src="{{$image['src']}}" data-retina="{{$image['src']}}"/>
+                        <div class="sp-caption"></div>
+                    </div>
+                    @endforeach
+                    </div>
+
+                    <div class="sp-thumbnails">
+
+                    @foreach($hotel->getImages() as $image)
+                        <div class="sp-thumbnail">
+                          <div class="sp-thumbnail-image-container"> <img class="sp-thumbnail-image" src="{{$image['thumb']}}"/> </div>
+                          <div class="sp-thumbnail-text">
+                            <div class="sp-thumbnail-title"> {{$hotel->title}}</div>
+                            <div class="sp-thumbnail-description"></div>
+                          </div>
+                        </div>
+                        @endforeach
+
+                    </div>
+                </div>
+             </div>
+
             <div class="sp"></div>
             <div class="sp"></div>
             <div class="sp"></div>
             <div class="tab tab-section">
                 <ul>
                     <li class="active" rel=".tab-1">酒店介绍</li>
-                    <li rel=".tab-2">游记/攻略</li>
-                    <li rel=".tab-3">附近景点</li>
+                    <li rel=".tab-2">酒店政策</li>
+                    <li rel=".tab-3">设施服务</li>
+                    <li rel=".tab-4">游记/攻略</li>
+                    <li rel=".tab-5">附近景点</li>
                 </ul>
             </div>
             <div class="hotel-detail-tab-content tab-content tab-hotel" style="clear:both;border:solid 1px #e1e1e1;padding:10px;border-top:solid 2px #f33b7a">
                 <div class="tab-1 tab-section-content">
+
                     {!!$hotel->description!!}
+
                 </div>
+
+                <div class="tab-2  tab-section-content hidden  hotel-hotel-list">
+                    <ul>
+                        <div class="hotel_introduction_body">
+                            {!!$hotel->policy!!}
+                        </div>
+                    </ul>
+                    <div class="sp"></div>
+                </div>
+
+                <div class="tab-3  tab-section-content hidden  hotel-hotel-list">
+                    <ul>
+                        <div class="hotel_introduction_body">
+                            {!!$hotel->service!!}
+                        </div>
+                    </ul>
+                    <div class="sp"></div>
+                </div>
+
                 
-                <div class="tab-2 tab-section-content hidden  hotel-hotel-list">
+                <div class="tab-4 tab-section-content hidden  hotel-hotel-list">
                  
                  <ul>
                  @foreach($travelNews as $sight)
@@ -187,10 +126,8 @@
                 @endforeach
                 </ul>
                 <div class="sp"></div>
-                 
-                 
                 </div>
-                <div class="tab-3 tab-section-content hidden hotel-hotel-list">
+                <div class="tab-5 tab-section-content hidden hotel-hotel-list">
                 <ul>
                  @foreach($sights as $sight)
                     <li class="hotel-hotel-list-item">

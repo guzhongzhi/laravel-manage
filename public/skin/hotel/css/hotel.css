@@ -1,0 +1,118 @@
+.sp-thumbnail-image-container  {
+    width:170px;
+}
+.sp-thumbnail-image-container img {
+    width:150px;
+}
+.hotel-hotel-list li,
+.hotel-hotel-list ul {
+    list-style:none;
+    margin:0;
+    padding:0;
+}
+.hotel-hotel-list div.img{
+    height:200px;
+    overflow: hidden;
+    border: solid 1px #e1e1e1;
+    text-align:center;
+}
+.hotel-hotel-list li .title{
+    padding:10px 0px;
+}
+.hotel-hotel-list li img{
+    width:99%;
+
+}
+.hotel-hotel-list li{
+    float:left;
+    width:32%;
+    height:250px;
+    overflow:hidden;
+    margin-right:1%;
+    text-align:center;
+}
+
+.hotel_introduction_body .f1{
+    display: block;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 24px;
+    color: #666;
+    background: #F6F6F6;
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    margin: 20px 0 10px 0;
+}
+.fleft{
+    float: left;
+}
+
+.hotel_introduction_body .e2, .hotel_introduction_body .e3, .hotel_introduction_body .e4, .hotel_introduction_body .e5, .hotel_introduction_body .e6, .hotel_introduction_body .e7, .hotel_introduction_body .e8, .hotel_introduction_body .e9, .hotel_introduction_body .e10, .hotel_introduction_body .e11, .hotel_introduction_body .e12, .hotel_introduction_body
+.e13{
+    font-size: 14px;
+    color: #666;
+    line-height: 24px;
+}
+.clearfix{
+    zoom: 1;
+}
+
+.hotel_introduction_body .f1 i{
+    width: 4px;
+    height: 16px;
+    background: #2DBB55;
+    display: inline-block;
+    padding-top: 0px;
+    vertical-align: middle;
+    margin: 0 10px;
+}
+
+.ml10{
+    margin-left: 10px;
+}
+.index1200 .check_mark{
+    width: 170px;
+}
+
+.check_mark{
+    width: 180px;
+    display: inline-block;
+    height: 24px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.creditCard{
+    width: 130px;
+    height: 60px;
+    border: 1px solid #ddd;
+    display: inline-block;
+    margin-right: 15px;
+    text-align: center;
+}
+
+.visa, .UnionPay, .MasterCard, .DinersClub, .JCB, .AmericanExpress{
+    width: 70px;
+    height: 42px;
+    background: url(http://img2.tuniucdn.com/img/2013122516/hotel_2016/detail/visa.png) no-repeat;
+    display: inline-block;
+    margin-right: 3px;
+    margin-top: 8px;
+}
+
+.UnionPay{
+    background-position: 0 -252px;
+}
+
+.AmericanExpress{
+    background-position: 0 -96px;
+}
+.DinersClub{
+    background-position: 0 -148px
+}
+.MasterCard{background-position:0 0}
+
+.visa{background-position:0 -47px}
+.JCB{background-position:0 -202px}

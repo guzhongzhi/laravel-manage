@@ -1,7 +1,9 @@
 <?php namespace App\Model;
 
+use App\Helper\ImageSeekHelper;
 use Illuminate\Database\Eloquent\Model;
 use DB;
+use App\Model\HotelImage;
 
 class Hotel extends AutoModel {
     
@@ -47,41 +49,30 @@ class Hotel extends AutoModel {
     }
     
     public function getImages() {
-        
-        $content = $this->description.'';
-        preg_match_all('/<img.*?src=(\'|")(.*?)(\'|").*?>/is',$content,$matches);
-        if(isset($matches[2])) {
-            $data = array();
-            foreach($matches[2] as $url) {
-                $data[] = array(
-                    "url"=>$url,
-                );
+        $hotelImages = array();
+        $sql = "SELECT * FROM hotel_image WHERE hotel_id = ?";
+        $resultes = DB::select($sql, array($this->id));
+        foreach($resultes as $itemResult){
+
+            preg_match('%(http://.*/.*?)_w0_h600_c0_t0.jpg%sim', $itemResult->url, $matchUrlKey);
+
+
+            if(isset($matchUrlKey[1]) && $matchUrlKey[1]){
+                $thumbUrl = $matchUrlKey[1] . "_w120_h120_c1_t0.jpg";
+            }elseif(preg_match('%http://%sim', $itemResult->url)) {
+                $thumbUrl = $itemResult->url;
+            }else{
+                $originalImageSrc = public_path() . $itemResult->url;
+                $thumbUrl = ImageSeekHelper::getThumFileSrc($itemResult->url);
+                $thumbFullUrl = public_path() . $thumbUrl;
+                ImageSeekHelper::makeThumb($originalImageSrc, $thumbFullUrl, 1, 150, 100);
             }
-            if($this->pic != "") {
-                $data[]  = array(
-                    "url"=>($this->pic),
-                );
-            }
-            try {
-                $newMap = $this->saveRemoteFileToLocal($data);
-            } catch (\Exception $ex) {
-                echo $ex->__toString();
-                die();
-            }
-            if(!empty($newMap)) {
-                foreach($newMap as $oldUrl=>$newUrl) {
-                    $content = str_replace($oldUrl,$newUrl,$content);
-                }
-                $this->description = $content;
-                
-                if(isset($newMap[$this->pic])) {
-                    $this->pic = $newMap[$this->pic];
-                }                
-                $this->save();
-            }
-            return json_decode(json_encode($data));
+
+
+            $hotelImages[] = array('src'=>$itemResult->url, 'thumb'=>$thumbUrl);
         }
-        return array();
+
+        return $hotelImages;
     }
     
     protected function filterPicUrl($url) {
@@ -156,5 +147,15 @@ class Hotel extends AutoModel {
         $curl_result = curl_exec($ch);
         curl_close($ch);
         return $curl_result;
+    }
+
+    /**------------------**/
+
+    public function saveHotelImages($images){
+        foreach($images as $itemImage){
+            $data = array('hotel_id'=>$this->id, 'url'=>$itemImage, 'created_at'=>date("Y-m-d H:i:s"), 'updated_at'=>date("Y-m-d H:i:s"));
+            HotelImage::create($data);
+        }
+
     }
 }
