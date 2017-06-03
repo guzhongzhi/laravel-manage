@@ -7,6 +7,7 @@ class ImageSeekHelper {
     static $secretImgPath = '/upload/travel/';
     static $foodImgPath = '/upload/food/';
     static $hotelImgPath = '/upload/hotel/';
+    static $foreignThumPath = '/upload/thumb/';
     static $hotelImgLimitNumber = 50; //for each city, the number of hotel we will download.
     public static function makeDir($path){
         $path = public_path() . $path . date("Y") . date("m") . "/";
@@ -267,10 +268,17 @@ class ImageSeekHelper {
         return false;
     }
 
-    public static function getThumFileSrc($originalSrc){
+    public static function getThumFileSrc($originalSrc, $pixels=''){
         $position = strripos($originalSrc, '/');
         $fileDir  = substr($originalSrc, 0, $position+1);
-        $thumbSrc = $fileDir . sha1(substr($originalSrc, $position+1)).".jpg";
+        if(preg_match('/^http/sim', $originalSrc)){
+            $fileDir = self::$foreignThumPath;
+            $fullFileDir = public_path() . $fileDir;
+            if(!is_dir($fullFileDir)){
+                mkdir($fullFileDir, 0777, true);
+            }
+        }
+        $thumbSrc = $fileDir . sha1(substr($originalSrc, $position+1)) . $pixels . ".jpg";
         return $thumbSrc;
     }
     

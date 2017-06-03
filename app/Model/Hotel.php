@@ -44,11 +44,37 @@ class Hotel extends AutoModel {
         }
         return $p;
     }
-    
-    public function getPic() {
-        $pic = $this->pic;
-        $this->getImages();
-        return $pic;
+
+    public function getPic(){
+        if(!$this->pic){
+            $this->pic = '/skin/images/no_pic.png';
+        }else{
+            $foreign = false;
+            if (preg_match('/^http/sim', $this->pic)) { //foreign url do nothing
+                $foreign = true;
+                $thumbUrl = ImageSeekHelper::getThumFileSrc($this->pic, '_150_130');
+
+            }else{
+                $thumbUrl = ImageSeekHelper::getThumFileSrc($this->pic, '_150_130');
+                $originalImageSrc = public_path() . $this->pic;
+            }
+            $thumbFullUrl = public_path() . $thumbUrl;
+            if(!file_exists($thumbFullUrl)){
+                if($foreign == true){
+                    $originalImageSrc = ImageSeekHelper::savePic($this->pic, ImageSeekHelper::$foreignThumPath);
+                    $originalImageSrc = public_path() . $originalImageSrc;
+                    echo $thumbUrl;die();
+                }
+                ImageSeekHelper::makeThumb($originalImageSrc, $thumbFullUrl, 1, 150, 130);
+                $this->pic = $thumbUrl;
+                if($foreign == true){
+                    unlink($originalImageSrc);
+                }
+            }else{
+                $this->pic = $thumbUrl;
+            }
+        }
+        return $this->pic;
     }
     
     public function getImages() {
