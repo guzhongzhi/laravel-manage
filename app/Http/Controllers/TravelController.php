@@ -78,6 +78,7 @@ class TravelController extends Controller {
             "_force_index"=>$forceIndex,
         );
         $searchData = $request->get("filter", array());
+        $searchFormValue = PaginateHelper::initSearchFieldData($searchData,$searchForm);
         $city = $province = null;
         $city = Region::find($cityId);
         
