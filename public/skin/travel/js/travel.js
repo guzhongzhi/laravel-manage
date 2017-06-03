@@ -23,13 +23,13 @@ $(
                     $(this).attr('class', 'fl clicked');
                     $(this).html('<i></i>图文模式');
                     $('.img').hide();
-                    $('.ctd_content_controls img').hide();
+                    $('.ctd_content img').hide();
                 }else{
                     $(this).attr('title', '只看文字');
                     $(this).attr('class', 'fl');
                     $(this).html('<i></i>只看文字');
                     $('.img').show();
-                    $('.ctd_content_controls img').show();
+                    $('.ctd_content img').show();
 
                 }
                 
