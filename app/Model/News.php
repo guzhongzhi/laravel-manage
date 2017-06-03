@@ -1,6 +1,7 @@
 <?php namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Helper\ImageSeekHelper;
 use DB;
 
 class News extends Model {
