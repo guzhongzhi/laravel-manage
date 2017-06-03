@@ -68,7 +68,6 @@ class TravelController extends Controller {
             ),
         );
         $searchData = $request->get("filter", array());
-        $searchFormValue = PaginateHelper::initSearchFieldData($searchData,$searchForm);
         $city = $province = null;
         $city = Region::find($cityId);
         
@@ -112,6 +111,10 @@ class TravelController extends Controller {
                 "type"=>"=",
                 "label"=>"Province Id",
                 "value"=>($provinceId>0) ? $provinceId : null,
+            ),
+            "_order"=>array(
+                'field_name'=>'id',
+                'value'=>'desc',
             ),
         );
         $searchData = $request->get("filter", array());
