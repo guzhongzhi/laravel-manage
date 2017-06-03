@@ -116,6 +116,10 @@ class TravelController extends Controller {
                 'field_name'=>'id',
                 'value'=>'desc',
             ),
+            "_force_index"=>array(
+                'table_name'=>'news',
+                'index_name'=>'idx_1',
+            ),
         );
         $searchData = $request->get("filter", array());
         $searchFormValue = PaginateHelper::initSearchFieldData($searchData,$searchForm);
@@ -132,6 +136,7 @@ class TravelController extends Controller {
         $cities = Region::getRetionsByParentId($provinceId);
         $paginateHelper = new PaginateHelper(News::class);
         $paginate = $paginateHelper->getPaginate($searchFormValue);
+
         
         return view('travel.home', array(
                 "provinces"=>$provinces,

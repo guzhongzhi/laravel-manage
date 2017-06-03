@@ -54,6 +54,13 @@ class PaginateHelper {
             }
             $queryBuilder->orderBy($fieldName,$direction);
         }
+        if(isset($filter['_force_index'])){
+            $indexTable = $filter["_force_index"]['table_name'];
+            $indexName = $filter["_force_index"]['index_name'];
+            $queryBuilder->from(\DB::raw("$indexTable FORCE INDEX ($indexName)"));;
+        }
+
+
         /**
          * @var \Illuminate\Database\Eloquent\Collection $rows
          */
