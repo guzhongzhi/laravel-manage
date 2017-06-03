@@ -137,6 +137,8 @@ class SecretSeek extends Command {
             }
 
             //for http://you.ctrip.com/
+
+            /*
             $ctripUrl = "http://you.ctrip.com/travels/URL_KEY/t2.html";
             $mainDomainUrl = "http://you.ctrip.com";
             foreach($provinces as $province){
@@ -182,6 +184,7 @@ class SecretSeek extends Command {
                 }
                 echo "End to seek the ctrip province - $provinceName.\n";
             }
+            */
             
             if(count($provinces) > 0){
                 $start++;
