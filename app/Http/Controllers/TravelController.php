@@ -62,6 +62,10 @@ class TravelController extends Controller {
                 "label"=>"City Id",
                 "value"=>($cityId>0) ? $cityId : null,
             ),
+            "_order"=>array(
+                'field_name'=>'id',
+                'value'=>'desc',
+            ),
         );
         $searchData = $request->get("filter", array());
         $searchFormValue = PaginateHelper::initSearchFieldData($searchData,$searchForm);

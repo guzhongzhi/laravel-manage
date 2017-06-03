@@ -25,10 +25,13 @@ class Hotel extends AutoModel {
         return "/hotel/s-" . $this->id.".html";
     }
     
-    public function getShortDesc() {
+    public function getShortDesc($number=200) {
         $sd = $this->short_desc;
         if($sd == "") {
-            $sd = $this->title;
+            $content = $this->description;
+            $content = preg_replace('/<\/?.*?>/is','',$content);
+            $content = str_replace(array("\r\n", "\r", "\n", " "), "", $content);
+            $sd = mb_substr($content,0,$number);
         }
         return $sd;
     }

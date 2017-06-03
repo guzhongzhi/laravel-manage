@@ -96,6 +96,10 @@ class HotelController extends Controller {
                 "label"=>"Province Id",
                 "value"=>($provinceId>0) ? $provinceId : null,
             ),
+            "_order"=>array(
+                    'field_name'=>'id',
+                    'value'=>'desc',
+                ),
         );
         $searchData = $request->get("filter", array());
         $searchFormValue = PaginateHelper::initSearchFieldData($searchData,$searchForm);
