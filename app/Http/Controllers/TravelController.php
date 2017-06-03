@@ -47,6 +47,15 @@ class TravelController extends Controller {
 
     public function cityList(Request $request, $cityId) {
         $provinces = Region::getProvinces();
+        if($cityId){
+            $forceIndex = array(
+                'table_name'=>'news',
+                'index_name'=>'idx_1',
+            );
+        }else{
+            //do nothing
+            $forceIndex = array();
+        }
         $searchForm = array(
             "category_id"=>array(
                 "field_name"=>"category_id",
@@ -66,6 +75,7 @@ class TravelController extends Controller {
                 'field_name'=>'id',
                 'value'=>'desc',
             ),
+            "_force_index"=>$forceIndex,
         );
         $searchData = $request->get("filter", array());
         $city = $province = null;
@@ -97,6 +107,15 @@ class TravelController extends Controller {
     
     public function provinceList(Request $request, $provinceId) {
         $provinces = Region::getProvinces();
+        if($provinceId){
+            $forceIndex = array(
+                'table_name'=>'news',
+                'index_name'=>'idx_2',
+            );
+        }else{
+            //do nothing
+            $forceIndex = array();
+        }
         $searchForm = array(
             "category_id"=>array(
                 "field_name"=>"category_id",
@@ -116,10 +135,7 @@ class TravelController extends Controller {
                 'field_name'=>'id',
                 'value'=>'desc',
             ),
-            "_force_index"=>array(
-                'table_name'=>'news',
-                'index_name'=>'idx_1',
-            ),
+            "_force_index"=>$forceIndex,
         );
         $searchData = $request->get("filter", array());
         $searchFormValue = PaginateHelper::initSearchFieldData($searchData,$searchForm);
