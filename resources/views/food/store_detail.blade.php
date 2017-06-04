@@ -80,13 +80,13 @@
 
                                     <ul class="j_tab_con recommand_travel" style="display: block;">
                                         @foreach(\App\Helper\TravelHelper::getNewsList($cityId, $provinceId, \App\Model\News::CATEGORY_ID_TRAVEL, 10, 'recommand') AS $itemTravel)
-                                            <li><div class="biaoqian"><i class="icon_bq1">推荐</i></div><a href="{{$itemTravel->getTravelUrl()}}" target="_blank"><img src="{{$itemTravel->pic}}"></a><div class="txt"><div class="t"><a href="{{$itemTravel->getTravelUrl()}}" target="_blank">{{$itemTravel->title}}</a></div><div class="time">发表于：{{$itemTravel->created_at}}</div><a href="{{$itemTravel->getTravelUrl()}}" target="_blank"><span>{{$itemTravel->getShortDesc(80)}}</span></a></div><div class="i"><div><i class="icon_kan"></i>{{$itemTravel->click}}</div></div></li>
+                                            <li><div class="biaoqian"><i class="icon_bq1">推荐</i></div><a href="{{$itemTravel->getTravelUrl()}}" target="_blank"><img src="{{$itemTravel->getPic()}}"></a><div class="txt"><div class="t"><a href="{{$itemTravel->getTravelUrl()}}" target="_blank">{{$itemTravel->title}}</a></div><div class="time">发表于：{{$itemTravel->created_at}}</div><a href="{{$itemTravel->getTravelUrl()}}" target="_blank"><span>{{$itemTravel->getShortDesc(80)}}</span></a></div><div class="i"><div><i class="icon_kan"></i>{{$itemTravel->click}}</div></div></li>
                                         @endforeach
                                     </ul>
 
                                     <ul class="j_tab_con new_travel" style="display: none;">
                                         @foreach(\App\Helper\TravelHelper::getNewsList($cityId, $provinceId, \App\Model\News::CATEGORY_ID_TRAVEL, 10, 'new') AS $itemTravel)
-                                            <li><div class="biaoqian"><i class="icon_bq1">最新</i></div><a href="{{$itemTravel->getTravelUrl()}}" target="_blank"><img src="{{$itemTravel->pic}}"></a><div class="txt"><div class="t"><a href="{{$itemTravel->getTravelUrl()}}" target="_blank">{{$itemTravel->title}}</a></div><div class="time">发表于：{{$itemTravel->created_at}}</div><a href="{{$itemTravel->getTravelUrl()}}" target="_blank"><span>{{$itemTravel->getShortDesc(80)}}</span></a></div><div class="i"><div><i class="icon_kan"></i>{{$itemTravel->click}}</div></div></li>
+                                            <li><div class="biaoqian"><i class="icon_bq1">最新</i></div><a href="{{$itemTravel->getTravelUrl()}}" target="_blank"><img src="{{$itemTravel->getPic()}}"></a><div class="txt"><div class="t"><a href="{{$itemTravel->getTravelUrl()}}" target="_blank">{{$itemTravel->title}}</a></div><div class="time">发表于：{{$itemTravel->created_at}}</div><a href="{{$itemTravel->getTravelUrl()}}" target="_blank"><span>{{$itemTravel->getShortDesc(80)}}</span></a></div><div class="i"><div><i class="icon_kan"></i>{{$itemTravel->click}}</div></div></li>
                                         @endforeach
                                     </ul>
 
