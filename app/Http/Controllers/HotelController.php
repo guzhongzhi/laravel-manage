@@ -142,7 +142,18 @@ class HotelController extends Controller {
         $queryBuilder->where("city_id",$hotel->city_id);
         $queryBuilder->WhereNotIn("id",array($hotel->id));
         $queryBuilder->getQuery()->limit(5);
-        
+
+        $city = $province = null;
+        $city = Region::find($hotel->city_id);
+        $province = Region::find($hotel->province_id);
+
+        if($city){
+            $mapCity = $city->name;
+            $cityId = $city->id;
+        }else{
+            $mapCity = $province->name;
+            $cityId = 0;
+        }
         $relatedSight = $queryBuilder->get(array("*"));
         
         return view('hotel.detail', array(
@@ -151,6 +162,7 @@ class HotelController extends Controller {
                 "sights"=>$this->getSights(),
                 "travelNews"=>$this->getHotTravNews(),
                 "controller"=>$this,
+                'mapCity'=>$mapCity,
             )
         );
         

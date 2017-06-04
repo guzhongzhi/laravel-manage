@@ -55,6 +55,13 @@ class TravelHelper {
             $andSqlMin1 .= " AND city_id = '$cityId'";
             $andSqlMin2 .= " AND city_id = '$cityId'";
         }
+        if($categoryId && $provinceId && $cityId){
+            $indexName = 'idx_1';
+        }elseif($categoryId && $provinceId){
+            $indexName = 'idx_2';
+        }else{
+            $indexName = '';
+        }
 
         if($orderType == 'recommand'){
             $sqlInt = "SELECT ROUND(RAND() * ((SELECT count(*) FROM `news` WHERE 1 $andSqlMin1))+(SELECT id FROM `news` WHERE 1 $andSqlMin2 LIMIT 1)) AS int_number";
@@ -66,7 +73,11 @@ class TravelHelper {
 
         }else{
 			//order by id desc
+            if($indexName){
+                $queryBuilder->from(\DB::raw("news FORCE INDEX ($indexName)"));
+            }
             $queryBuilder->orderBy('id', 'desc');
+
         }
 
         if($limit){

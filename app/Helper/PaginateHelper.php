@@ -57,7 +57,7 @@ class PaginateHelper {
         if(isset($filter['_force_index']) && $filter['_force_index']){
             $indexTable = $filter["_force_index"]['table_name'];
             $indexName = $filter["_force_index"]['index_name'];
-            $queryBuilder->from(\DB::raw("$indexTable FORCE INDEX ($indexName)"));;
+            $queryBuilder->from(\DB::raw("$indexTable FORCE INDEX ($indexName)"));
         }
 
 

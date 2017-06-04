@@ -30,6 +30,7 @@
     <script language="javascript" src="/skin/hotel/js/hotel.js"></script>
     <link rel="stylesheet" type="text/css" href="/css/slider/slider-pro.min.css" media="screen"/>
     <link rel="stylesheet" type="text/css" href="/skin/hotel/css/hotel.css" media="screen"/>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=bTmOXFz6sEkPnLXGp07M6FOgvlUGPwfF"></script>
     <div class="sp"></div>
     <div class="container">
         <div class="fleft two-left-big">
@@ -88,9 +89,15 @@
             </div>
             <div class="hotel-detail-tab-content tab-content tab-hotel" style="clear:both;border:solid 1px #e1e1e1;padding:10px;border-top:solid 2px #f33b7a">
                 <div class="tab-1 tab-section-content">
-
-                    {!!$hotel->description!!}
-
+                    <div class="hotel_introduction_body">
+                        {!!$hotel->description!!}
+                        <div class="e10 clearfix">
+                            <span class="f1 fleft">
+                                <i></i><label>酒店地图</label>
+                            </span>
+                            <div id="allmap"></div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="tab-2  tab-section-content hidden  hotel-hotel-list">
@@ -208,5 +215,15 @@
         
         <div class="sp"></div>
     </div>
+
+    <script type="text/javascript">
+        // 百度地图API功能
+        var map = new BMap.Map("allmap");
+        map.centerAndZoom(new BMap.Point(116.404, 39.915), 11);
+        var local = new BMap.LocalSearch(map, {
+            renderOptions:{map: map}
+        });
+        local.search("{{$mapCity}} {{$hotel->title}}");
+    </script>
     
 @endsection
