@@ -401,7 +401,7 @@
                       </div>
                       
                       <script language="javascript">
-                        $($("#travel-city-tab a")[0]).trigger("click");
+                        $($("#food-city-tab a")[0]).trigger("click");
                       </script>
                     </div>
                   
