@@ -159,8 +159,8 @@ class HotelController extends Controller {
         return view('hotel.detail', array(
                 "hotel"=>$hotel,
                 "recItems"=>$relatedSight,
-                "sights"=>$this->getSights(),
-                "travelNews"=>$this->getHotTravNews(),
+                "sights"=>$this->getSights($province->id, $cityId),
+                "travelNews"=>$this->getHotTravNews($province->id, $cityId),
                 "controller"=>$this,
                 'mapCity'=>$mapCity,
             )
@@ -172,6 +172,9 @@ class HotelController extends Controller {
         $sight = new News();
         $queryBuilder = $sight->newQuery();
         $queryBuilder->where("category_id",News::CATEGORY_ID_TRAVEL);
+        if($provinceId) {
+            $queryBuilder->where("province_id",$provinceId);
+        }
         if($cityId) {
             $queryBuilder->where("city_id",$cityId);
         }
@@ -185,6 +188,9 @@ class HotelController extends Controller {
         $sight = new News();
         $queryBuilder = $sight->newQuery();
         $queryBuilder->where("category_id",News::CATEGORY_ID_SIGHT);
+        if($provinceId) {
+            $queryBuilder->where("province_id",$provinceId);
+        }
         if($cityId) {
             $queryBuilder->where("city_id",$cityId);
         }
@@ -197,6 +203,9 @@ class HotelController extends Controller {
         
         $hotel = new Hotel();
         $queryBuilder = $hotel->newQuery();
+        if($provinceId) {
+            $queryBuilder->where("province_id",$provinceId);
+        }
         if($cityId) {
             $queryBuilder->where("city_id",$cityId);
         }
