@@ -171,7 +171,7 @@ class HotelController extends Controller {
     
     protected function getHotTravNews($provinceId = null,$cityId = null) {
         $items = TravelHelper::getNewsList($cityId, $provinceId, News::CATEGORY_ID_TRAVEL, $limit=12, $orderType='rand');
-        if(!$items){
+        if(count($items) == 0){
             $items = TravelHelper::getNewsList(0, $provinceId, News::CATEGORY_ID_TRAVEL, $limit=12, $orderType='rand');
         }
         return $items;
@@ -179,7 +179,7 @@ class HotelController extends Controller {
     
     protected function getSights($provinceId = null,$cityId = null) {
         $items = TravelHelper::getNewsList($cityId, $provinceId, News::CATEGORY_ID_SIGHT, $limit=12, $orderType='rand');
-        if(!$items){
+        if(count($items) == 0){
             $items = TravelHelper::getNewsList(0, $provinceId, News::CATEGORY_ID_SIGHT, $limit=12, $orderType='rand');
         }
         return $items;
