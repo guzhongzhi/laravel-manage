@@ -104,16 +104,10 @@ class HotelSeek extends Command {
             //update the status
             $sql = "UPDATE hotel_search_url SET is_searched = 1 WHERE id = ?";
             DB::update($sql, array($result->id));
+            $cmd = "nohup php ".base_path()."/artisan hotel:seek 0  1>> process.out 2>> process.err < /dev/null &";    //
+            echo $cmd,"\n";
+            system($cmd);
         }
-        //echo $result->code . PHP_EOL;
-        //start to insert the city url
-
-        $cmd = "nohup php ".base_path()."/artisan hotel:seek 0  1>> process.out 2>> process.err < /dev/null &";    //
-        echo $cmd,"\n";
-        system($cmd);
-
-        
-
     }
 
 
