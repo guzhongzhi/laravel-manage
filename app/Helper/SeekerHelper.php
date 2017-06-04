@@ -572,7 +572,10 @@ class SeekerHelper {
             $url = $data->url;
             //echo $url;die();
             $content = self::curlInitData($url);
+
             $number = preg_replace('%http://.*?num=(.*)%sim', '$1', $data->url);
+
+
             if ($content) {
                 //$content = mb_convert_encoding($content, 'utf8', 'gbk');
                 $html = str_get_html($content);//获得解析的文档
@@ -630,11 +633,17 @@ class SeekerHelper {
                 }
 
                 $content = preg_replace('%<div class="moreService">.*?</div>%sim', '', $content);
+
                 preg_match('%<div class="d1".*?</div>(.*?)<div class="d4".*?</div>(.*?)<div class="d2".*?</div>(.*)</div>$%sim', $content, $matchContent);
+                if(!$matchContent){
+                    preg_match('%<div class="d1".*?</div>(.*?)<div class="d4".*?</div>(.*?)<div class="d2".*?</div>(.*)</div>%sim', $content, $matchContent);
+                }
 
                 $description = isset($matchContent[1]) ? $matchContent[1] : "";
                 $policy = isset($matchContent[2]) ? $matchContent[2] : "";
                 $service = isset($matchContent[3]) ? $matchContent[3] : "";
+
+
                 //insert the hotel
                 $pic = isset($hotelImages[0]) ? $hotelImages[0] : "";
                 $urlKey = sha1(preg_replace('/\?num.*/sim', '', $url));
