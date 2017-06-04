@@ -84,7 +84,6 @@ class News extends Model {
                 if($foreign == true){
                     $originalImageSrc = ImageSeekHelper::savePic($this->pic, ImageSeekHelper::$foreignThumPath);
                     $originalImageSrc = public_path() . $originalImageSrc;
-                    echo $thumbUrl;die();
                 }
                 ImageSeekHelper::makeThumb($originalImageSrc, $thumbFullUrl, 1, 150, 130);
                 $this->pic = $thumbUrl;
