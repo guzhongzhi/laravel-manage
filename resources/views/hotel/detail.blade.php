@@ -36,6 +36,7 @@
         <div class="fleft two-left-big">
             <div class="hotel-detail-title">
             <h1>{{$hotel->title}}</h1>
+            <span class="star"><i><s style="width:86%;"></s></i><b>4.3</b>分</span>
             </div>
             <div class="sp"></div>
             
