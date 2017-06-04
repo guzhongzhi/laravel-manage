@@ -570,6 +570,7 @@ class SeekerHelper {
     public static function insertTuniuHotelContent($data){
         try {
             $url = $data->url;
+            //$url = 'http://hotel.tuniu.com/detail/1723858766?num=2938';
             //echo $url;die();
             $content = self::curlInitData($url);
 
@@ -585,6 +586,9 @@ class SeekerHelper {
                 $address = trim($html->find('span[class=address]', 0)->innertext);
                 $content = trim($html->find('div[class=hotel_introduction_body]', 0)->innertext);
                 $rate = trim($html->find('span[class=a1]', 0)->innertext);
+                if(!$rate){
+                    $rate = 0;
+                }
 
                 $ulsDiv = $html->find('ul[class=hrela_spic_list]', 0);
                 preg_match_all('/<img.*?title="(.*?)".*?data-midd="(.*?)"/sim', $ulsDiv->innertext, $matchImgs);
