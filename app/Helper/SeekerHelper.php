@@ -570,7 +570,7 @@ class SeekerHelper {
     public static function insertTuniuHotelContent($data){
         try {
             $url = $data->url;
-            $url = 'http://hotel.tuniu.com/detail/1730872437?num=2957';
+            //$url = 'http://hotel.tuniu.com/detail/1730872437?num=2957';
             //echo $url;die();
             $content = self::curlInitData($url);
 
