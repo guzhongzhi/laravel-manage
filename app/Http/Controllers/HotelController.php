@@ -1,6 +1,7 @@
 <?php 
 namespace App\Http\Controllers;
 
+use App\Helper\TravelHelper;
 use App\Model\Region;
 use App\Model\News;
 use App\Model\Hotel;
@@ -169,33 +170,18 @@ class HotelController extends Controller {
     }
     
     protected function getHotTravNews($provinceId = null,$cityId = null) {
-        $sight = new News();
-        $queryBuilder = $sight->newQuery();
-        $queryBuilder->where("category_id",News::CATEGORY_ID_TRAVEL);
-        if($provinceId) {
-            $queryBuilder->where("province_id",$provinceId);
+        $items = TravelHelper::getNewsList($cityId, $provinceId, News::CATEGORY_ID_TRAVEL, $limit=12, $orderType='rand');
+        if(!$items){
+            $items = TravelHelper::getNewsList(0, $provinceId, News::CATEGORY_ID_TRAVEL, $limit=12, $orderType='rand');
         }
-        if($cityId) {
-            $queryBuilder->where("city_id",$cityId);
-        }
-        $queryBuilder->getQuery()->limit(12);
-        $items = $queryBuilder->get(array('*'));
         return $items;
     }
     
     protected function getSights($provinceId = null,$cityId = null) {
-        
-        $sight = new News();
-        $queryBuilder = $sight->newQuery();
-        $queryBuilder->where("category_id",News::CATEGORY_ID_SIGHT);
-        if($provinceId) {
-            $queryBuilder->where("province_id",$provinceId);
+        $items = TravelHelper::getNewsList($cityId, $provinceId, News::CATEGORY_ID_SIGHT, $limit=12, $orderType='rand');
+        if(!$items){
+            $items = TravelHelper::getNewsList(0, $provinceId, News::CATEGORY_ID_SIGHT, $limit=12, $orderType='rand');
         }
-        if($cityId) {
-            $queryBuilder->where("city_id",$cityId);
-        }
-        $queryBuilder->getQuery()->limit(12);
-        $items = $queryBuilder->get(array('*'));
         return $items;
     }
     
