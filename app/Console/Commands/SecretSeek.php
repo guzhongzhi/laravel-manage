@@ -98,7 +98,7 @@ class SecretSeek extends Command {
                 foreach($cities as $city){
                     $cityId = $city->id;
                     $cityName = $city->name;
-                    if($city->name_en == 'Shixiaqu' || $city->name_en == 'Xian' || $city->name_en == 'shengzhixiaxianjixingzhengquhua'){
+                    if($city->name_en == 'Shixiaqu' || $city->name_en == 'shengzhixiaxianjixingzhengquhua'){
                         continue;
                     }
                     $cityPY = SeekerHelper::getCnCnUrlKey(strtolower($city->short_name_en));
