@@ -150,7 +150,7 @@ class SightSeek extends Command {
     }
 
     protected function grabImages($type, $start){
-        $sql = "SELECT id , title FROM news WHERE `category_id`=? limit $start, 10";
+        $sql = "SELECT id , title FROM news WHERE `category_id`=? ORDER BY id ASC limit $start, 10";
         $p = array(News::CATEGORY_ID_SIGHT);
         $rows = DB::select($sql, $p);
         foreach($rows as $row){
@@ -167,7 +167,7 @@ class SightSeek extends Command {
 
         if(count($rows) > 0){
             $start = $start + 10;
-            $cmd = "nohup php ".base_path()."/artisan sight:seek $type $start 1>> process_sight_$type_$start.out 2>> process_sight_$type_$start.err < /dev/null &";    //
+            $cmd = "nohup php ".base_path()."/artisan sight:seek $type $start 1>> process_sight_$type.'_'.$start.out 2>> process_sight_$type.'_'.$start.err < /dev/null &";    //
             echo $cmd,"\n";
             system($cmd);
         }
