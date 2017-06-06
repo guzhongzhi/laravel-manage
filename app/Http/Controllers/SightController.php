@@ -147,7 +147,6 @@ class SightController extends Controller {
     public function sightDetail($newId) {
         $sight = News::find($newId);
         
-		var_dump($sight);
         $queryBuilder = $sight->newQuery();
         $queryBuilder->where("city_id",$sight->city_id);
         $queryBuilder->WhereNotIn("id",array($sight->id));
