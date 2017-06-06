@@ -167,7 +167,7 @@ class SightSeek extends Command {
 
         if(count($rows) > 0){
             $start = $start + 10;
-            $cmd = "nohup php ".base_path()."/artisan sight:seek $type $start 1>> process.out 2>> process.err < /dev/null &";    //
+            $cmd = "nohup php ".base_path()."/artisan sight:seek $type $start 1>> process_sight_$type_$start.out 2>> process_sight_$type_$start.err < /dev/null &";    //
             echo $cmd,"\n";
             system($cmd);
         }
@@ -175,10 +175,14 @@ class SightSeek extends Command {
     }
 
     protected function saveSightImages($sightId, $urls){
-        foreach($urls as $url){
-            $insertUrl = 'INSERT INTO news_image(`id`, `news_id`, `url`, `created_at`, `updated_at`) VALUES(NULL, ?, ?, NOW(), NOW());';
-            $p = array($sightId, $url);
-            DB::insert($insertUrl, $p);
+        try {
+            foreach ($urls as $url) {
+                $insertUrl = 'INSERT INTO news_image(`id`, `news_id`, `url`, `created_at`, `updated_at`) VALUES(NULL, ?, ?, NOW(), NOW());';
+                $p = array($sightId, $url);
+                DB::insert($insertUrl, $p);
+            }
+        }catch (\Exception $e){
+
         }
     }
 
