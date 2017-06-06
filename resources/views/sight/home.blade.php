@@ -138,7 +138,7 @@
         <ul>
         @foreach($news as $new)
             <li>
-                <div class="pic"><a href="{{$new->getSightUrl()}}"><img src="{{$new->pic}}"/></a></div>
+                <div class="pic"><a href="{{$new->getSightUrl()}}"><img src="{{$new->getPic()}}"/></a></div>
                 <div class="desc">
                     <p class="title"><a href="{{$new->getSightUrl()}}">{{$new->title}}</a></p>
                     <p class="short_desc">{{$new->getShortDesc()}}</p>

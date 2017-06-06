@@ -12,9 +12,10 @@ class SeekerHelper {
     const SEEK_CNCN_FOOD_TYPE = 'cncn_food';
     const SEEK_CNCN_STORE_TYPE = 'cncn_store';
     const SEEK_CTRIP_TRAVEL_TYPE = 'ctrip';
+    const SEEK_CTRIP_SIGHT_TYPE = 'ctrip_sight';
     const SEEK_TUNIU_HOTEL_TYPE = 'tuniu_hotel';
-    public static function curlInitData($url, $retry=5){
-        sleep(rand(1,3));
+    public static function curlInitData($url, $sleep=3, $retry=5, $referer='http://www.baidu.com'){
+        sleep(rand(0,$sleep));
         global $con;
         $binfo = array(
             'Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; .NET CLR 2.0.50727; InfoPath.2; AskTbPTV/5.17.0.25589; Alexa Toolbar)',
@@ -48,7 +49,7 @@ class SeekerHelper {
         curl_setopt($ch, CURLOPT_TIMEOUT,10);
         curl_setopt($ch, CURLOPT_POST, 0);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);//不直接输出，返回到变量
-        curl_setopt($ch, CURLOPT_REFERER, "http://www.baidu.com");
+        curl_setopt($ch, CURLOPT_REFERER, $referer);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
         curl_setopt($ch, CURLOPT_MAXREDIRS, 3);
         $curl_result = curl_exec($ch);
@@ -69,7 +70,7 @@ class SeekerHelper {
     }
     
     public static function checkUrlValidate($url){
-        $content = shell_exec("curl -I $url");
+        $content = shell_exec("curl -I --connect-timeout 5 '$url'");
         if (preg_match('%HTTP/1.1 200 OK%si', $content)) {
             return true;
         }else{
@@ -673,4 +674,174 @@ class SeekerHelper {
             return false;
         }
     }
+
+    public static function insertCtripSightUrl($url, $mainData, $increase=0){
+        //http://you.ctrip.com/sight/beijing1/1508206.html
+        //http://you.ctrip.com/sight/mengtougou120093/71774.html
+        //http://you.ctrip.com/sight/mengtougou120093/107679.html
+        //http://you.ctrip.com/sight/beijing1/229.html
+        $mainDomainUrl = $mainData['main_domain_url'];
+        $countryId     = $mainData['country_id'];
+        $provinceId    = $mainData['province_id'];
+        $cityId        = isset($mainData['city_id']) ? $mainData['city_id'] : 0;
+        $content = self::curlInitData($url);
+        //$mm=memory_get_usage();
+        //echo 'Memory use: ' . $mm .PHP_EOL;
+        if($content){
+            $html = str_get_html($content);//获得解析的文档
+            $itemAttr = "class=result";
+            $ret = $html->find('div['.$itemAttr.']', 0);
+            if($ret){
+
+                $picUrls = $ret->find('a[class=pic]');
+                if($picUrls){
+                    $calcTotal = 0;
+                    foreach($picUrls as $picUrl){
+                       $fullUrl = $mainDomainUrl . $picUrl->href;
+                        echo $fullUrl . PHP_EOL;
+                        $increase++;
+                        if($increase > 21){
+                            //return true; //temp to insert the url, will remove it on live
+                        }
+
+                        try{
+                            $sql = "INSERT INTO search_url(`id`, `url`, `url_secret`, `type`, `country_id`, `province_id`, `city_id`, `is_searched`, `created_at`, `updated_at`) VALUE (NULL, ?, ?, ?, ?, ?, ?, 0, NOW(), NOW())";
+                            $p = array($fullUrl, sha1($fullUrl), 'ctrip_sight', $countryId, $provinceId, $cityId);
+                            DB::insert($sql, $p);
+                        }catch(\Exception $e){
+                            //do nothing
+                            $calcTotal++;
+                        }
+                        unset($sql);
+                        unset($fullUrl);
+                        unset($picUrl);
+                        unset($p);
+                    }
+                }else{
+                    echo "Do not find the url: $url" . PHP_EOL;
+                    return false;
+                }
+
+                //销毁掉不必要的变量,增加内存的使用率
+                unset($content);
+                unset($html);
+                unset($ret);
+                unset($picUrls);
+                $mainData['page_no'] = $mainData['page_no']+1;
+                $nextUrl ="http://you.ctrip.com/searchsite/sight/?query={$mainData['search_query']}&isAnswered=&isRecommended=&publishDate=&PageNo={$mainData['page_no']}";
+                echo $nextUrl . PHP_EOL;
+                self::insertCtripSightUrl($nextUrl, $mainData, $increase);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static function insertCtripSightContent($data){
+        $url = $data->url;
+
+        $content = self::curlInitData($url, 1);
+        if($content){
+            preg_match('%<div class="f_left">.*?<h1><a.*?>(.*?)</a>%sim', $content, $matchTitle);
+            $newsTitle = isset($matchTitle[1]) ? $matchTitle[1] : "";
+            $newsTitle = str_replace('【携程攻略】', '', $newsTitle);
+            preg_match('/<meta name="keywords" content="(.*?)".*<meta name="description" content="(.*?)"/sim', $content, $matchMeta);
+            $newsKeywords    = isset($matchMeta[1]) ? $matchMeta[1] : "";
+            $newsDescription = isset($matchMeta[2]) ? $matchMeta[2] : "";
+            $newsDescription = str_replace('携程攻略社区!', '', $newsDescription);
+            $newsDescription = str_replace('携程', '这里', $newsDescription);
+            $html = str_get_html($content);//获得解析的文档
+            $itemAttr = "class=boxsight_v1";
+            $ret = $html->find('div['.$itemAttr.']', 0);
+            if($ret){
+                $newsContent = $ret->innertext;
+                //$newsContent = preg_replace('%<p class="toggle_btn">.*?</p>%sim', '', $newsContent);
+               // echo $newsContent;die();
+                //get the score
+                preg_match('%<ul class="detailtop_r_info">.*?<span class="score"><b>(.*?)</b>%sim', $content, $matchScore);
+                $score = isset($matchScore[1]) ? $matchScore[1]: 0;
+                //get the traffic info
+                $trafficInfo = '';
+                $trafficUrl = preg_replace('%(http://.*/sight/.*/.*?).html%sim', '$1-traffic.html#jiaotong', $url);
+                $trafficContent = self::curlInitData($trafficUrl, 1);
+                if($trafficContent){
+                    $trafficHtml = str_get_html($trafficContent);
+                    $trafficObj = $trafficHtml->find('div[class=detailcon]', 0);
+                    if($trafficObj){
+                        $trafficInfo = $trafficObj->innertext;
+                    }
+                }
+                if(preg_match('/support@ctrip.com/sim', $newsContent)){
+                    $newsContent = '';
+                }
+                //insert the database
+                try{
+                    $sql = "INSERT INTO news(`id`, `category_id`, `city_id`, `province_id`, `country_id`, `rate`, `title`, `meta_keywords`, `meta_description`, `short_description`, `editor`, `source_url`, `traffic_info`, `pic`, `content`, `created_at`, `updated_at`) VALUE (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?); ";
+                    $newsShortDescription = '';
+                    $createdAt = $updatedAt = date("Y-m-d H:i:s");
+                    $p = array(News::CATEGORY_ID_SIGHT, $data->city_id, $data->province_id, $data->country_id, $score, $newsTitle, $newsKeywords, $newsDescription, $newsShortDescription, '', $url, $trafficInfo,'', $newsContent, $createdAt, $updatedAt);
+                    DB::insert($sql, $p);
+
+                }catch(Exception $e){
+                    //do nothing
+                    echo $e->getMessage();
+                }
+            }
+        }
+    }
+
+    public static function searchImages($sigthName,$level = 0) {
+        $url = "http://image.chinaso.com/getpic?rn=150st=$level&q=".urlencode($sigthName)."&t=" . time();
+        echo $url,PHP_EOL;
+        $content = self::curlInitData($url, 1, 5,"http://image.chinaso.com/so?q=" . urlencode($sigthName));
+        $c = json_decode($content ,true);
+
+        $results = $c["arrResults"];
+        if(empty($results) && $level == 0) {
+            if(isset($c["relateSearch"][0])) {
+                return self::searchImages($c["relateSearch"][0], $level++);
+            }
+        }
+
+        $urls = array();
+        foreach($results as $result) {
+            if($result["ImageWidth"] <700 || $result["ImageHeight"] <600) {
+                continue;
+            }
+            $url = $result["url"]."";
+            if(preg_match('/(landtu.com|sinaimg.cn|16fan.com|nipic.com|qq.com|sina.com.cn|bbs.ce.cn|chuyouke.com)/is',$url)) {
+                continue;
+            }
+
+            $urls[] = $url;
+
+
+        }
+
+        if(empty($urls) || count($urls) < 6) {
+            foreach($results as $result) {
+                $url = $result["url"]."";
+                if(preg_match('/(landtu.com|sinaimg.cn|16fan.com|nipic.com|qq.com|sina.com.cn|bbs.ce.cn|chuyouke.com)/is',$url)) {
+                    continue;
+                }
+
+                $urls[] = $url;
+
+            }
+        }
+        $urls = array_unique($urls);
+        $checkI = 0;
+        $resultUrls = array();
+        foreach($urls as $url){
+            if($checkI > 6){
+                break;
+            }
+            if(self::checkUrlValidate($url)){
+                $checkI++;
+                $resultUrls[] = $url;
+            }
+        }
+        return $resultUrls;
+    }
+
 }

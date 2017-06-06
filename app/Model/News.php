@@ -36,19 +36,25 @@ class News extends Model {
     ];
     
     public function getImages() {
-        $sql = "select * FROM news_image WHERE news_id = " . ($this->id * 1) . " limit 10";
-        $rows = DB::select($sql);
-        if(empty($rows)) {
-            $rows = json_decode(json_encode(array(
-                array(
-                "url"=>$this->pic,
-                "news_id"=>$this->id,
-            )
-            )));
+        if($this->sightImages){
+            return $this->sightImages;
         }
-        return $rows;
+        $sightImages = array();
+        $sql = "SELECT * FROM news_image WHERE news_id = ?";
+        $resultes = DB::select($sql, array($this->id));
+        foreach($resultes as $itemResult){
+            $thumbUrl = $itemResult->url;
+            $sightImages[] = array('src'=>$itemResult->url, 'thumb'=>$thumbUrl);
+        }
+        $this->sightImages = $sightImages;
+        return $sightImages;
     }
-    
+
+    public function getStar(){
+        $star = $this->rate / 5 * 100;
+        return $star;
+    }
+
     public function getSameCityNews() {
         $news = new News();
         $queryBuilder = $news->newQuery();
@@ -71,6 +77,7 @@ class News extends Model {
             $this->pic = '/skin/images/no_pic.png';
         }else{
             $foreign = false;
+            $needToDownload = true;
             if (preg_match('/^http/sim', $this->pic)) { //foreign url do nothing
                 $foreign = true;
                 $thumbUrl = ImageSeekHelper::getThumFileSrc($this->pic, '_150_130');
@@ -83,11 +90,19 @@ class News extends Model {
             if(!file_exists($thumbFullUrl)){
                 if($foreign == true){
                     $originalImageSrc = ImageSeekHelper::savePic($this->pic, ImageSeekHelper::$foreignThumPath);
-                    $originalImageSrc = public_path() . $originalImageSrc;
+                    if (preg_match('/^http/sim', $originalImageSrc)) { //foreign url
+                        $needToDownload = false;
+                        $originalImageSrc =  $originalImageSrc;
+                    }else{
+                        $originalImageSrc = public_path() . $originalImageSrc;
+                    }
+
                 }
-                ImageSeekHelper::makeThumb($originalImageSrc, $thumbFullUrl, 1, 150, 130);
+                if($needToDownload){
+                    ImageSeekHelper::makeThumb($originalImageSrc, $thumbFullUrl, 1, 150, 130);
+                }
                 $this->pic = $thumbUrl;
-                if($foreign == true){
+                if($foreign == true && $needToDownload){
                     unlink($originalImageSrc);
                 }
             }else{

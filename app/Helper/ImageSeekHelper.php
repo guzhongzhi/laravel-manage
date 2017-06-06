@@ -63,8 +63,8 @@ class ImageSeekHelper {
         $url=str_replace(" ","%20",$url); 
         //读文件 
         $string = self::readFiletext($url); 
-        if(empty($string)){ 
-            echo "no access for the file $url" . PHP_EOL;return '';
+        if(empty($string)){
+            return $url;
         } 
         //文件名 
         $filename = self::getFilename($url); 

@@ -20,132 +20,43 @@
     <div class="container">
         <div class="fleft two-left-big">
             <div class="sight-detail-title">
-            <h1>{{$sight->getProvince()->name}} {{$sight->title}}</h1>
+                <h1>{{$sight->title}}</h1>
+                <span class="star"><i><s style="width:{{$sight->getStar()}}%;"></s></i><b>{{$sight->rate}}</b>分</span>
             </div>
             <div class="sp"></div>
-            
-            
-            <div class="short-desc-view-on-detail">
-            {{$sight->getShortDesc()}}
-            </div>
-            
-            
-            <div class="sp"></div>
-            <style>
-            
-            .sp-thumbnail-image-container  {
-                width:170px;
-            }
-            .sp-thumbnail-image-container img {
-                width:150px;
-            }
-            </style>
-            
             <div style="border:solid 1px #e2e2e2">
+            <script language="javascript" src="/js/jquery.sliderPro.min.js"></script>
+            <script language="javascript" src="/skin/sight/js/sight.js"></script>
+            <link rel="stylesheet" type="text/css" href="/skin/sight/css/sight.css" media="screen"/>
+            <link rel="stylesheet" type="text/css" href="/css/slider/slider-pro.min.css" media="screen"/>
             
-    <script language="javascript" src="/js/jquery.sliderPro.min.js"></script>
-    
-    
-    
-    
-    
-<link rel="stylesheet" type="text/css" href="/css/slider/slider-pro.min.css" media="screen"/>
-<script type="text/javascript">
-	$( document ).ready(function( $ ) {
-		$( '#example5' ).sliderPro({
-			width: 740,
-			height: 500,
-			orientation: 'vertical',
-			loop: false,
-			arrows: true,
-			buttons: false,
-			thumbnailsPosition: 'right',
-			thumbnailPointer: true,
-			thumbnailWidth: 170,
-			breakpoints: {
-				800: {
-					thumbnailsPosition: 'bottom',
-					thumbnailWidth: 170,
-					thumbnailHeight: 100
-				},
-				500: {
-					thumbnailsPosition: 'bottom',
-					thumbnailWidth: 120,
-					thumbnailHeight: 50
-				}
-			}
-		});
-        $(".slider-pro").css("max-width","100%");
-	});
-</script>
-            
-        <div id="example5" class="slider-pro">
-          <div class="sp-slides">
-          
-            @foreach($sight->getImages() as $image)
-            <div class="sp-slide">
-                <img class="sp-image" src="css/images/blank.gif" data-src="{{$image->url}}" data-retina="{{$image->url}}"/>
-                <div class="sp-caption"></div>
-            </div>
-            @endforeach
-          </div>
-  
-        <div class="sp-thumbnails">
+            <div id="example5" class="slider-pro">
+              <div class="sp-slides">
 
-        @foreach($sight->getImages() as $image)
-    
-            <div class="sp-thumbnail">
-              <div class="sp-thumbnail-image-container"> <img class="sp-thumbnail-image" src="{{$image->url}}"/> </div>
-              <div class="sp-thumbnail-text">
-                <div class="sp-thumbnail-title"> {{$sight->title}}</div>
-                <div class="sp-thumbnail-description"></div>
+                @foreach($sight->getImages() as $image)
+                <div class="sp-slide">
+                    <img class="sp-image" src="/skin/images/blank.gif" data-src="{{$image['src']}}" data-retina="{{$image['src']}}"/>
+                    <div class="sp-caption"></div>
+                </div>
+                @endforeach
+              </div>
+
+            <div class="sp-thumbnails">
+
+            @foreach($sight->getImages() as $image)
+
+                <div class="sp-thumbnail">
+                    <div class="sp-thumbnail-image-container"> <img class="sp-thumbnail-image" src="{{$image['thumb']}}"/> </div>
+                  <div class="sp-thumbnail-text">
+                    <div class="sp-thumbnail-title"> {{$sight->title}}</div>
+                    <div class="sp-thumbnail-description"></div>
+                  </div>
+                </div>
+                @endforeach
+
               </div>
             </div>
-            
-            
-            @endforeach
-            
-          </div>
-        </div> 
          </div>
-            
-            
-            
-            
-                <style>
-                
-                .sight-hotel-list li,
-                .sight-hotel-list ul {
-                    list-style:none;
-                    margin:0;
-                    padding:0;
-                }
-                .sight-hotel-list div.img{
-                    height:200px;
-                    overflow: hidden;
-                    border: solid 1px #e1e1e1;
-                    text-align:center;
-                }
-                .sight-hotel-list li .title{
-                    padding:10px 0px;
-                }
-                .sight-hotel-list li img{
-                    width:99%;
-                    
-                }
-                .sight-hotel-list li{
-                    float:left;
-                    width:32%;
-                    height:270px;
-                    overflow:hidden;
-                    margin-right:1%;
-                    text-align:center;
-                }
-                
-                </style>
-            
-            
-            
             <div class="sp"></div>
             <div class="sp"></div>
             <div class="sp"></div>
@@ -153,7 +64,8 @@
                 <ul>
                     <li class="active" rel=".tab-1">景点介绍</li>
                     <li rel=".tab-2">游记/攻略</li>
-                    <li rel=".tab-3">交通酒店</li>
+                    <li rel=".tab-3">酒店</li>
+                    <li rel=".tab-4">交通</li>
                 </ul>
             </div>
             <div class="sight-detail-tab-content tab-content tab-sight" style="clear:both;border:solid 1px #e1e1e1;padding:10px;border-top:solid 2px #f33b7a">
@@ -189,7 +101,10 @@
                 </ul>
                 <div class="sp"></div>
                 </div>
-                
+                <div class="tab-4 tab-section-content hidden sight-hotel-list">
+                    {!!$sight->traffic_info!!}
+                    <div class="sp"></div>
+                </div>
             </div>
             
         </div>

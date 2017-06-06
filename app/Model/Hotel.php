@@ -24,7 +24,12 @@ class Hotel extends AutoModel {
     public function getHotelUrl() {
         return "/hotel/s-" . $this->id.".html";
     }
-    
+
+    public function getStar(){
+        $star = $this->rate / 5 * 100;
+        return $star;
+    }
+
     public function getShortDesc($number=200) {
         $sd = $this->short_desc;
         if($sd == "") {
@@ -81,10 +86,7 @@ class Hotel extends AutoModel {
         $sql = "SELECT * FROM hotel_image WHERE hotel_id = ?";
         $resultes = DB::select($sql, array($this->id));
         foreach($resultes as $itemResult){
-
             preg_match('%(http://.*/.*?)_w0_h600_c0_t0.jpg%sim', $itemResult->url, $matchUrlKey);
-
-
             if(isset($matchUrlKey[1]) && $matchUrlKey[1]){
                 $thumbUrl = $matchUrlKey[1] . "_w120_h120_c1_t0.jpg";
             }elseif(preg_match('%http://%sim', $itemResult->url)) {
@@ -95,8 +97,6 @@ class Hotel extends AutoModel {
                 $thumbFullUrl = public_path() . $thumbUrl;
                 ImageSeekHelper::makeThumb($originalImageSrc, $thumbFullUrl, 1, 150, 100);
             }
-
-
             $hotelImages[] = array('src'=>$itemResult->url, 'thumb'=>$thumbUrl);
         }
 

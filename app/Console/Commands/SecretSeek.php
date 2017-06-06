@@ -219,6 +219,8 @@ class SecretSeek extends Command {
                 $content = SeekerHelper::insertCNCNStoreContent($row);
             }elseif($type ==  SeekerHelper::SEEK_TUNIU_HOTEL_TYPE){
                 $content = SeekerHelper::insertTuniuHotelContent($row);
+            }elseif($type ==  SeekerHelper::SEEK_CTRIP_SIGHT_TYPE){
+                $content = SeekerHelper::insertCtripSightContent($row);
             }
             //update the table
             if($content){

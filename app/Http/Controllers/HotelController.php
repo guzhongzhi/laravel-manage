@@ -48,6 +48,15 @@ class HotelController extends Controller {
 	}
 
     public function cityList(Request $request, $cityId) {
+        if($cityId){
+            $forceIndex = array(
+                'table_name'=>'hotel',
+                'index_name'=>'idx_1',
+            );
+        }else{
+            //do nothing
+            $forceIndex = array();
+        }
         $provinces = Region::getProvinces();
         $searchForm = array(
             "city_id"=>array(
@@ -57,6 +66,11 @@ class HotelController extends Controller {
                 "label"=>"City Id",
                 "value"=>($cityId>0) ? $cityId : null,
             ),
+            "_order"=>array(
+                'field_name'=>'id',
+                'value'=>'desc',
+            ),
+            "_force_index"=>$forceIndex,
         );
         $searchData = $request->get("filter", array());
         $searchFormValue = PaginateHelper::initSearchFieldData($searchData,$searchForm);
@@ -89,6 +103,15 @@ class HotelController extends Controller {
     
     public function provinceList(Request $request, $provinceId) {
         $provinces = Region::getProvinces();
+        if($provinceId){
+            $forceIndex = array(
+                'table_name'=>'hotel',
+                'index_name'=>'idx_2',
+            );
+        }else{
+            //do nothing
+            $forceIndex = array();
+        }
         $searchForm = array(
             "province_id"=>array(
                 "field_name"=>"province_id",
@@ -101,6 +124,7 @@ class HotelController extends Controller {
                     'field_name'=>'id',
                     'value'=>'desc',
                 ),
+            "_force_index"=>$forceIndex,
         );
         $searchData = $request->get("filter", array());
         $searchFormValue = PaginateHelper::initSearchFieldData($searchData,$searchForm);

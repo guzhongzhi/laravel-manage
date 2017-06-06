@@ -1,553 +1,213 @@
 <?php namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
-use DB;
-include_once "Pinyin.php";
-use App\Model\Region;
+use App\Helper\PinyinHelper;
+use App\Helper\SeekerHelper;
 use App\Model\News;
-use App\Model\NewsImage;
+
 
 class SightSeek extends Command {
 
-	/**
-	 * The console command name.
-	 *
-	 * @var string
-	 */
-	protected $name = 'sight:seek';
+    /**
+     * The console command name.
+     *
+     * @var string
+     */
+    protected $name = 'sight:seek';
 
-	/**
-	 * The console command description.
-	 *
-	 * @var string
-	 */
-	protected $description = 'Command description.';
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Command description.';
 
-	/**
-	 * Create a new command instance.
-	 *
-	 * @return void
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-	}
+    /**
+     * Create a new command instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
 
-	/**
-	 * Execute the console command.
-	 *
-	 * @return mixed
-	 */
-	public function fire()
-	{
-        $args = $this->argument();
-        
-        $sName = $args["SourceName"];
-        switch(strtolower($sName)) {
-            case 'cncn': {
-                $this->seekCnCn();
-                break;
-            }
-            case "ctrip": {
-                try {
-                    $this->seekCtrip();
-                }catch(\Exception $ex){
-                    echo $ex->__toString(),PHP_EOL;
-                }
-                
-                break;
-            }
-            default: {
-                echo "Invalid Params";
-                die();
-            }
+    /**
+     * Execute the console command.
+     *
+     * @return mixed
+     */
+    public function fire(){
+        $arguments = $this->argument();
+        $type  = $arguments['type'];
+        $start = $arguments['start'];
+        $regionId = $arguments['regionId'];
+        $shellCommand = "ps aux | grep 'artisan sight:seek $type $start ' | awk '{print $2}'";
+        $result = shell_exec($shellCommand);
+        $resultArray = explode("\n", $result);
+        $resultArray = array_diff($resultArray, array(""));
+        $resultArray = array_unique($resultArray);
+        $countNumber = count($resultArray);
+        if($countNumber > 3){
+            die("No need to process it, wait the process." . PHP_EOL);
         }
-	}
-    
-    public function getFileContent($url, $referer="http://www.baidu.com"){
-        $binfo = array(
-            'Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; .NET CLR 2.0.50727; InfoPath.2; AskTbPTV/5.17.0.25589; Alexa Toolbar)',
-            'Mozilla/5.0 (Windows NT 5.1; rv:22.0) Gecko/20100101 Firefox/22.0',
-            'Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; .NET4.0C; Alexa Toolbar)',
-            'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)',
-            'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322; .NET CLR 2.0.50727)',
-        );
-        $cipRandA = 45;
-        $cipRandB = 79;
-        $cipRandC = mt_rand(8,254);
-        $cip = $cipRandA.'.'.$cipRandB.'.'.$cipRandC.'.'.mt_rand(0,254);
-        $xip = $cipRandA.'.'.$cipRandB.'.'.$cipRandC.'.'.mt_rand(0,254);
-        #$cip = '180.97.33.107';
-        #$xip = '180.97.33.107';
-        $header = array(
-            'CLIENT-IP:'.$cip,
-            'X-FORWARDED-FOR:'.$xip,
-        );
-        $userinfo = $binfo[mt_rand(0,4)];
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
-        curl_setopt($ch, CURLOPT_USERAGENT, "$userinfo");
-        curl_setopt($ch, CURLOPT_TIMEOUT,10);
-        curl_setopt($ch, CURLOPT_POST, 0);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_REFERER, $referer);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-        curl_setopt($ch, CURLOPT_MAXREDIRS, 3);
-        $curl_result = curl_exec($ch);
-        curl_close($ch);
-        return $curl_result;
-    }
-    
-    protected function getProvinceNameById($id) {
-        $sql = "SELECT * FROM region WHERE  id= " . ($id * 1);
-        $rows = DB::select($sql);
-        $row = $rows[0];
-        return $row->name;
-    }
-    
-    protected function getProvinceByName($name) {
-        $sql = "SELECT * FROM region WHERE name like '%".$name."%' AND parent_id = 1";
-        echo $sql,PHP_EOL;
-        $rows = DB::select($sql);
-        $data = isset($rows[0]) ? $rows[0] : new Region();
-        if($data->id) {
-            return Region::find($data->id);
+        if($type == 0){
+            $this->grabPages($type, $start, $regionId);
+        }else{
+            $this->grabImages($type, $start);
         }
-        return $data;
-    }
-    
-    protected function getCityByName($name,$provinceId) {
-        $sql = "SELECT * FROM region WHERE name like '%".$name."%' AND parent_id = " . ($provinceId * 1);
-        echo $sql,PHP_EOL;
-        $rows = DB::select($sql);
-        $data = isset($rows[0]) ? $rows[0] : new Region();
-        if($data->id) {
-            return Region::find($data->id);
-        }
-        return $data;
-    }
-    
-    protected function seekCtrip() {
-        for($i=1;$i<=190;$i++) {
-            $url = "http://you.ctrip.com/countrysightlist/china110000/p".$i.".html";
-            $content = $this->getFileContent($url);
-            
-            preg_match_all('/<div[^>]*?list_wide_mod1[^>]*>(.*?)<div[^>]*?ttd_pager.*?>/is',$content,$matches);
-            $listHtml = $matches[0][0];
-            
-            preg_match_all('/<a[^>]*?\/place\/([a-z0-9]*?).html.*?>(.*?)<\/a>/is',$listHtml,$matches);
-            $sightNames = $matches[1];
-            $sightNames = array_unique($sightNames);
-            
-            foreach($sightNames as $sightName) {
-                $url = "http://you.ctrip.com/sight/".$sightName."/s0-p1.html";
-                
-                echo $url,PHP_EOL;
-                $content = $this->getFileContent($url);
-                
-                preg_match_all('/<b\s+class="numpage">(\d+)<\/b>/is',$content,$matches);
-                $maxPage = $matches[1][0];
-                
-                $this->seekCtripSight($content,$sightName);
-                //$maxPage = 2;
-                for($p = 2;$p<=$maxPage;$p++) {
-                    
-                    echo PHP_EOL;
-                    echo PHP_EOL;
-                    $url = "http://you.ctrip.com/sight/".$sightName."/s0-p".$p.".html";
-                    echo $url,PHP_EOL;
-                    
-                    $content = $this->getFileContent($url);
-                    try {
-                        $this->seekCtripSight($content,$sightName);
-                    }catch(\Exception $ex) {
-                        
-                    }
-                    
-                    sleep(1);
-                }
-            }
-        }
-    }
-        
-        
-    function searchImages($sigthName,$level = 0) {
-        $url = "http://image.chinaso.com/getpic?rn=50&st=0&q=".urlencode($sigthName)."&t=" . time();
-        echo $url,PHP_EOL;
-        $content = $this->getFileContent($url,"http://image.chinaso.com/so?q=" . urlencode($sigthName));
-        $c = json_decode($content ,true);
-        
-        $results = $c["arrResults"];
-        if(empty($results) && $level == 0) {
-            if(isset($c["relateSearch"][0])) {
-                return $this->searchImages($c["relateSearch"][0], $level++);
-            }
-        }
-        
-        $urls = array();
-        foreach($results as $result) {
-            if($result["ImageWidth"] <700 || $result["ImageHeight"] <600) {
-                continue;
-            }
-            $url = $result["url"]."";
-            if(preg_match('/(landtu.com|sinaimg.cn|16fan.com|nipic.com|qq.com|sina.com.cn)/is',$url)) {
-                continue;
-            }
-            $urls[] = $url;
-        }
-        if(empty($urls)) {
-            foreach($results as $result) {
-                $url = $result["url"]."";
-                if(preg_match('/(landtu.com|sinaimg.cn|16fan.com|nipic.com|qq.com|sina.com.cn)/is',$url)) {
-                    continue;
-                }
-                $urls[] = $url;
-            }
-        }
-        $urls = array_unique($urls);
-        return $urls;
-    }
-    
-    protected function seekCtripSight($content,$sightName) {
 
-        preg_match_all('/\/sight\/'.$sightName.'\/(\d+).html/',$content,$matches);
-        $sightUrls = $matches[0];
-        $sightUrls = array_unique($sightUrls);
-        foreach($sightUrls as $sightUrl) {
-            try {
-                
-            
-            $sightUrl = "http://you.ctrip.com".$sightUrl;
-            echo $sightUrl,PHP_EOL;
-            
-                
-            $sql = "SELECT * FROM news WHERE source_url = ?";
-            $row = DB::select($sql,[$sightUrl]);
-            if(!empty($row)) {
-                $row = $row[0];
-                $this->seekSightImage($row->id);
-                continue;
-            }
-            
-            $content = $this->getFileContent($sightUrl);
-            
-            preg_match_all('/<div[^>]*?class="breadbar_v1[^>]*?>(.*?)<div.*?dest_toptitle/is',$content,$matches);            
-            
-            $bread = preg_replace('/<div[^?]*?bread_hover[^?]*?>.*?<\/div>/is','',$matches[0][0]);
-            $bread = str_ireplace('<i class="arrow"></i>','',$bread);
-            
-            preg_match_all('/<a.*?>(.*?)<\/a>/is',$bread,$matches);
-            
-            print_r($matches);
-            $provinceName = $matches[1][1];
-            $provinceName = trim($provinceName);
-            
-            if(!isset($matches[1][2])) {
-                $provinceName = str_replace("景点","",$provinceName);
-                $provinceName = trim($provinceName);
-            }
-            
-            $cityName = isset($matches[1][2]) ? $matches[1][2]: "";
-            $cityName = str_replace("景点","",$cityName);
-            
-            echo $provinceName , " > " , $cityName ,PHP_EOL;
-            
-            
-            $province = $this->getProvinceByName($provinceName);
-            $city = $this->getCityByName($cityName,$province->id);
-            if(!$city->id) {
-                $cities = $province->getChilds();
-                $city = $cities->pop();
-                if(!$city) {
-                    $city = new Region();
-                }
-            }
-            
-            preg_match('/<title>(.*?)<\/title>/is',$content,$matches);
-            preg_match('/<h1>(.*?)<\/h1>/is',$content,$matches);
-            
-            $title = $matches[1];
-            $title = str_ireplace("【携程攻略】","",$title);
-            
-            $title = preg_replace('/<\/?a\s?.*?>/is','',$title);
-            
-            $content2 = preg_replace('/<div[^>]*?none[^>]*?>.*?<\/div>/is','',$content);
-            preg_match_all('/<div[^>]*?itemprop="description".*?>(.*?)<\/div>/is',$content2,$matches);
-            
-            
-            
-            preg_match_all('/<div[^>]*?toggle_l.*?>(.*?)<\/div>/is',$content,$matches);
-            
-            $lines = array();
-            foreach($matches[1] as $line) {
-                $line = preg_replace('/<\/?div\s?.*?>/is','',$line);
-                
-                
-                $line = trim($line);
-                $line = preg_replace('/\s+/is'," ",$line);
-                $lines[] = trim($line);
-            }
-            $lines = array_unique($lines);
-            
-            $sightContent = implode(PHP_EOL, $lines);
-            file_put_contents("1.log",$sightContent);
-            
-            $sight = News::create(array(
-                "category_id"=>1,
-                "province_id"=>$province->id,
-                "country_id"=>1,
-                "city_id"=>$city->id,
-                "content"=> $sightContent,
-                "title"=>$title,
-                "source_url"=>$sightUrl,
-            ));
-            $this->seekSightImage($sight->id);
-            
-            sleep(5);
-            }catch(\Exception $ex) {
-                echo $ex->__toString(),PHP_EOL;
-            }
-        }
-        
     }
-    
-    protected function seekSightImage($id) {
-        $sight = News::find($id);
-        $provinceName = $this->getProvinceNameById($sight->province_id);
-        $title = "";
-        if($sight->pic == "") {
-            $title = $provinceName . " ". $sight->title;
-        }
-        echo $title,PHP_EOL;
-        if($title) {
-            try {
-                $images = $this->searchImages($title);
-                if(empty($images)) {
-                    die();
-                }
-                print_r($images);
-                $sight->pic = isset($images[3]) ? $images[3] : (isset($images[0]) ? $images[0] : "");
-                $sight->save();
-                
-                foreach($images as $index=>$pic) {
-                    NewsImage::create(array(
-                        "news_id"=>$sight->id,
-                        "url"=>$pic,
-                    ));
-                    if($index > 30) {
-                        break;
-                    }
-                }
-                
-            } catch (\Exception $ex) {
-                echo $ex->__toString(),PHP_EOL;
-            }
-        }
-    }
-    
-    protected function seekCnCn() {
-        try {
-        $args = $this->argument();
-        $countryCode = $args["CountryCode"];
-        $provinceId = isset($args["ProvinceId"]) ? $args["ProvinceId"] :"";
-        
+
+    /**
+     * Get the pages.
+     *
+     * @return
+     */
+
+    protected function grabPages($type, $start, $regionId=0){
+
+        //get the citys
         $sql = "SELECT * FROM region WHERE parent_id = 0";
-        if($countryCode) {
-            //$sql .= " AND "
-        }
         $countries = DB::select($sql);
-        
-        foreach($countries as $country) {
-            $countryId = $country->id;
-            
-            $sql = "SELECT * FROM region WHERE parent_id = " . $countryId;
-            $provinces = DB::select($sql);
-            
-            foreach($provinces as $province) {
-                if($provinceId && $province->id != $provinceId) {
-                    continue;
-                }
-                
-                $childCities = $this->getProvinceEnNames($province->id);
-                
-                $provinceName = $province->name."";
-                $provinceName = rtrim($provinceName,"市");
-                $provinceName = rtrim($provinceName,"省");
-                $enname = \CUtf8_PY::encode($provinceName,"all","");
-                $page = 1;
-                
-                do {
-                    sleep(5);
-                    $childCities[] = $enname;
-                    $urlHead = "http://" . $enname . ".cncn.com/jingdian/";
-                    $url = $urlHead ."1-".$page."-0-0.html";
-                    
-                    $urlRegex = "(" . implode("|",$childCities) . ").cncn.com\/jingdian\/";
-                    echo $url,PHP_EOL;
-                    try {
-                        $content = $this->getFileContent($url);
-                        $content = iconv("gbk","utf-8",$content);
-                        
-                        preg_match_all('/共(\d+)页/is',$content,$matches);
-                        $totalPage = isset($matches[1][0]) ? $matches[1][0] : 1;
-                    } catch (\Exception $ex) {
+        foreach($countries as $country){
+            $cId = $country->id;
+            $regionSql = '';
+            if($regionId){
+                $regionSql = " AND id='$regionId' ";
+            }
+            $sqlProvince = "SELECT * FROM region WHERE parent_id = '$cId' $regionSql limit $start, 1";
+            $provinces = DB::select($sqlProvince);
+            //seek the url from the site url: http://you.ctrip.com/searchsite/Sight?query=
+
+            foreach($provinces as $province){
+                $provinceName = $province->name;
+                $pId = $province->id;
+                echo "Start to seek the ctrip sight province - $provinceName.\n";
+                $provinceQuery = str_replace(' ', '', ($province->name));
+                $provinceQuery  = preg_replace('/省$/si', '', $provinceQuery);
+                $provinceQuery  = preg_replace('/地区$/si', '', $provinceQuery);
+                $provinceQuery  = preg_replace('/区$/si', '', $provinceQuery);
+                $provinceQuery  = preg_replace('/市$/si', '', $provinceQuery);
+                $provinceQuery  = str_replace(array('(', ')', ','), '', $provinceQuery);
+                $provinceQuery = mb_substr( $provinceQuery, 0, 2, 'utf8');
+
+
+                $sqlCity = "SELECT * FROM region WHERE parent_id = '$pId'";
+                $cities = DB::select($sqlCity);
+                $checkHasCityUrlKey = false;
+
+                foreach($cities as $city){
+                    $cityId = $city->id;
+                    $cityName = $city->name;
+                    if($city->name_en == 'Shixiaqu' || $city->name_en == 'shengzhixiaxianjixingzhengquhua'  || $city->name_en == 'zizhiquzhixiaxianjixingzhengquhua'){
                         continue;
                     }
-                    $this->processListContent($content, $province, $country,$urlRegex);
-                    $page++;
-                    
-                    $totalPage = 10;
-                }while($page <= $totalPage);
-                
+                    $cityQuery  = str_replace(' ', '', ($city->name));
+                    $cityQuery  = preg_replace('/市$/si', '', $cityQuery);
+                    $cityQuery  = preg_replace('/地区$/si', '', $cityQuery);
+                    $cityQuery  = preg_replace('/区$/si', '', $cityQuery);
+                    $cityQuery  = preg_replace('/县$/si', '', $cityQuery);
+                    $cityQuery  = str_replace(array('(', ')', ','), '', $cityQuery);
+                    $cityQuery = mb_substr( $cityQuery, 0, 2, 'utf8');
+
+
+                    echo $city->id . " - " . $cityQuery . PHP_EOL;
+                    $mainDomainUrl = "http://you.ctrip.com";
+                    $searchQuery = $provinceQuery . $cityQuery;
+                    $grabUrl = "http://you.ctrip.com/searchsite/Sight?query=".$searchQuery;
+                    echo $grabUrl . PHP_EOL;
+                    $mainData = array('main_domain_url'=>$mainDomainUrl, 'country_id'=>$cId, 'province_id'=>$pId, 'page_no'=>1,
+                                      'city_id'=>$cityId, 'type'=>SeekerHelper::SEEK_CTRIP_SIGHT_TYPE, 'search_query'=>$searchQuery,
+                                );
+                    $checkContent = SeekerHelper::insertCtripSightUrl($grabUrl, $mainData);
+                    echo "Seek $cityName Done. \n";
+                }
+
+                //for province
+                $searchQuery = $provinceQuery;
+                $mainData = array('main_domain_url'=>$mainDomainUrl, 'country_id'=>$cId, 'province_id'=>$pId, 'page_no'=>1,
+                    'city_id'=>0, 'type'=>SeekerHelper::SEEK_CTRIP_SIGHT_TYPE, 'search_query'=>$searchQuery,
+                );
+                $grabUrl = "http://you.ctrip.com/searchsite/Sight?query=".$searchQuery;
+                SeekerHelper::insertCtripSightUrl($grabUrl, $mainData);
+                echo "End to seek the ctrip sight province - $provinceName.\n";
+                break;
             }
-            
-        }
-        }catch(\Exception $ex) {
-            echo $ex->__toString();
-        }
-    }
-    
-    static $cache = array();
-    protected function getProvinceEnNames($pid) {
-        $key ="child_province_en_name_".$pid;
-        if(isset(self::$cache[$key])) {
-            return self::$cache[$key];
-        }
-        $sql = "SELECT * FROM region WHERE parent_id = " . $pid;
-        $rows = DB::select($sql);
-        $enNames = array();
-        foreach($rows as $row) {
-            $enName = trim(trim($row->name_en),"Shi");
-            $enName = trim($enName);
-            $enNames[] = $enName;
-        }
-        return self::$cache[$key] = $enNames;
-    }
-    
-    protected function processListContent($content, $province, $country,$urlRegex) {
-        
-        //echo $content;die();
-        
-        $content = str_replace('<a ',PHP_EOL.'<a ',$content);
-        //echo $content;
-        //echo PHP_EOL,PHP_EOL,PHP_EOL,PHP_EOL,PHP_EOL;
-        
-        $regex = '/<a.*?href="http:\/\/'.$urlRegex.'.*?>(.*?)<\/a>/i';
-        echo $regex,PHP_EOL;
-        preg_match_all($regex,$content,$matches);
-        print_r($matches);
-        $matchedLines = $matches[0];
-        //print_r($matchedLines);die();
-        foreach($matchedLines as $lineContent) {
-            preg_match('/href="(.*?)"/is',$lineContent,$matches);
-            $jinDianUrl = $matches[1];
-            
-            if(substr($jinDianUrl,-4) == ".htm") {
-                continue;
+            if(count($provinces) > 0){
+                $start++;
+                $cmd = "nohup php ".base_path()."/artisan sight:seek $type $start $regionId 1>> process.out 2>> process.err < /dev/null &";    //
+                echo $cmd,"\n";
+                system($cmd);
+                break;
             }
-            
-            if(substr($jinDianUrl,-10) == "/jingdian/") {
-                continue;
-            }
-            
-            try {
-                $this->seekJianDian($jinDianUrl . "profile", $province, $country);
-            } catch (\Exception $ex) {
-                echo $ex->__toString();
-            }
+
         }
-    }
-    
-    function seekJianDian($url, $province, $country) {
-        
-        if($url == "http://Beijing.cncn.com/jingdian/8haowenquanshangwuhuiguan/profile") {
-            return ;
-        }
-        
-        if($url == "http://Beijing.cncn.com/jingdian/dongyuemiao/profile") {
-            return ;
-        }
-        
-        
-        
-        echo $url,PHP_EOL;
-        
-        $sql = "SELECT * FROM news WHERE source_url = ?";
-        $row = DB::select($sql,[$url]);
-        if(!empty($row)) {
-            return ;
-        }
-        
-        $content = $this->getFileContent($url);
-        $content = iconv("GBK","UTF-8",$content);
-        
-        $content = preg_replace('/<div[^>]*?class="hide_box"[^>]*?>.*?<\/div>/is','',$content);
-        
-        
-        preg_match_all('/<div[^>]*?ndwz[^>]*?>(.*?)<\/div>/is',$content,$matches);
-        
-        $bread = isset($matches[1][0]) ? $matches[1][0] : "";;
-        
-        if($bread == "") {
-            return;
-        }
-        
-        preg_match_all('/<a.*?>(.*?)<\/a>/is',$bread,$matches);
-        
-        $matches = $matches[1];
-        
-        
-        $sightName = $matches[count($matches) - 1];
-        
-        echo $sightName;
-        
-        preg_match_all('/<h1>(.*?)<\/h1>/is',$content,$matches);
-        $title = $matches[1][0];
-        
-        preg_match_all('/<div[^>]*?class="top"[^>]*?>(.*?)<\/div>/is',$content,$matches);
-        $shotTopDesc = $matches[1][0];
-        $content = str_replace($matches[0][0],'',$content);
-        
-        preg_match_all('/<div[^>]*?class="type"[^>]*?>(.*?)<\/div>/is',$content,$matches);
-        $content = $matches[1][0];
-        $sight = News::create(array(
-            "category_id"=>1,
-            "province_id"=>$province->id,
-            "country_id"=>$country->id,
-            "content"=> '<div class="jindian-base">'.$shotTopDesc . '</div><div class="jiandian-content">' . $content . '</div>',
-            "title"=>$title,
-            "source_url"=>$url,
-        ));
-        
+
     }
 
-	/**
-	 * Get the console command arguments.
-	 *
-	 * @return array
-	 */
-	protected function getArguments()
-	{
-		return [
-			['SourceName', InputArgument::REQUIRED, 'cncn|ctrip'],
-			['CountryCode', InputArgument::REQUIRED, 'country of the sight.'],
-			['ProvinceId', InputArgument::OPTIONAL, 'province of the sight.'],
-		];
-	}
+    protected function grabImages($type, $start){
+        $sql = "SELECT id , title FROM news WHERE `category_id`=? limit $start, 10";
+        $p = array(News::CATEGORY_ID_SIGHT);
+        $rows = DB::select($sql, $p);
+        foreach($rows as $row){
+            echo "Start to process {$row->id} {$row->title}" .PHP_EOL;
+            $urls = SeekerHelper::searchImages($row->title);
+            $pic = isset($urls[0]) ? $urls[0] : "";
+            if($pic){
+                $this->saveSightImages($row->id, $urls);
+                $sqlUpdate = "UPDATE news SET pic=? WHERE id = ?";
+                $p = array($pic, $row->id);
+                DB::update($sqlUpdate, $p);
+            }
+        }
 
-	/**
-	 * Get the console command options.
-	 *
-	 * @return array
-	 */
-	protected function getOptions()
-	{
-		return [
-			//['example', null, InputOption::VALUE_OPTIONAL, 'An example option.', null],
-		];
-	}
+        if(count($rows) > 0){
+            $start = $start + 10;
+            $cmd = "nohup php ".base_path()."/artisan sight:seek $type $start 1>> process.out 2>> process.err < /dev/null &";    //
+            echo $cmd,"\n";
+            system($cmd);
+        }
+
+    }
+
+    protected function saveSightImages($sightId, $urls){
+        foreach($urls as $url){
+            $insertUrl = 'INSERT INTO news_image(`id`, `news_id`, `url`, `created_at`, `updated_at`) VALUES(NULL, ?, ?, NOW(), NOW());';
+            $p = array($sightId, $url);
+            DB::insert($insertUrl, $p);
+        }
+    }
+
+
+    /**
+     * Get the console command arguments.
+     *
+     * @return array
+     */
+    protected function getArguments()
+    {
+        return [
+            ['type', InputArgument::REQUIRED, '0->search url,1->search image'],
+            ['start', InputArgument::REQUIRED, 'the start of the number'],
+            ['regionId', InputArgument::OPTIONAL, 'the region id if we need it'],
+
+        ];
+    }
+
+    /**
+     * Get the console command options.
+     *
+     * @return array
+     */
+    protected function getOptions()
+    {
+        return [
+            //['example', null, InputOption::VALUE_OPTIONAL, 'An example option.', null],
+        ];
+    }
 
 }
