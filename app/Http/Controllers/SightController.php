@@ -152,10 +152,10 @@ class SightController extends Controller {
         $queryBuilder->WhereNotIn("id",array($sight->id));
         $queryBuilder->getQuery()->limit(5);
         
-        $relatedSight = $queryBuilder->get(array("*"));
-        
+        $relatedSight = $queryBuilder->get(array("*")); 
         return view('sight.detail', array(
                 "sight"=>$sight,
+		"trafficInfo"=>$sight->traffic_info,
                 "recItems"=>$relatedSight,
                 "hotels"=>$this->getHotels(),
                 "travelNews"=>$this->getHotTravNews(),

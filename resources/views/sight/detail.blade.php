@@ -102,7 +102,7 @@
                 <div class="sp"></div>
                 </div>
                 <div class="tab-4 tab-section-content hidden sight-hotel-list">
-                    {!!$sight->traffic_info!!}{{$sight->traffic_info}}
+                    {!!$trafficInfo!!}
                     <div class="sp"></div>
                 </div>
             </div>
