@@ -30,6 +30,7 @@ class News extends Model {
         'short_description',
         'editor',
         'source_url',
+		'traffic_info',
         'content',
         'created_at',
         'updated_at',
