@@ -153,6 +153,7 @@ class SeekerHelper {
             $newsKeywords = '';
             $newsDescription = isset($matchMeta[1]) ? $matchMeta[1] : "";
             $newsDescription = str_replace('欣欣旅游网游记攻略：', '', $newsDescription);
+            $newsDescription = mb_substr($newsDescription, 0 ,200, 'utf8');
             //echo $newsDescription ."<br />";
             
             $html = str_get_html($content);//获得解析的文档
@@ -386,9 +387,11 @@ class SeekerHelper {
             //$content = mb_convert_encoding($content, 'utf8', 'gbk');
             preg_match('/<meta name="keywords" content="(.*?)".*<meta name="description" content="(.*?)"/sim', $content, $matchMeta);
             $newsKeywords    = isset($matchMeta[1]) ? $matchMeta[1] : "";
+            $newsKeywords = mb_substr($newsKeywords, 0 ,200, 'utf8');
             $newsDescription = isset($matchMeta[2]) ? $matchMeta[2] : "";
             $newsDescription = str_replace('携程攻略社区!', '', $newsDescription);
             $newsDescription = str_replace('携程', '这里', $newsDescription);
+            $newsDescription = mb_substr($newsDescription, 0 ,200, 'utf8');
                 
            /*  preg_match('%<div class="ctd_head_left">.*?<h2>(.*?)</h2>%si', $content, $matchTitle);
             $newsTitle = isset($matchTitle[1]) ? $matchTitle[1] : "";
@@ -747,9 +750,11 @@ class SeekerHelper {
             $newsTitle = str_replace('【携程攻略】', '', $newsTitle);
             preg_match('/<meta name="keywords" content="(.*?)".*<meta name="description" content="(.*?)"/sim', $content, $matchMeta);
             $newsKeywords    = isset($matchMeta[1]) ? $matchMeta[1] : "";
+            $newsKeywords = mb_substr($newsKeywords, 0 ,200, 'utf8');
             $newsDescription = isset($matchMeta[2]) ? $matchMeta[2] : "";
             $newsDescription = str_replace('携程攻略社区!', '', $newsDescription);
             $newsDescription = str_replace('携程', '这里', $newsDescription);
+            $newsDescription = mb_substr($newsDescription, 0 ,200, 'utf8');
             $html = str_get_html($content);//获得解析的文档
             $itemAttr = "class=boxsight_v1";
             $ret = $html->find('div['.$itemAttr.']', 0);
