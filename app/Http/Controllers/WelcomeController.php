@@ -73,7 +73,8 @@ class WelcomeController extends Controller {
             $queryBuilder = $sight->newQuery();
             $queryBuilder->where("category_id",News::CATEGORY_ID_SIGHT);
             if($cityId) {
-                $queryBuilder->where("city_id",$cityId);
+                $queryBuilder->where("province_id",$cityId);
+                $queryBuilder->whereOr("city_id",$cityId);
             }
             $queryBuilder->getQuery()->limit($limit);
             
@@ -93,7 +94,8 @@ class WelcomeController extends Controller {
             $queryBuilder = $sight->newQuery();
             $queryBuilder->where("category_id",News::CATEGORY_ID_TRAVEL);
             if($cityId) {
-                $queryBuilder->getQuery()->whereRaw("(city_id = ".($cityId * 1)." OR province_id = ".($cityId * 1).")");
+                $queryBuilder->where("province_id",$cityId);
+                $queryBuilder->whereOr("city_id",$cityId);
             }
             $queryBuilder->getQuery()->limit($limit);
             
@@ -116,7 +118,8 @@ class WelcomeController extends Controller {
             $sight = new Food();
             $queryBuilder = $sight->newQuery();
             if($cityId) {
-                $queryBuilder->getQuery()->whereRaw("(city_id = ".($cityId * 1)." OR province_id = ".($cityId * 1).")");
+                $queryBuilder->where("province_id",$cityId);
+                $queryBuilder->whereOr("city_id",$cityId);
             }
             $queryBuilder->getQuery()->limit($limit);
             
@@ -136,12 +139,17 @@ class WelcomeController extends Controller {
             $sight = new Hotel();
             $queryBuilder = $sight->newQuery();
             if($cityId) {
-                $queryBuilder->where("city_id",$cityId);
+                $queryBuilder->where("province_id",$cityId);
+                $queryBuilder->whereOr("city_id",$cityId);
             }
             $queryBuilder->getQuery()->limit($limit);
             
             $relatedSight = $queryBuilder->get(array("*"));
             $items = $relatedSight->all();
+            if($cityId == 2){
+                //var_dump($items);
+               // die("chuan");
+            }
             return $items;
         } catch (\Exception $ex) {
             echo $ex->__toString();
