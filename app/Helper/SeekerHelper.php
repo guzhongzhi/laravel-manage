@@ -62,7 +62,7 @@ class SeekerHelper {
         }else{
             if($retry > 0){
                 $retry--;
-                $curl_result = self::curlInitData($url, $retry);
+                $curl_result = self::curlInitData($url, $sleep, $retry, $referer);
             }
 
         }
@@ -337,7 +337,7 @@ class SeekerHelper {
         $countryId     = $mainData['country_id'];
         $provinceId    = $mainData['province_id'];
         $cityId        = isset($mainData['city_id']) ? $mainData['city_id'] : 0;
-        $content = self::curlInitData($url);        
+        $content = self::curlInitData($url, 1);        
         if($content){
             
             preg_match_all('%<a class="journal-item cf".*?href="(.*?)">.*?</a>%si', $content, $matches);
@@ -380,7 +380,7 @@ class SeekerHelper {
     
     public static function insertCtripContent($data){
         $url = $data->url;
-        $content = self::curlInitData($url);
+        $content = self::curlInitData($url, 1);
         echo "Search $url \n";
         if($content){
             //$content = mb_convert_encoding($content, 'utf8', 'gbk');
@@ -450,7 +450,7 @@ class SeekerHelper {
 
 
     public static function seekHotelMainUrl($url){
-        $content = self::curlInitData($url);
+        $content = self::curlInitData($url, 1);
         if($content) {
             preg_match_all('%<li.*?>.*?code="(.*?)".*?>(.*?)</a>%sim', $content, $matchAll);
             $matchCodes = isset($matchAll[1]) ? $matchAll[1] : array();
@@ -498,7 +498,7 @@ class SeekerHelper {
             }
 
         }
-        $content = self::curlInitData($searchUrl);
+        $content = self::curlInitData($searchUrl, 1);
         $checkHasCityData = false;
         if($content) {
             echo $searchUrl;
@@ -538,7 +538,7 @@ class SeekerHelper {
             $url = str_replace("{{{$key}}}", $value, $url);
         }
         echo "----$url" . PHP_EOL;
-        $content = self::curlInitData($url);
+        $content = self::curlInitData($url, 1);
         if($content){
             $jsonContent= json_decode($content);
             $contentData = $jsonContent->data;
@@ -573,7 +573,7 @@ class SeekerHelper {
             $url = $data->url;
             //$url = 'http://hotel.tuniu.com/detail/1730872437?num=2957';
             //echo $url;die();
-            $content = self::curlInitData($url);
+            $content = self::curlInitData($url, 1);
 
             $number = preg_replace('%http://.*?num=(.*)%sim', '$1', $data->url);
 
@@ -684,7 +684,7 @@ class SeekerHelper {
         $countryId     = $mainData['country_id'];
         $provinceId    = $mainData['province_id'];
         $cityId        = isset($mainData['city_id']) ? $mainData['city_id'] : 0;
-        $content = self::curlInitData($url);
+        $content = self::curlInitData($url, 1);
         //$mm=memory_get_usage();
         //echo 'Memory use: ' . $mm .PHP_EOL;
         if($content){
