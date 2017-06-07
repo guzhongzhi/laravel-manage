@@ -57,6 +57,7 @@
     }
     .index-sight-hot-ul li .title{
         padding:10px 0px;
+        white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
     }
     .index-sight-hot-ul li {
         float:left;
@@ -136,7 +137,7 @@
                         <div role="tabpanel" class="tab-pane" id="sight-tab-{{$city->id}}">
                         <ul class="index-sight-hot-ul">
                         @foreach($controller->getSights($city->id) as $sight)
-                            <li><a href="/sight/s-{{$s->id}}.html">
+                            <li><a href="/sight/s-{{$s->id}}.html" title="{{$sight->title}}">
                                 <div><img src="{{$sight->pic}}" style="width:99%;height:150px"/></div>
                                 <div class="title">{{$sight->title}}</div>
                                 </a>
@@ -217,7 +218,7 @@
                         <div role="tabpanel" class="tab-pane" id="hotel-tab-{{$city->id}}">
                         <ul class="index-sight-hot-ul">
                         @foreach($controller->getHotels($city->id) as $sight)
-                            <li><a href="/hotel/s-{{$s->id}}.html">
+                            <li><a href="/hotel/s-{{$s->id}}.html" title="{{$sight->title}}">
                                 <div><img src="{{$sight->pic}}" style="width:99%;height:150px"/></div>
                                 <div class="title">{{$sight->title}}</div>
                                 </a>
@@ -305,7 +306,7 @@
                         <div role="tabpanel" class="tab-pane" id="travel-tab-{{$city->id}}">
                         <ul class="index-sight-hot-ul">
                         @foreach($controller->getTravels($city->id) as $sight)
-                            <li><a href="/travel/s-{{$s->id}}.html">
+                            <li><a href="/travel/s-{{$s->id}}.html" title="{{$sight->title}}">
                                 <div><img src="{{$sight->pic}}" style="width:99%;height:150px"/></div>
                                 <div class="title">{{$sight->title}}</div>
                                 </a>
@@ -388,7 +389,7 @@
                         <div role="tabpanel" class="tab-pane" id="food-tab-{{$city->id}}">
                         <ul class="index-sight-hot-ul">
                         @foreach($controller->getFoods($city->id) as $sight)
-                            <li><a href="/food/d-{{$s->id}}.html">
+                            <li><a href="/food/d-{{$s->id}}.html" title="{{$sight->title}}">
                                 <div><img src="{{$sight->pic}}" style="width:99%;height:150px"/></div>
                                 <div class="title">{{$sight->title}}</div>
                                 </a>
