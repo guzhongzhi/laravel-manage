@@ -73,7 +73,7 @@ class WelcomeController extends Controller {
             $queryBuilder = $sight->newQuery();
             $queryBuilder->where("category_id",News::CATEGORY_ID_SIGHT);
             if($cityId) {
-                $queryBuilder->getQuery()->whereRaw("(city_id = ".($cityId * 1)." OR province_id = ".($cityId * 1).")");
+                $queryBuilder->getQuery()->whereRaw("(province_id = ".($cityId * 1)." OR city_id = ".($cityId * 1).")");
             }
             $queryBuilder->getQuery()->limit($limit);
             
@@ -93,7 +93,7 @@ class WelcomeController extends Controller {
             $queryBuilder = $sight->newQuery();
             $queryBuilder->where("category_id",News::CATEGORY_ID_TRAVEL);
             if($cityId) {
-                $queryBuilder->getQuery()->whereRaw("(city_id = ".($cityId * 1)." OR province_id = ".($cityId * 1).")");
+                $queryBuilder->getQuery()->whereRaw("(province_id = ".($cityId * 1)." OR city_id = ".($cityId * 1).")");
             }
             $queryBuilder->getQuery()->limit($limit);
             
@@ -116,7 +116,7 @@ class WelcomeController extends Controller {
             $sight = new Food();
             $queryBuilder = $sight->newQuery();
             if($cityId) {
-                $queryBuilder->getQuery()->whereRaw("(city_id = ".($cityId * 1)." OR province_id = ".($cityId * 1).")");
+                $queryBuilder->getQuery()->whereRaw("(province_id = ".($cityId * 1)." OR city_id = ".($cityId * 1).")");
             }
             $queryBuilder->getQuery()->limit($limit);
             
@@ -136,7 +136,7 @@ class WelcomeController extends Controller {
             $sight = new Hotel();
             $queryBuilder = $sight->newQuery();
             if($cityId) {
-                $queryBuilder->getQuery()->whereRaw("(city_id = ".($cityId * 1)." OR province_id = ".($cityId * 1).")");
+                $queryBuilder->getQuery()->whereRaw("(province_id = ".($cityId * 1)." OR city_id = ".($cityId * 1).")");
             }
             $queryBuilder->getQuery()->limit($limit);
             
