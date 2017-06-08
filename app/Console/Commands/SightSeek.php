@@ -162,7 +162,9 @@ class SightSeek extends Command {
                 $sqlUpdate = "UPDATE news SET pic=? WHERE id = ?";
                 $p = array($pic, $row->id);
                 DB::update($sqlUpdate, $p);
-            }
+            }else{
+				echo 'no pic' . PHP_EOL;
+			}
         }
 
         if(count($rows) > 0){
@@ -182,7 +184,7 @@ class SightSeek extends Command {
                 DB::insert($insertUrl, $p);
             }
         }catch (\Exception $e){
-
+			echo $e->getMessage();
         }
     }
 
