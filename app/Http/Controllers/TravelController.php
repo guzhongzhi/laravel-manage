@@ -54,7 +54,10 @@ class TravelController extends Controller {
             );
         }else{
             //do nothing
-            $forceIndex = array();
+            $forceIndex = array(
+                'table_name'=>'news',
+                'index_name'=>'id_category',
+            );
         }
         $searchForm = array(
             "category_id"=>array(
@@ -115,7 +118,10 @@ class TravelController extends Controller {
             );
         }else{
             //do nothing
-            $forceIndex = array();
+            $forceIndex = array(
+                'table_name'=>'news',
+                'index_name'=>'id_category',
+            );
         }
         $searchForm = array(
             "category_id"=>array(

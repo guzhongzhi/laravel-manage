@@ -66,10 +66,6 @@ class HotelController extends Controller {
                 "label"=>"City Id",
                 "value"=>($cityId>0) ? $cityId : null,
             ),
-            "_order"=>array(
-                'field_name'=>'id',
-                'value'=>'desc',
-            ),
             "_force_index"=>$forceIndex,
         );
         $searchData = $request->get("filter", array());
@@ -120,10 +116,6 @@ class HotelController extends Controller {
                 "label"=>"Province Id",
                 "value"=>($provinceId>0) ? $provinceId : null,
             ),
-            "_order"=>array(
-                    'field_name'=>'id',
-                    'value'=>'desc',
-                ),
             "_force_index"=>$forceIndex,
         );
         $searchData = $request->get("filter", array());

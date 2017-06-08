@@ -155,7 +155,7 @@ class SightController extends Controller {
         $relatedSight = $queryBuilder->get(array("*")); 
         return view('sight.detail', array(
                 "sight"=>$sight,
-		"trafficInfo"=>$sight->traffic_info,
+				"trafficInfo"=>$sight->traffic_info,
                 "recItems"=>$relatedSight,
                 "hotels"=>$this->getHotels(),
                 "travelNews"=>$this->getHotTravNews(),
