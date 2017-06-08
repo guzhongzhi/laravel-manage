@@ -74,6 +74,7 @@ class WelcomeController extends Controller {
             $queryBuilder->where("category_id",News::CATEGORY_ID_SIGHT);
             if($cityId) {
                 $queryBuilder->getQuery()->whereRaw("(province_id = ".($cityId * 1)." OR city_id = ".($cityId * 1).")");
+				$queryBuilder->from(DB::raw("news FORCE INDEX (idx_1)"));
             }
             $queryBuilder->getQuery()->limit($limit);
             
@@ -94,6 +95,7 @@ class WelcomeController extends Controller {
             $queryBuilder->where("category_id",News::CATEGORY_ID_TRAVEL);
             if($cityId) {
                 $queryBuilder->getQuery()->whereRaw("(province_id = ".($cityId * 1)." OR city_id = ".($cityId * 1).")");
+				$queryBuilder->from(DB::raw("news FORCE INDEX (idx_1)"));
             }
             $queryBuilder->getQuery()->limit($limit);
             
