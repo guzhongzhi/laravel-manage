@@ -70,7 +70,7 @@ class SeekerHelper {
     }
     
     public static function checkUrlValidate($url){
-        $content = shell_exec("curl -I --connect-timeout 5 -m 20 '$url'");
+        $content = shell_exec("curl -I --connect-timeout 2 -m 5 '$url'");
         if (preg_match('%HTTP/1.1 200 OK%si', $content)) {
             return true;
         }else{
