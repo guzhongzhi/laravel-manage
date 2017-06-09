@@ -150,7 +150,20 @@ class SightSeek extends Command {
     }
 
     protected function grabImages($type, $start){
+		
+		if($start == 0){
+			//get the start number
+			$sql = "SELECT news_id FROM news_image ORDER BY id desc limit 1";
+			$row = DB::selectOne($sql);
+			$newsId = $row->id;
+			
+			$sql = "select count(*) as count_number from news where category_id = ? and id <= ?";
+			$row = DB::selectOne($sql, array(1, $newsId));
+			$start = $row->count_number;
+		}
         $sql = "SELECT id , title FROM news WHERE `category_id`=? ORDER BY id ASC limit $start, 10";
+		echo $sql . PHP_EOL;
+		DIE();
         $p = array(News::CATEGORY_ID_SIGHT);
         $rows = DB::select($sql, $p);
         foreach($rows as $row){
