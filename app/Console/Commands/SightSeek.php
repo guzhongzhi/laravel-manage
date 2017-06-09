@@ -45,7 +45,7 @@ class SightSeek extends Command {
         $type  = $arguments['type'];
         $start = $arguments['start'];
         $regionId = $arguments['regionId'];
-        $shellCommand = "ps aux | grep 'artisan sight:seek $type $start' | awk '{print $2}'";
+        $shellCommand = "ps aux | grep 'artisan sight:seek $type' | awk '{print $2}'";
         $result = shell_exec($shellCommand);
         $resultArray = explode("\n", $result);
         $resultArray = array_diff($resultArray, array(""));
