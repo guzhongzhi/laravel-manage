@@ -162,8 +162,6 @@ class SightSeek extends Command {
 			$start = $row->count_number;
 		}
         $sql = "SELECT id , title FROM news WHERE `category_id`=? ORDER BY id ASC limit $start, 10";
-		echo $sql . PHP_EOL;
-		DIE();
         $p = array(News::CATEGORY_ID_SIGHT);
         $rows = DB::select($sql, $p);
         foreach($rows as $row){
