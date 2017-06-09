@@ -155,7 +155,7 @@ class SightSeek extends Command {
 			//get the start number
 			$sql = "SELECT news_id FROM news_image ORDER BY id desc limit 1";
 			$row = DB::selectOne($sql);
-			$newsId = $row->id;
+			$newsId = $row->news_id;
 			
 			$sql = "select count(*) as count_number from news where category_id = ? and id <= ?";
 			$row = DB::selectOne($sql, array(1, $newsId));
