@@ -77,7 +77,7 @@ class WelcomeController extends Controller {
                 //$queryBuilder->getQuery()->whereRaw("(province_id = ".($cityId * 1)." OR city_id = ".($cityId * 1).")");
 				//$queryBuilder->getQuery()->whereRaw("province_id=$cityId Union all select * from news where city_id = $cityId");
 				//$queryBuilder->from(DB::raw("news FORCE INDEX (idx_1)"));
-				$queryBuilder->from(DB::raw(" news right join (select id from news where category_id = ".News::CATEGORY_ID_SIGHT."  AND (province_id=$cityId or city_id = $cityId) limit $limit) as t1 on news.id = t1.id "));
+				$queryBuilder->from(DB::raw(" news right join (select id from news FORCE INDEX (idx_1) where category_id = ".News::CATEGORY_ID_SIGHT."  AND (province_id=$cityId or city_id = $cityId) limit $limit) as t1 on news.id = t1.id "));
             }else{
 				$queryBuilder->where("category_id",News::CATEGORY_ID_SIGHT);
 				$queryBuilder->getQuery()->limit($limit);
@@ -103,7 +103,7 @@ class WelcomeController extends Controller {
                 //$queryBuilder->getQuery()->whereRaw("(province_id = ".($cityId * 1)." OR city_id = ".($cityId * 1).")");
 				//$queryBuilder->from(DB::raw("news FORCE INDEX (idx_1)"));
 				//$queryBuilder->getQuery()->whereRaw("province_id=$cityId Union all select * from news where city_id = $cityId");
-				$queryBuilder->from(DB::raw(" news right join (select id from news where category_id=".News::CATEGORY_ID_TRAVEL." AND (province_id=$cityId or city_id = $cityId) limit $limit) as t1 on news.id = t1.id "));
+				$queryBuilder->from(DB::raw(" news right join (select id from news FORCE INDEX (idx_1) where category_id=".News::CATEGORY_ID_TRAVEL." AND (province_id=$cityId or city_id = $cityId) limit $limit) as t1 on news.id = t1.id "));
             }else{
 				$queryBuilder->where("category_id",News::CATEGORY_ID_TRAVEL);
 				$queryBuilder->getQuery()->limit($limit);
