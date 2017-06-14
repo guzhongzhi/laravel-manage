@@ -152,7 +152,7 @@ class WelcomeController extends Controller {
             if($cityId) {
                 //$queryBuilder->getQuery()->whereRaw("(province_id = ".($cityId * 1)." OR city_id = ".($cityId * 1).")");
 				//$queryBuilder->getQuery()->whereRaw("province_id=$cityId Union all select * from hotel where city_id = $cityId");
-				$queryBuilder->from(DB::raw(" hotel right join (select id from hotel where (province_id=$cityId or city_id = $cityId) limit $limit) as t1 on hotel.id = t1.id "));
+				$queryBuilder->from(DB::raw(" hotel right join (select id from hotel where province_id=$cityId union all select id from hotel where city_id = $cityId limit $limit) as t1 on hotel.id = t1.id "));
             }else{
 				$queryBuilder->getQuery()->limit($limit);
 			}
