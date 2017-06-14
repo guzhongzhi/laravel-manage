@@ -71,13 +71,18 @@ class WelcomeController extends Controller {
         try {
             $sight = new News();
             $queryBuilder = $sight->newQuery();
-            $queryBuilder->where("category_id",News::CATEGORY_ID_SIGHT);
+			$andSql = '';
+			$andSql .= ' WHERE category_id = ' . News::CATEGORY_ID_SIGHT;
             if($cityId) {
                 //$queryBuilder->getQuery()->whereRaw("(province_id = ".($cityId * 1)." OR city_id = ".($cityId * 1).")");
-				$queryBuilder->getQuery()->whereRaw("province_id=$cityId Union all select * from news where city_id = $cityId");
+				//$queryBuilder->getQuery()->whereRaw("province_id=$cityId Union all select * from news where city_id = $cityId");
 				//$queryBuilder->from(DB::raw("news FORCE INDEX (idx_1)"));
-            }
-            $queryBuilder->getQuery()->limit($limit);
+				$queryBuilder->from(DB::raw(" news right join (select id from news where category_id = ".News::CATEGORY_ID_SIGHT."  AND (province_id=$cityId or city_id = $cityId) limit $limit) as t1 on news.id = t1.id "));
+            }else{
+				$queryBuilder->where("category_id",News::CATEGORY_ID_SIGHT);
+				$queryBuilder->getQuery()->limit($limit);
+			}
+            
             
             $relatedSight = $queryBuilder->get(array("*"));
             $items = $relatedSight->all();
@@ -93,14 +98,16 @@ class WelcomeController extends Controller {
         try {
             $sight = new News();
             $queryBuilder = $sight->newQuery();
-            $queryBuilder->where("category_id",News::CATEGORY_ID_TRAVEL);
+            
             if($cityId) {
                 //$queryBuilder->getQuery()->whereRaw("(province_id = ".($cityId * 1)." OR city_id = ".($cityId * 1).")");
 				//$queryBuilder->from(DB::raw("news FORCE INDEX (idx_1)"));
-				$queryBuilder->getQuery()->whereRaw("province_id=$cityId Union all select * from news where city_id = $cityId");
-            }
-            $queryBuilder->getQuery()->limit($limit);
-            
+				//$queryBuilder->getQuery()->whereRaw("province_id=$cityId Union all select * from news where city_id = $cityId");
+				$queryBuilder->from(DB::raw(" news right join (select id from news where category_id=".News::CATEGORY_ID_TRAVEL." AND (province_id=$cityId or city_id = $cityId) limit $limit) as t1 on news.id = t1.id "));
+            }else{
+				$queryBuilder->where("category_id",News::CATEGORY_ID_TRAVEL);
+				$queryBuilder->getQuery()->limit($limit);
+			}
             $relatedSight = $queryBuilder->get(array("*"));
             $items = $relatedSight->all();
             return $items;
@@ -121,9 +128,11 @@ class WelcomeController extends Controller {
             $queryBuilder = $sight->newQuery();
             if($cityId) {
                 //$queryBuilder->getQuery()->whereRaw("(province_id = ".($cityId * 1)." OR city_id = ".($cityId * 1).")");
-				$queryBuilder->getQuery()->whereRaw("province_id=$cityId Union all select * from food where city_id = $cityId");
+				//$queryBuilder->getQuery()->whereRaw("province_id=$cityId Union all select * from food where city_id = $cityId");
+				$queryBuilder->from(DB::raw(" food right join (select id from food where (province_id=$cityId or city_id = $cityId) limit $limit) as t1 on food.id = t1.id "));
+            }else{
+				$queryBuilder->getQuery()->limit($limit);
             }
-            $queryBuilder->getQuery()->limit($limit);
             
             $relatedSight = $queryBuilder->get(array("*"));
             $items = $relatedSight->all();
@@ -142,9 +151,12 @@ class WelcomeController extends Controller {
             $queryBuilder = $sight->newQuery();
             if($cityId) {
                 //$queryBuilder->getQuery()->whereRaw("(province_id = ".($cityId * 1)." OR city_id = ".($cityId * 1).")");
-				$queryBuilder->getQuery()->whereRaw("province_id=$cityId Union all select * from hotel where city_id = $cityId");
-            }
-            $queryBuilder->getQuery()->limit($limit);
+				//$queryBuilder->getQuery()->whereRaw("province_id=$cityId Union all select * from hotel where city_id = $cityId");
+				$queryBuilder->from(DB::raw(" hotel right join (select id from hotel where (province_id=$cityId or city_id = $cityId) limit $limit) as t1 on hotel.id = t1.id "));
+            }else{
+				$queryBuilder->getQuery()->limit($limit);
+			}
+            
             
             $relatedSight = $queryBuilder->get(array("*"));
             $items = $relatedSight->all();
