@@ -73,6 +73,49 @@ class News extends Model {
         return "/travel/s-" . $this->id.".html";
     }
 
+	public function getHomePic(){
+		if(!$this->pic){
+            $this->homePic = '/skin/images/no_pic.png';
+        }else{
+
+            $foreign = false;
+            $needToDownload = true;
+            if (preg_match('/^http/sim', $this->pic)) { //foreign url do nothing
+                $foreign = true;
+                $thumbUrl = ImageSeekHelper::getThumFileSrc($this->pic, '_206_150');
+
+            }else{
+                $thumbUrl = ImageSeekHelper::getThumFileSrc($this->pic, '_206_150');
+                $originalImageSrc = public_path() . $this->pic;
+            }
+            $thumbFullUrl = public_path() . $thumbUrl;
+			
+            if(!file_exists($thumbFullUrl)){
+                if($foreign == true){
+					
+                    $originalImageSrc = ImageSeekHelper::savePic($this->pic, ImageSeekHelper::$foreignThumPath);
+                    if (preg_match('/^http/sim', $originalImageSrc)) { //foreign url
+                        $needToDownload = false;
+                        $originalImageSrc =  $originalImageSrc;
+                    }else{
+                        $originalImageSrc = public_path() . $originalImageSrc;
+                    }
+
+                }
+                if($needToDownload){
+                    ImageSeekHelper::makeThumb($originalImageSrc, $thumbFullUrl, 1, 206, 150);
+                }
+                $this->homePic = $thumbUrl;
+                if($foreign == true && $needToDownload){
+                    unlink($originalImageSrc);
+                }
+            }else{
+                $this->homePic = $thumbUrl;
+            }
+        }
+        return $this->homePic;
+		
+	}
     public function getPic(){
         if(!$this->pic){
             $this->pic = '/skin/images/no_pic.png';

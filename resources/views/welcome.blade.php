@@ -137,8 +137,8 @@
                         <div role="tabpanel" class="tab-pane" id="sight-tab-{{$city->id}}">
                         <ul class="index-sight-hot-ul">
                         @foreach($controller->getSights($city->id) as $sight)
-                            <li><a href="/sight/s-{{$sight->id}}.html" title="{{$sight->title}}">
-                                <div><img src="{{$sight->pic}}" style="width:99%;height:150px"/></div>
+                            <li><a href="{{$sight->getSightUrl()}}" title="{{$sight->title}}">
+                                <div><img class="img_none" src="/img/none.gif" datasrc="{{$sight->getHomePic()}}" style="width:99%;height:150px"/></div>
                                 <div class="title">{{$sight->title}}</div>
                                 </a>
                             </li>
@@ -218,8 +218,8 @@
                         <div role="tabpanel" class="tab-pane" id="hotel-tab-{{$city->id}}">
                         <ul class="index-sight-hot-ul">
                         @foreach($controller->getHotels($city->id) as $sight)
-                            <li><a href="/hotel/s-{{$sight->id}}.html" title="{{$sight->title}}">
-                                <div><img src="{{$sight->pic}}" style="width:99%;height:150px"/></div>
+                            <li><a href="{{$sight->getHotelUrl()}}" title="{{$sight->title}}">
+                                <div><img class="img_none" src="/img/none.gif" datasrc="{{$sight->getHomePic()}}" style="width:99%;height:150px"/></div>
                                 <div class="title">{{$sight->title}}</div>
                                 </a>
                             </li>
@@ -306,8 +306,8 @@
                         <div role="tabpanel" class="tab-pane" id="travel-tab-{{$city->id}}">
                         <ul class="index-sight-hot-ul">
                         @foreach($controller->getTravels($city->id) as $sight)
-                            <li><a href="/travel/s-{{$s->id}}.html" title="{{$sight->title}}">
-                                <div><img src="{{$sight->pic}}" style="width:99%;height:150px"/></div>
+							<li><a href="{{$sight->getTravelUrl()}}" title="{{$sight->title}}">
+                                <div><img class="img_none" src="/img/none.gif" datasrc="{{$sight->getHomePic()}}" style="width:99%;height:150px"/></div>
                                 <div class="title">{{$sight->title}}</div>
                                 </a>
                             </li>
@@ -389,8 +389,8 @@
                         <div role="tabpanel" class="tab-pane" id="food-tab-{{$city->id}}">
                         <ul class="index-sight-hot-ul">
                         @foreach($controller->getFoods($city->id) as $sight)
-                            <li><a href="/food/d-{{$s->id}}.html" title="{{$sight->title}}">
-                                <div><img src="{{$sight->pic}}" style="width:99%;height:150px"/></div>
+                            <li><a href="{{$sight->getFoodUrl()}}" title="{{$sight->title}}">
+                                <div><img class="img_none" src="/img/none.gif" datasrc="{{$sight->getPic()}}" style="width:99%;height:150px"/></div>
                                 <div class="title">{{$sight->title}}</div>
                                 </a>
                             </li>
@@ -414,5 +414,16 @@
             </div>
         </div>
     </div>
+<script language="javascript">
+	$(
+		function(){
+			$('.img_none').each(
+				function(){
+					this.src = $(this).attr('datasrc');
+				}
+			);
+		}
+	);
+</script>
     
 @endsection
