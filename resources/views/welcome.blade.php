@@ -97,7 +97,7 @@
                         <div class="title">热门城市</div>
                         <div class="index-left-box-content">
                         @foreach($controller->getCities() as $city)
-                            <a href="/sight/c{{$city->id}}.html">{{$city->name}}</a> &nbsp;
+                            <a href="{{$city->getSightUrl()}}">{{$city->name}}</a> &nbsp;
                         @endforeach
                             
                         </div>
@@ -110,7 +110,7 @@
                             <ul class="index-sight-hot-u2l">
                             @foreach($controller->getSights(0,16) as $s)
                                 <li>
-                                    <a href="/sight/s-{{$s->id}}.html">{{$s->title}}</a>
+                                    <a href="{{$s->getSightUrl()}}">{{$s->title}}</a>
                                 </li>
                             @endforeach
                             </ul>
@@ -178,7 +178,7 @@
                         <div class="title">热门城市</div>
                         <div class="index-left-box-content">
                         @foreach($controller->getCities() as $city)
-                            <a href="/hotel/c{{$city->id}}.html">{{$city->name}}</a> &nbsp;
+                            <a href="{{$city->getHotelUrl()}}">{{$city->name}}</a> &nbsp;
                         @endforeach
                             
                         </div>
@@ -191,7 +191,7 @@
                             <ul class="index-sight-hot-u2l">
                             @foreach($controller->getHotels(0,16) as $s)
                                 <li style='overflow:hidden'>
-                                    <a href="/hotel/s-{{$s->id}}.html">{{$s->title}}</a>
+                                    <a href="{{$s->getHotelUrl()}}">{{$s->title}}</a>
                                 </li>
                             @endforeach
                             </ul>
@@ -266,7 +266,7 @@
                         <div class="title">热门城市</div>
                         <div class="index-left-box-content">
                         @foreach($controller->getCities() as $city)
-                            <a href="/travel/c{{$city->id}}.html">{{$city->name}}</a> &nbsp;
+                            <a href="{{$city->getTravelUrl()}}">{{$city->name}}</a> &nbsp;
                         @endforeach
                             
                         </div>
@@ -279,7 +279,7 @@
                             <ul class="index-sight-hot-u2l">
                             @foreach($controller->getTravels(0,16) as $s)
                                 <li style='overflow:hidden'>
-                                    <a href="/travel/s-{{$s->id}}.html">{{$s->title}}</a>
+                                    <a href="{{$s->getTravelUrl()}}">{{$s->title}}</a>
                                 </li>
                             @endforeach
                             </ul>
@@ -349,7 +349,7 @@
                         <div class="title">热门城市</div>
                         <div class="index-left-box-content">
                         @foreach($controller->getCities() as $city)
-                            <a href="/food/c{{$city->id}}.html">{{$city->name}}</a> &nbsp;
+                            <a href="{{$city->getFoodUrl()}}">{{$city->name}}</a> &nbsp;
                         @endforeach
                             
                         </div>
@@ -362,7 +362,7 @@
                             <ul class="index-sight-hot-u2l">
                             @foreach($controller->getFoods(0,16) as $s)
                                 <li style='overflow:hidden'>
-                                    <a href="/food/d-{{$s->id}}.html">{{$s->title}}</a>
+                                    <a href="{{$s->getFoodUrl()}}">{{$s->title}}</a>
                                 </li>
                             @endforeach
                             </ul>

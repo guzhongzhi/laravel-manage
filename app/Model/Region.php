@@ -67,4 +67,40 @@ class Region extends Model {
         }
         return $data;
     }
+	
+	public function getSightUrl(){
+		if($this->parent_id != 1){
+			$url = "/sight/c".$this->id.".html";
+		}else{
+			$url = "/sight/p".$this->id.".html";
+		}
+		return $url;
+	}
+	
+	public function getHotelUrl(){
+		if($this->parent_id != 1){
+			$url = "/hotel/c".$this->id.".html";
+		}else{
+			$url = "/hotel/p".$this->id.".html";
+		}
+		return $url;
+	}
+	
+	public function getTravelUrl(){
+		if($this->parent_id != 1){
+			$url = "/travel/c".$this->id.".html";
+		}else{
+			$url = "/travel/p".$this->id.".html";
+		}
+		return $url;
+	}
+	
+	public function getFoodUrl(){
+		if($this->parent_id != 1){
+			$url = "/food/c".$this->id.".html";
+		}else{
+			$url = "/food/p".$this->id.".html";
+		}
+		return $url;
+	}
 }
