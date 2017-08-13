@@ -262,7 +262,9 @@
             -->
         <div class="" style="text-align:center;font-size:12px;line-height:24px;">
             站长联系：<a href="mailto:admin@yuxiclub.com">admin@yuxiclub.com</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Copyright © 2017 · All Rights Reserved : 愈惜旅游网 <br />
-            网站备案号: 蜀ICP备17014098号-1 
+            网站备案号: 蜀ICP备17014098号-1
+            
+            <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1262495929'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s19.cnzz.com/z_stat.php%3Fid%3D1262495929%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script> 
         </div>
         </div>
         
